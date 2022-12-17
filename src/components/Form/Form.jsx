@@ -1,48 +1,125 @@
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { __postPost } from "../../redux/modules/postSlice";
 import styled from "styled-components";
 
 const Form = () => {
-  const onSubmitHandler = () => {};
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [post, setPost] = useState({
+    title: "",
+    category: "",
+    imageBefore: "",
+    imageAfter: "",
+    content: "",
+    price: "",
+    hospitalAdress: "",
+    doctor: "",
+  });
+
+  const onSubmitHandler = () => {
+    if (post.title === "") {
+      alert("제목을 입력해주세요");
+    } else if (post.category === "") {
+      alert("카테고리를 선택해주세요!");
+    } else if (post.content === "") {
+      alert("내용을 입력해주세요!");
+    } else {
+      dispatch(__postPost(post));
+      navigate("/");
+    }
+  };
 
   return (
     <STForm onSubmit={onSubmitHandler}>
       <STTitle>
         <STLabel>제목</STLabel>
-        <STInput type="text" />
+        <STInput
+          type="text"
+          maxLength={"15"}
+          onChange={(e) => {
+            const { value } = e.target;
+            setPost({ ...post, title: value });
+          }}
+        />
       </STTitle>
       <STCategory>
         <STCLabel>수술부위</STCLabel>
-        <STSelect>
+        <STSelect
+          onChange={(e) => {
+            const { value } = e.target;
+            setPost({ ...post, category: value });
+          }}
+        >
           <option value="" defaultValue>
             카테고리를 선택해주세요
           </option>
           <option value="eye">눈성형</option>
           <option value="nose">코성형</option>
           <option value="chin">턱성형</option>
-          <option value="liptsuction">지방흡입</option>
+          <option value="liposuction">지방흡입</option>
         </STSelect>
       </STCategory>
       <STImage>
         <STImageLabel>전</STImageLabel>
-        <input type="file" />
+        <input
+          type="url"
+          onChange={(e) => {
+            const { value } = e.target;
+            setPost({ ...post, imageBefore: value });
+          }}
+        />
         <STImageLabel>후</STImageLabel>
-        <input type="file" />
+        <input
+          type="url"
+          onChange={(e) => {
+            const { value } = e.target;
+            setPost({ ...post, imageAfter: value });
+          }}
+        />
       </STImage>
       <STContent>
-        <STTextarea type="text" />
+        <STTextarea
+          type="text"
+          onChange={(e) => {
+            const { value } = e.target;
+            setPost({ ...post, content: value });
+          }}
+        />
       </STContent>
       <STPrice>
         <STPriceLabel>시술 비용</STPriceLabel>
-        <input style={{ fontSize: "bold" }} />
+        <input
+          style={{ fontSize: "bold" }}
+          onChange={(e) => {
+            const { value } = e.target;
+            setPost({ ...post, price: value });
+          }}
+        />
         <STPriceLabel> 원</STPriceLabel>
       </STPrice>
       <STDoctor>
         <STInfoLabel>병원이름</STInfoLabel>
-        <input type="text"></input>
+        <input
+          type="text"
+          onChange={(e) => {
+            const { value } = e.target;
+            setPost({ ...post, hospitalAdress: value });
+          }}
+        ></input>
         <STInfoLabel>원장님 성함</STInfoLabel>
-        <input type="text"></input>
+        <input
+          type="text"
+          onChange={(e) => {
+            const { value } = e.target;
+            setPost({ ...post, doctor: value });
+          }}
+        ></input>
       </STDoctor>
       <STBDIV>
-        <STButton>완료</STButton>
+        <STButton type="submit">완료</STButton>
       </STBDIV>
     </STForm>
   );
