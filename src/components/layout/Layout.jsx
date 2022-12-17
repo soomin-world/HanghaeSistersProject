@@ -7,7 +7,6 @@ const Layout = ({ children }) => {
   return (
     <>
       <StLayout>{children}</StLayout>
-      <Footer />
     </>
   );
 };
