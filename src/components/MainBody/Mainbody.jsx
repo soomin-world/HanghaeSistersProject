@@ -1,128 +1,72 @@
-import { useState, useEffect } from "react";
-import ReactCardSlider from "react-card-slider-component";
-import { useSelector, useDispatch } from "react-redux";
+import { useState } from "react";
 import styled from "styled-components";
-import { __getPosts } from "../../redux/modules/postSlice";
+import CardSlider from "../CardSlider/CardSlider";
 
 function MainBody() {
   //const { isLoading, error, posts } = useSelector((state) => state.posts);
-  const dispatch = useDispatch();
+
   const [activeIndex, setActiveIndex] = useState(0);
-
-  useEffect(() => {
-    dispatch(__getPosts);
-  });
-
+  const [activeCategory, setActiveCategory] = useState("");
   const tabContArr = [
     {
       tabTitle: (
         <li
           className={activeIndex === 0 ? "is-active" : ""}
-          onClick={() => tableClickHandler(0)}
+          onClick={() => tableClickHandler(0, "eye")}
         >
           눈
         </li>
       ),
-      tabCont: <div>탭1내용</div>,
     },
     {
       tabTitle: (
         <li
           className={activeIndex === 1 ? "is-active" : ""}
-          onClick={() => tableClickHandler(1)}
+          onClick={() => tableClickHandler(1, "nose")}
         >
           코
         </li>
       ),
-      tabCont: <div>탭2 내용</div>,
     },
     {
       tabTitle: (
         <li
           className={activeIndex === 2 ? "is-active" : ""}
-          onClick={() => tableClickHandler(2)}
+          onClick={() => tableClickHandler(2, "chin")}
         >
           턱
         </li>
       ),
-      tabCont: <div>탭3 내용</div>,
     },
     {
       tabTitle: (
         <li
           className={activeIndex === 3 ? "is-active" : ""}
-          onClick={() => tableClickHandler(3)}
+          onClick={() => tableClickHandler(3, "liposuction")}
         >
           지방흡입
         </li>
       ),
-      tabCont: <div>탭4 내용</div>,
     },
   ];
 
-  const tableClickHandler = (index) => {
+  const tableClickHandler = (index, category) => {
     setActiveIndex(index);
+    setActiveCategory(category);
+    console.log(index, category);
   };
-
-  const sliderClick = () => {};
-
-  const slides = [
-    {
-      image: "https://picsum.photos/200/300",
-      title: "This is a title",
-      description: "This is a description",
-      clickEvent: sliderClick,
-    },
-    {
-      image: "https://picsum.photos/600/500",
-      title: "This is a second title",
-      description: "This is a second description",
-      clickEvent: sliderClick,
-    },
-    {
-      image: "https://picsum.photos/700/600",
-      title: "This is a third title",
-      description: "This is a third description",
-      clickEvent: sliderClick,
-    },
-    {
-      image: "https://picsum.photos/500/400",
-      title: "This is a fourth title",
-      description: "This is a fourth description",
-      clickEvent: sliderClick,
-    },
-    {
-      image: "https://picsum.photos/200/300",
-      title: "This is a fifth title",
-      description: "This is a fifth description",
-      clickEvent: sliderClick,
-    },
-    {
-      image: "https://picsum.photos/800/700",
-      title: "This is a sixth title",
-      description: "This is a sixth description",
-      clickEvent: sliderClick,
-    },
-    {
-      image: "https://picsum.photos/300/400",
-      title: "This is a seventh title",
-      description: "This is a seventh description",
-      clickEvent: sliderClick,
-    },
-  ];
 
   return (
     <div>
       <div className="tabTitle">
         <STTab className="tabs is-boxed">
-          {tabContArr.map((section, index) => {
+          {tabContArr.map((section) => {
             return section.tabTitle;
           })}
         </STTab>
       </div>
-      <div>{tabContArr[activeIndex].tabCont}</div>
-      <div>
-        <ReactCardSlider slides={slides} />
+      <div clssName="card">
+        <CardSlider category={activeCategory} />
       </div>
     </div>
   );
