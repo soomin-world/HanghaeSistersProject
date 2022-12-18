@@ -1,0 +1,1 @@
+export { default as loginLottie } from './login_lottie.json'
