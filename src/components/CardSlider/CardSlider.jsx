@@ -16,10 +16,19 @@ function CardSlider(props) {
 
   console.log(posts);
   const sliderClick = () => {};
-  const slides = [{image:, description:,},{},{}];
+  const slides = posts.map((post) => {
+    if (post.category === clickedCategory) {
+      return {
+        image: post.imageAfter,
+        title: post.title,
+        description: post.hospital,
+        clickEvent: sliderClick,
+      };
+    }
+  });
   return (
     <div>
-      <ReactCardSlider slides={slids} />
+      <ReactCardSlider slides={slides} />
     </div>
   );
 }
@@ -34,13 +43,3 @@ export default CardSlider;
 //clickEvent: sliderClick,
 //}
 //];
-posts.map((post) => {
-  if (post.category === clickedCategory) {
-    return {
-      image: post.imageAfter,
-      title: post.title,
-      description: post.hospital,
-      clickEvent: sliderClick,
-    };
-  }
-});
