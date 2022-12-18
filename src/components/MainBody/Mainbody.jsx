@@ -1,61 +1,50 @@
-import ReactCardSlider from "react-card-slider-component";
+import React, { useEffect, useState } from "react";
+
 import { useSelector, useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { __getPost } from "../../redux/modules/postSlice";
 
 function MainBody() {
-  const { isLoading, error, posts } = useSelector((state) => state.post);
+  const { isLoading, error, posts } = useSelector((state) => state.posts);
+
+  console.log(posts);
+
   const dispatch = useDispatch();
-  const { category } = useParams();
+  const navigate = useNavigate();
 
-  const sliderClick = () => {};
+  useEffect(() => {
+    dispatch(__getPost());
+  }, [dispatch]);
 
-  const slides = [
-    {
-      image: "https://picsum.photos/200/300",
-      title: "This is a title",
-      description: "This is a description",
-      clickEvent: sliderClick,
-    },
-    {
-      image: "https://picsum.photos/600/500",
-      title: "This is a second title",
-      description: "This is a second description",
-      clickEvent: sliderClick,
-    },
-    {
-      image: "https://picsum.photos/700/600",
-      title: "This is a third title",
-      description: "This is a third description",
-      clickEvent: sliderClick,
-    },
-    {
-      image: "https://picsum.photos/500/400",
-      title: "This is a fourth title",
-      description: "This is a fourth description",
-      clickEvent: sliderClick,
-    },
-    {
-      image: "https://picsum.photos/200/300",
-      title: "This is a fifth title",
-      description: "This is a fifth description",
-      clickEvent: sliderClick,
-    },
-    {
-      image: "https://picsum.photos/800/700",
-      title: "This is a sixth title",
-      description: "This is a sixth description",
-      clickEvent: sliderClick,
-    },
-    {
-      image: "https://picsum.photos/300/400",
-      title: "This is a seventh title",
-      description: "This is a seventh description",
-      clickEvent: sliderClick,
-    },
-  ];
+  if (isLoading) {
+    return <div>로딩 중....</div>;
+  }
 
-  <ReactCardSlider slides={slides} />;
-  return <div>난메인바디</div>;
+  if (error) {
+    return <div>{error.message}</div>;
+  }
+
+  return (
+    <div>
+      <ul>
+        {posts.map((post) => (
+          <li
+            key={post.id}
+            onClick={() => {
+              navigate(`/detail/${post.id}`, { state: post });
+            }}
+          >
+            <span>글번호 :</span>
+            <p>{post.id}</p>
+            <span>제목 :</span>
+            <p>{post.title}</p>
+            <span>작성자 :</span>
+            <p>{post.price}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 }
 
 export default MainBody;
