@@ -126,7 +126,7 @@ const Form = () => {
 };
 
 const STForm = styled.form`
-  margin: 15% 0% 0% 15%;
+  margin: 2% 0% 5% 15%;
   width: 60%;
   border: 1px solid black;
   border-radius: 25px;
