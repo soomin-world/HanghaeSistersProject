@@ -4,6 +4,7 @@ import axios from "axios";
 
 const initialState = {
   posts: [],
+  post: {},
   isLoading: true,
   error: null,
 };
@@ -58,8 +59,8 @@ export const __getPosts = createAsyncThunk(
   "getPosts",
   async (payload, thunkAPI) => {
     try {
-      await axios.get("http://localhost:3001/posts");
-      return thunkAPI.fulfillWithValue(pa);
+      const data = await axios.get("http://localhost:3001/posts");
+      return thunkAPI.fulfillWithValue(data.data);
     } catch (error) {
       console.log(error);
       return thunkAPI.rejectWithValue(error);

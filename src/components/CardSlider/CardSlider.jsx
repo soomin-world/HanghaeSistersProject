@@ -10,7 +10,7 @@ function CardSlider(props) {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(__getPosts());
-  }, []);
+  }, [dispatch]);
   // const sliderClick = (id) => {
   //   <Link to={`/detail/${id}`} />;
   // };
