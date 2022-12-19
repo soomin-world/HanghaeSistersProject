@@ -14,7 +14,7 @@ function CardSlider(props) {
   // const sliderClick = (id) => {
   //   <Link to={`/detail/${id}`} />;
   // };
-  const posts = useSelector((state) => state);
+  const posts = useSelector((state) => state.post.posts);
   console.log(posts);
   const [slides, setSlides] = useState([]);
 
