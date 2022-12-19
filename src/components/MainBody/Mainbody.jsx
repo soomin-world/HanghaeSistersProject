@@ -6,7 +6,7 @@ function MainBody() {
   //const { isLoading, error, posts } = useSelector((state) => state.posts);
 
   const [activeIndex, setActiveIndex] = useState(0);
-  const [activeCategory, setActiveCategory] = useState("");
+  const [activeCategory, setActiveCategory] = useState("eye");
   const tabContArr = [
     {
       tabTitle: (
