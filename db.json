@@ -1,0 +1,26 @@
+{
+  "posts": [
+    {
+      "title": "111111111111111",
+      "category": "nose",
+      "imageBefore": "https://picsum.photos/300/400",
+      "imageAfter": "https://picsum.photos/300/400",
+      "content": "1111111111111111111",
+      "price": "111111111",
+      "hospitalAdress": "1111111111111",
+      "doctor": "1111111111111",
+      "id": 3
+    },
+    {
+      "title": "12:44",
+      "category": "nose",
+      "imageBefore": "https://picsum.photos/300/400",
+      "imageAfter": "https://picsum.photos/300/400",
+      "content": "212121212",
+      "price": "12113124",
+      "hospitalAdress": "14124",
+      "doctor": "124124",
+      "id": 4
+    }
+  ]
+}

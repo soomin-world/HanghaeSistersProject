@@ -1,7 +1,7 @@
 import Router from "./shared/Router";
 
 function App() {
-  <Router />;
+  return <Router />;
 }
 
 export default App;
