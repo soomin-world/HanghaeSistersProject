@@ -5,9 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { __getPost } from "../../redux/modules/postSlice";
 
 function MainBody() {
-  const { isLoading, error, posts } = useSelector((state) => state.posts);
+  const { isLoading, error, posts } = useSelector((state) => state.post);
 
-  console.log(posts);
+  // console.log(posts);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();

@@ -1,25 +1,79 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
-import {} from "../../redux/modules/postSlice";
+import { __upDatePost } from "../../redux/modules/postSlice";
 import styled from "styled-components";
 
 const EditForm = () => {
-  const dispatch = useDispatch;
-  const navigate = useNavigate;
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { state } = useLocation();
 
+  const [inputs, setInputs] = useState({
+    id: state.id,
+    title: state.title,
+    category: state.category,
+    imageBefore: state.imageBefore,
+    imageAfter: state.imageAfter,
+    content: state.content,
+    price: state.price,
+    hospitalAdress: state.hospitalAdress,
+    doctor: state.doctor,
+  });
+
+  const {
+    title,
+    category,
+    imageBefore,
+    imageAfter,
+    content,
+    price,
+    hospitalAdress,
+    doctor,
+  } = inputs;
+
+  const onChnage = (e) => {
+    const { value, name } = e.target;
+    setInputs({
+      ...inputs,
+      [name]: value,
+    });
+  };
+
+  const updateHandler = (e) => {
+    if (title.trim() === "" || content.trim() === "") {
+      alert("내용과 제목을 입력해주세요");
+      return;
+    }
+    const upDateContent = {
+      id: state.id,
+      title: title,
+      category: category,
+      imageBefore: imageBefore,
+      imageAfter: imageAfter,
+      content: content,
+      price: price,
+      hospitalAdress: hospitalAdress,
+      doctor: doctor,
+    };
+    console.log("잘 넘어갔나?", upDateContent);
+    dispatch(__upDatePost(upDateContent));
+    navigate(`/detail/:${state.id}`, { state: upDateContent });
+  };
+
   return (
-    <STForm>
+    <STForm onSubmit={updateHandler}>
       <STTitle>
         <STLabel>제목</STLabel>
-        <STInput value={state.title} />
+        <STInput type="text" name="title" value={title} onChange={onChnage} />
       </STTitle>
       <STCategory>
         <STCLabel>수술부위</STCLabel>
         <STSelect>
-          <option value>{state.category}</option>
+          <option name="category" value={category} onChange={onChnage}>
+            {category}
+          </option>
           <option value="eye">눈성형</option>
           <option value="nose">코성형</option>
           <option value="chin">턱성형</option>
@@ -28,23 +82,44 @@ const EditForm = () => {
       </STCategory>
       <STImage>
         <STImageLabel>전</STImageLabel>
-        <STInput value={state.title} />
+        <STInput
+          type="url"
+          name="imageBefore"
+          value={imageBefore}
+          onChange={onChnage}
+        />
         <STImageLabel>후</STImageLabel>
-        <STInput value={state.title} />
+        <STInput
+          type="url"
+          name="imageAfter"
+          value={imageAfter}
+          onChange={onChnage}
+        />
       </STImage>
       <STContent>
-        <STTextarea value={state.content} />
+        <STTextarea
+          type="text"
+          name="content"
+          value={content}
+          onChange={onChnage}
+        />
       </STContent>
       <STPrice>
         <STPriceLabel>시술 비용</STPriceLabel>
-        <STInput value={state.price} />
+        <STInput type="text" name="price" value={price} onChange={onChnage} />
         <STPriceLabel> 원</STPriceLabel>
       </STPrice>
       <STDoctor>
         <STInfoLabel>병원이름</STInfoLabel>
-        <STInput value={state.hospitalAdress} />
+        <STInput
+          type="text"
+          name="hospitalAdress"
+          value={hospitalAdress}
+          onChange={onChnage}
+        />
+
         <STInfoLabel>원장님 성함</STInfoLabel>
-        <STInput value={state.doctor} />
+        <STInput type="text" name="doctor" value={doctor} onChange={onChnage} />
       </STDoctor>
       <STBDIV>
         <STButton type="submit">수정완료</STButton>

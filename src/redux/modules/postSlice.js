@@ -35,6 +35,22 @@ export const __postPost = createAsyncThunk(
   }
 );
 
+export const __upDatePost = createAsyncThunk(
+  "upDatePost",
+  async (payload, thunkAPI) => {
+    try {
+      const data = await axios.put(
+        `http://localhost:3001/posts/${payload.id}`,
+        payload
+      );
+      return thunkAPI.fulfillWithValue(data.data);
+    } catch (error) {
+      alert("서버요청중 오류발생!");
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
 export const __deletePost = createAsyncThunk(
   "__deletePost",
   async (payload, thunkAPI) => {
@@ -51,8 +67,8 @@ export const __deletePost = createAsyncThunk(
   }
 );
 
-export const postsSlice = createSlice({
-  name: "posts",
+export const postSlice = createSlice({
+  name: "post",
   initialState,
   reducer: {},
   extraReducers: {
@@ -92,5 +108,5 @@ export const postsSlice = createSlice({
   },
 });
 
-export const {} = postsSlice.actions;
-export default postsSlice.reducer;
+export const {} = postSlice.actions;
+export default postSlice.reducer;

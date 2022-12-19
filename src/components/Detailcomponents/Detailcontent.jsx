@@ -16,7 +16,7 @@ const DetailContent = () => {
   const deleteHandler = () => {
     if (!window.confirm("해당글을 삭제하시겠습니까?")) return;
     dispatch(__deletePost(state));
-    navigate("/");
+    navigate(`/`);
   };
 
   const updateHandler = () => {
@@ -27,6 +27,10 @@ const DetailContent = () => {
       title: state.title,
       price: state.price,
       content: state.content,
+      imageBefore: state.imageBefore,
+      imageAfter: state.imageAfter,
+      hospitalAdress: state.hospitalAdress,
+      doctor: state.doctor,
     };
     navigate(`/postingEdit`, { state: newContent });
   };
