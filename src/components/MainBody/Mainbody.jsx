@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { __getPost } from "../../redux/modules/postSlice";
@@ -8,6 +7,8 @@ function MainBody() {
   const { isLoading, error, posts } = useSelector((state) => state.post);
 
   // console.log(posts);
+
+  console.log("나오나?", posts);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
