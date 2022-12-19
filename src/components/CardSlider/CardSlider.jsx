@@ -7,15 +7,14 @@ import { __getPosts } from "../../redux/modules/postSlice";
 
 function CardSlider(props) {
   const clickedCategory = props.category;
-  console.log(clickedCategory);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(__getPosts());
   }, []);
-  const sliderClick = (id) => {
-    <Link to={`/detail/${id}`} />;
-  };
-  const posts = useSelector((state) => state.post.posts);
+  // const sliderClick = (id) => {
+  //   <Link to={`/detail/${id}`} />;
+  // };
+  const posts = useSelector((state) => state);
   console.log(posts);
   const [slides, setSlides] = useState([]);
 
@@ -25,7 +24,6 @@ function CardSlider(props) {
     posts.map((post) => {
       if (post.category === clickedCategory) {
         setSlides((slide) => [...slide, post]);
-        console.log(slides);
       }
     });
   }, [posts, clickedCategory]);
