@@ -7,6 +7,7 @@ import styled from "styled-components";
 const EditForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [Selected, setSelected] = useState("");
 
   const { state } = useLocation();
 
@@ -41,8 +42,8 @@ const EditForm = () => {
     });
   };
 
-  const updateHandler = (e) => {
-    if (title.trim() === "" || content.trim() === "") {
+  const updateHandler = () => {
+    if (title.trim() === "" || content.trim() === "" || category === "") {
       alert("내용과 제목을 입력해주세요");
       return;
     }
@@ -70,26 +71,35 @@ const EditForm = () => {
       </STTitle>
       <STCategory>
         <STCLabel>수술부위</STCLabel>
-        <STSelect>
-          <option name="category" value={category} onChange={onChnage}>
-            {category}
+        <STSelect name="category" onChange={onChnage}>
+          <option name="category" value="">
+            카테고리를 선택해주세요
           </option>
-          <option value="eye">눈성형</option>
-          <option value="nose">코성형</option>
-          <option value="chin">턱성형</option>
-          <option value="liposuction">지방흡입</option>
+          <option name="category" value="눈성형">
+            눈성형
+          </option>
+          <option name="category" value="코성형">
+            코성형
+          </option>
+          <option name="category" value="턱성형">
+            턱성형
+          </option>
+          <option name="category" value="지방흡입">
+            지방흡입
+          </option>
         </STSelect>
       </STCategory>
+
       <STImage>
         <STImageLabel>전</STImageLabel>
-        <STInput
+        <input
           type="url"
           name="imageBefore"
           value={imageBefore}
           onChange={onChnage}
         />
         <STImageLabel>후</STImageLabel>
-        <STInput
+        <input
           type="url"
           name="imageAfter"
           value={imageAfter}
@@ -106,20 +116,24 @@ const EditForm = () => {
       </STContent>
       <STPrice>
         <STPriceLabel>시술 비용</STPriceLabel>
-        <STInput type="text" name="price" value={price} onChange={onChnage} />
+        <input type="text" name="price" value={price} onChange={onChnage} />
         <STPriceLabel> 원</STPriceLabel>
       </STPrice>
       <STDoctor>
         <STInfoLabel>병원이름</STInfoLabel>
-        <STInput
+        <input
           type="text"
           name="hospitalAdress"
           value={hospitalAdress}
           onChange={onChnage}
-        />
-
+        ></input>
         <STInfoLabel>원장님 성함</STInfoLabel>
-        <STInput type="text" name="doctor" value={doctor} onChange={onChnage} />
+        <input
+          type="text"
+          name="doctor"
+          value={doctor}
+          onChange={onChnage}
+        ></input>
       </STDoctor>
       <STBDIV>
         <STButton type="submit">수정완료</STButton>
@@ -127,15 +141,13 @@ const EditForm = () => {
     </STForm>
   );
 };
-
 const STForm = styled.form`
-  margin: 15% 0% 0% 15%;
+  margin: 2% 0% 5% 15%;
   width: 60%;
   border: 1px solid black;
   border-radius: 25px;
   background-color: rgb(255, 255, 255);
   padding: 50px 50px 30px 40px;
-  font-family: "Noto Sans KR";
 `;
 const STTitle = styled.div`
   width: 800px;
