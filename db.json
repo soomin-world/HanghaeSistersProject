@@ -76,6 +76,17 @@
       "hospitalAdress": "11",
       "doctor": "111",
       "id": 9
+    },
+    {
+      "title": "눈성형3",
+      "category": "eye",
+      "imageBefore": "http://localhost:3000/postingPage",
+      "imageAfter": "http://localhost:3000/postingPage",
+      "content": "http://localhost:3000/postingPage",
+      "price": "http://localhost:3000/postingPage",
+      "hospitalAdress": "http://localhost:3000/postingPage",
+      "doctor": "http://localhost:3000/postingPage",
+      "id": 10
     }
   ]
 }

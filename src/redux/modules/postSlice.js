@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { instance } from "../../shared/axios";
 
 const initialState = {
   posts: [],
@@ -13,7 +14,7 @@ export const __postPost = createAsyncThunk(
   async (payload, thunkAPI) => {
     console.log(payload);
     try {
-      await axios.post("http://localhost:3001/posts", payload);
+      await instance.post("/posts", payload);
       return thunkAPI.fulfillWithValue(payload);
     } catch (error) {
       console.log(error);
@@ -25,7 +26,7 @@ export const __getPosts = createAsyncThunk(
   "getPosts",
   async (payload, thunkAPI) => {
     try {
-      const data = await axios.get("http://localhost:3001/posts");
+      const data = await instance.get("/posts");
       return thunkAPI.fulfillWithValue(data.data);
     } catch (error) {
       console.log(error);
