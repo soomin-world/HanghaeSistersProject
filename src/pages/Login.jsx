@@ -2,17 +2,16 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 // dispatch
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { __loginUser } from "../redux/modules/userSlice";
 
 // Lottie style
 import Lottie from "lottie-react";
 import { loginLottie } from "../assets/lottie";
+import { pickLottie } from "../assets/lottie";
 
 // style 
 import styled from "styled-components";
-import Comment from "../components/Comment";
-
 
 
 const Login = () => {
@@ -61,8 +60,8 @@ const Login = () => {
     //   userPassword : userPw
     // } 
     const login_data = {
-      "email": "eve.holt@reqres.in",
-      "password": "cityslicka" }
+      "email": "janet.weaver@reqres.in",
+      "password": "Janet" }
       console.log(login_data)
     dispatch(__loginUser(login_data))
     setUsername("")
@@ -74,8 +73,19 @@ const Login = () => {
   return (
     <Contain>
       <BoxBox>
+        <BBox>
+          <div className='MiniBox'>
+            <Lottie animationData ={pickLottie}/>
+            <Lottie animationData ={pickLottie}/>
+            <Lottie animationData ={pickLottie}/>
+          </div>
+          <div className='ImgBox'>
+            <Lottie animationData ={loginLottie}/>
+          </div>
+        </BBox>
         <LoginBox>
           <Title>항해 언니</Title>
+          <p>예뻐지고 싶은 언니들의 커뮤니티</p>
           <Box>
             <p>로그인</p>
             <IdBox>
@@ -112,9 +122,6 @@ const Login = () => {
             </MoveBox>
           </Box>      
         </LoginBox>
-        <ImgBox>
-          <Lottie animationData ={loginLottie}/>
-        </ImgBox>
       </BoxBox>
     </Contain>
   )
@@ -132,20 +139,40 @@ const BoxBox = styled.div`
   width: 1400px;
   height:900px;
   margin: 0 auto;
+  /* border:1px solid red;  */
+
 `
+const BBox = styled.div`
+  width: 100%;
+  heigth:100%;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  .MiniBox{
+    display: flex;
+    width : 500px;
+    height: 240px;
+    /* border:1px solid red;  */
+    position: absolute;
+    top: 5%;
+    left: -10%;
+  }
+  .ImgBox{
+    width: 850px;
+    height: 700px;
+    position : absolute;
+    top: 0;
+    left: 40%;
+    /* transform: translateY(50%); */
+  }
+`
+
 const LoginBox = styled.div`
   position : absolute;
   z-index: 10;
   top: 60%;
-  left: 20%;
-  transform: translate(-50%, -50%);
-`
-const ImgBox = styled.div`
-  width: 900px;
-  height: 700px;
-  position : absolute;
-  /* top: 2%; */
-  left: 40%;
+  left: 10%;
+  transform: translateY(-50%);
 `
 const Title = styled.p`
   font-size: 65px;

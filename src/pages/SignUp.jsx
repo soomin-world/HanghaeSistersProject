@@ -1,22 +1,25 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+
+//redux, middleware
+import { useDispatch } from "react-redux";
+import { __signUpUser, __userCheck } from "../redux/modules/userSlice";
 
 //Lottie style
 import Lottie from "lottie-react";
 import { loginLottie } from "../assets/lottie";
 
+//style
 import styled from "styled-components";
 import '../shared/Common/Common.css';
 
 const SignUp = () =>{
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  
-
+    
   // 회원가입/ 로그인 state
-  const [username, setUsername] = useState('')
   const [userCheck, setUserCheck] = useState(false)
+  const [username, setUsername] = useState('')
   const [userPw, setUserPw] = useState('')
   const [userPwCheck, setUserPwCheck] = useState('')
 
@@ -37,12 +40,23 @@ const SignUp = () =>{
       alert('영문과 숫자를 포함하는 4-10자의 이내의 아이디를 입력해주세요')
       return 
     }
-    setUserCheck(true)
-    console.log('중복체크pass', userCheck)
-    // dispatch(action)
+    // 서버요청시 : id만, 지금은 test
+    const signup_data = {
+      "email": "janet.weaver@reqres.in",
+      "password": "Janet" 
+    }
+    console.log(username)
+    dispatch(__userCheck(signup_data))
+    // 디스패치 -> 서버에 중복체크 요청 /api/user/idcheck
+    // useSelect에서 코드값 200이면 true로 바꿔.
+    // if(statuscode === 200) { 
+    //   console.log('중복체크pass', userCheck)
+      setUserCheck(true)
+    // }else{
+    //   alert('중복된 아이디입니다.')
+    // }
   }
   
-
   // 회원가입
   const goSignIn = () =>{
     console.log('회원가입', username, userPw, userPwCheck)
@@ -62,20 +76,24 @@ const SignUp = () =>{
       return
     }
     // user데이터전송
-    const user_data = {
-      username : username,
-      userPassword : userPw,
-      userPasswordCheck : userPwCheck,
-    }
+    // const signup_data = {
+    //   username : username,
+    //   userPassword : userPw,
+    //   userPasswordCheck : userPwCheck,
+    // }
+    // test
+    const signup_data = {
+      "email": "janet.weaver@reqres.in",
+      "password": "Janet" }
     // 중복확인 여부
-    console.log(userCheck)
     !userCheck ? 
-    alert('아이디 중복확인을 해주세요')
+      alert('아이디 중복확인을 해주세요')
     : 
-    console.log('중복확인pass', user_data)
-    // dispatch(user_data)
+      console.log('중복확인pass', userCheck)
+      dispatch(__signUpUser(signup_data))
 
-//----------------------------------------
+
+    //----------------------------------------
     // 회원가입 버튼 누르면 
     // /api/user/idcheck 중복확인 
     // input에서 id 중복확인, 서버로 dispatch(결과404면 state:false)
@@ -103,7 +121,10 @@ const SignUp = () =>{
     <Contain>
       <BoxBox>
         <SignupBox>
-          <Title>항해 언니</Title>
+          <Title>
+            <p className='maintit'>항해 언니</p>
+            <p className='subtit'>예뻐지고 싶은 언니들의 커뮤니티</p>
+          </Title>
           <Box>
             <p>회원 가입</p>
             <IdBox>
@@ -168,36 +189,40 @@ const Contain = styled.div`
 	background-color: #ffec99;
 	/* background-color: #fff3bf; */
 	/* background-color: #e5dbff; */
-  `
+`
 const BoxBox = styled.div`
   position: relative;
   width: 1400px;
   height:900px;
   margin: 0 auto;
-
+  /* border: 1px solid red; */
 `
-
 const SignupBox = styled.div`
   position : absolute;
   z-index: 10;
-  top: 60%;
-  left: 20%;
-  transform: translate(-50%, -50%);
+  top: 20%;
+  left: 7%;
+  /* transform: translate(-50%, -50%); */
 `
 const ImgBox = styled.div`
   width: 900px;
   height: 700px;
   position : absolute;
   /* top: 2%; */
-  left: 40%;
+  left: 35%;
 `
-
-const Title = styled.p`
-  font-size: 65px;
-  font-weight:600;
+const Title = styled.div`
   margin-bottom: 30px;
   text-align: center;
   font-family: 'GongGothicMedium';
+  border: 1px solid red;
+  .maintit{
+    font-size: 65px;
+    margin-bottom: 10px;
+  }
+  .subtit{
+    font-size: 30px;
+  }
 `;
 const Box = styled.div`
   width: 550px;
