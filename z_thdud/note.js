@@ -8,3 +8,8 @@ import Lottie from "lottie-react";
 import { loginLottie } from "../assets/lottie";
 
 
+// 서버 설치
+// yarn add json-server
+
+// 서버실행
+// yarn json-server --watch db.json --port 3001

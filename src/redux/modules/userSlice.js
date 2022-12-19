@@ -1,13 +1,15 @@
-// 2_creadteSlice는 리듀서의 역할 
-//   => 액션value, 액션함수, 리듀서를 합쳐놓았기 때문에 코드가 간략해짐
+// 리듀서, 미들웨어
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
+// API, cookie
+import instance from "../../shared/Request";
+import { setCookie } from "../../shared/Cookie";
 
-// 기본데이터 diary안에 관리할 데이터가 들어가고
-// isLoading - 서버와의 통신결과
-// error - 에러객체 저장
 const initialState = {
+  // user안에 리듀서가 관리할 데이터가 들어가고
+  // isLoading - 서버와의 통신결과
+  // error - 에러객체 저장
   user: [],
   isLoading: false,
   error: null,
@@ -17,14 +19,14 @@ const initialState = {
 // --------------------------------------------------Diary 미들웨어
 // 회원가입 ( 유저 데이터 보내기, 결과 받기) 
 export const __signUpUser = createAsyncThunk(
-  "getUser",
+  "signUpUser",
   async (payload, thunkAPI) => {
     try {
       const data = await axios.get("http://localhost:3005/user");
       // console.log('로딩데이터: ', data)
       return thunkAPI.fulfillWithValue(data.data);
     } catch (err) {
-      console.log(err);
+
       return thunkAPI.rejectWithValue(err);
     }
   }
@@ -33,106 +35,103 @@ export const __signUpUser = createAsyncThunk(
 // 로그인하기
 // 로그인 정보 보내고, 토큰 
 export const __loginUser = createAsyncThunk(
-  "addUser",
+  "loginUser",
   async (payload, thunkAPI) => {
-    console.log(payload);
     try {
-      const data = await axios.post("http://localhost:3005/user", payload);
-      console.log("추가데이터: ", data);
-      return thunkAPI.fulfillWithValue(data.data);
-    } catch (err) {
-      console.log(err);
+      // 서버에 통신을 보낸다. 
+      // payload확인 
+      console.log(payload)
+      // 실제로 해볼 부분
+      // const {data} = await instance.post('api/user/login',payload)
+      // payload보내는 부분 체크
+      // const {data} = await axios.post('https://reqres.in/api/login',{ 
+      //   "email": "eve.holt@reqres.in",
+      //   "password": "cityslicka" })
+      const {data} = await axios.post('https://reqres.in/api/login', payload)
+
+      console.log('로그인유저:', data)
+
+      // 로그인 성공하면 서버에서 토큰, code:200 줌.
+      // api호출 성공하면 token값 받아옴(경로확인), 헤더 저장
+      const token = data.token;
+      instance.defaults.headers.common["Authorization"] = token;
+      // statusCode===200 이니까 try에 들어왔겠지?..if일단 패스 
+      // if( data.statusCode === 200 ){}
+      // 쿠키에 is_login으로 토큰 저장 => 프론트가서 로그인 유지
+      setCookie("is_login",token);
+      // 토큰은 쿠키에 저장했으니, 스토어로 안감. 굳이.뭐하러. 
+      return thunkAPI.fulfillWithValue(data,payload);
+    }catch(err){
+      console.log(err)
       return thunkAPI.rejectWithValue(err);
+      // 서버가 400번대 코드를 설정해놓으면
+      // axios가 여기로 보냄 
     }
   }
 );
 
 
-// --------------------------------------------------Diary 리듀서
+
+
+// 로그인 유지는? 프론트에서 어려움이 있음?
+
+// 로그인 토큰 만료시간이 있음 
+// => 포스트/댓글/페이지이동을 할 때마다 로그인 체크
+
+// 1.프론트는 db가 없기 때문에, 새로고침을 하면 데이터가 다 날아감
+// 2.만료시간이 지나지 않은 유저에게 다시 로그인 요청을 해야 함, XXXX안됨!!
+// 3.쿠키에 저장해놓은 토큰을 가지고 로그인 요청을 하는 API를 새로 만들어야 하지 않을까
+// 4.제가 생각한 게 맞는지. 모르겠씀다. 
+
+
+
+
+
+// ---------------------------- 리듀서
 export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {},
   extraReducers: {
-    // 리스트 불러오기 ---------------
-    [__getUser.pending]: (state) => {
+
+    // 회원가입  ---------------
+    [__signUpUser.pending]: (state) => {
       state.isLoading = true;
       // 네트워크 요청 시작-> 로딩 true 변경합니다.
     },
-    [__getUser.fulfilled]: (state, action) => {
+    [__signUpUser.fulfilled]: (state, action) => {
       // action으로 받아온 객체를 store에 있는 값에 넣어준다
       state.isLoading = false;
-      state.diary = action.payload;
+      state.user = action.payload;
     },
-    [__getUser.rejected]: (state, action) => {
+    [__signUpUser.rejected]: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
       // 에러 발생-> 네트워크 요청은 끝,false
       // catch 된 error 객체를 state.error에 넣습니다.
     },
 
-    // 리스트 추가 ------------------
-    [__addDiary.pending]: (state) => {
+    // 로그인 -----------------받음 payload(username),data
+    [__loginUser.pending]: (state) => {
       state.isLoading = true;
     },
-    [__addDiary.fulfilled]: (state, action) => {
-      // 액션으로 받은 값 = payload 추가해준다.
-      console.log("action-서버값", action.payload);
+    [__loginUser.fulfilled]: (state, action) => {
       state.isLoading = false;
-      state.diary = [...state.diary, action.payload];
-    },
-    [__addDiary.rejected]: (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload;
-    },
-
-    // 리스트 삭제 ------------------
-    [__delDiary.pending]: (state) => {
-      state.isLoading = true;
-    },
-    [__delDiary.fulfilled]: (state, action) => {
-      // 미들웨어를 통해 받은 action값이 무엇인지 항상 확인한다
-      console.log("action-서버값", action.payload);
-      state.isLoading = false;
-      const newList = state.diary.filter((t) => t.id !== action.payload);
-      state.diary = [...newList];
-    },
-    [__delDiary.rejected]: (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload;
-    },
-
-    // 수정 버튼 클릭 -----------------
-    [__editStartDiary.pending]: (state) => {
-      state.isLoading = true;
-    },
-    [__editStartDiary.fulfilled]: (state, action) => {
-      // console.log('state-store값',state.diary)
       console.log("action-서버값", action);
-      state.isLoading = false;
-      const copy = [...state.diary];
-      const index = state.diary.findIndex((c) => +c.id === +action.payload.id);
-      state.diary[index] = action.payload;
-      state.diary = [...state.diary];
-    },
-    [__editStartDiary.rejected]: (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload;
-    },
+      const username = action.meta.email
+      console.log(username)
+      // 여기서 뭐해줘야 하지? 스토어에 저장할 값.
+      // 토큰은 쿠키에 저장했으니까 안해줘도 될거같고
+      // 유저 데이터랑, 성공메세지(알림띄움용) 보내주면 될듯. 
 
-    // 수정 완료 버튼 클릭 -----------------
-    [__editStartDiary.pending]: (state) => {
-      state.isLoading = true;
+      // store에 들어있는 값은 무엇? 로그인 한 유저의 정보만 있는건가?
+      // store는 모든 유저의 데이터가 들어있나??? 아닌것 같음. 
+      // 리덕스는 새로고침하면 정보가 사라지니까
+      // 토큰도 스토어에 저장하면 안됨. 그렇네.  
+      // 그렇다면. 로그인 할때 store값은 별로 중요하지 않다 
+      state.user = { username }; 
     },
-    [__editStartDiary.fulfilled]: (state, action) => {
-      // console.log('state-store값',state.diary)
-      console.log("action-서버값", action);
-      state.isLoading = false;
-      const index = state.diary.findIndex((c) => +c.id === +action.payload.id);
-      state.diary[index] = action.payload;
-      state.diary = [...state.diary];
-    },
-    [__editStartDiary.rejected]: (state, action) => {
+    [__loginUser.rejected]: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
     },

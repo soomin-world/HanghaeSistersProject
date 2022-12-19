@@ -1,32 +1,62 @@
 import { useState } from "react";
+
+import { useDispatch, useSelector } from "react-redux";
+import { addComment } from "../redux/modules/commentTest";
+
 import styled from "styled-components";
 
 
 const Comment = () =>{
+  const dispatch = useDispatch()
+  const commentList = useSelector((state)=> state.comment.comment)
+  // id로 넘어오는 값을 받는다 치고 1로 고정시켜서 데이터 출력함함
+  const idx = 1;
+  console.log(commentList)
+  
+
+  //댓글창stae, 수정여부state
   const [isComment, setIsComment] = useState(false)
   const [isEdit, setIsEdit] = useState(false)
+  // 댓글text
   const [commentText, setCommentText] = useState('')
 
   const add_comment = () =>{
-    
-    console.log('댓글 등록/', commentText)
-    // dispatch
+    if(commentText === ''){
+      alert('댓글을 입력해주세요')
+      return
+    }
+    // commentId는 서버에서 넣어줌, 임시로넣음
+    // postId필요한가? 나만 필요한가? 
+    const newComment = {
+      postId : 1,
+      commentId : Math.floor(Math.random()*100),
+      comment : commentText,
+      username : "로그인아직",
+    }
+    console.log('댓글 등록/', newComment)
+    dispatch(addComment(newComment))
+    setCommentText("")
   }
+
   const del_comment = (id) =>{
     console.log('댓글 삭제/', id)
     // dispatch
   }
+
   const edit_starCommit = (id) =>{
     console.log('isEdit?/', id)
     // dispatch
   }
+
   const edit_endCommit = () =>{
     console.log('수정완료/', )
     // dispatch
   }
+
+
   return (
   <>
-    <ComWrite_box>
+    <ComWriteBox>
       <CommentBtn onClick={()=>{setIsComment(!isComment)}}>
         (말풍선) 댓글쓰기
       </CommentBtn>
@@ -40,7 +70,7 @@ const Comment = () =>{
             value= { commentText || "" }
             placeholder="좋은 정보는 모이면 모일수록, 좋지요~! 댓글을 작성해주세요."
             onChange={(e)=>{
-              console.log(e.target.value)
+              // console.log(e.target.value)
               setCommentText(e.target.value)
             }}
           />
@@ -49,45 +79,50 @@ const Comment = () =>{
         {/* <div>글자수:____</div> */}
       </>
       }
-    </ComWrite_box>
-    <ComList_box>
-      <div className="com_box">
-        <div className="com_username">thdud2222</div>
-        {(!isEdit)? 
-          <div className="com_text">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Corporis ab ipsa a hic nisi libero, fugit aliquid culpa accusantium. Eos magnam et quae ab repellat fugit recusandae quibusdam veniam necessitatibus.</div>
-        :
-          <>
-            <textarea 
-            className="com_edit_textarea" 
-            defaultvalue= { commentText || "" }
-            onChange={(e)=>{
-              console.log(e.target.value)
-              setCommentText(e.target.value)
-            }}
-          />
-          </>
-        }
-        {/* id가 내 id면 삭제, 수정버튼 보여주기 */}
-        {(!isEdit)? 
-          <div className='comBtn_box'>
-            <button onClick={()=>{del_comment(0)}}>삭제</button>
-            <button onClick={()=>{setIsEdit(!isEdit)}}>수정</button>
-          </div>
-        :
-          <div className='comBtn_box'>
-            <button onClick={()=>{setIsEdit(!isEdit)}}>수정취소</button>
-            <button onClick={()=>{edit_endCommit(0)}}>수정완료</button>
-          </div>
+    </ComWriteBox>
 
-        }
-      </div>
-    </ComList_box>
+    <ComListBox>
+      {commentList.map((c)=>{
+        // console.log(c)
+        return(
+          <div key={c.id} className="com_box">
+            <div className="com_username">{c.username}</div>
+            {(!isEdit)? 
+              <div className="com_text">{c.comment}</div>
+            :
+              <>
+                <textarea 
+                className="com_edit_textarea" 
+                defaultvalue= { commentText || "" }
+                onChange={(e)=>{
+                  console.log(e.target.value)
+                  setCommentText(e.target.value)
+                }}
+              />
+              </>
+            }
+            {/* id가 내 id면 삭제, 수정버튼 보여주기 */}
+            {(!isEdit)? 
+              <div className='comBtn_box'>
+                <button onClick={()=>{del_comment(c.id)}}>삭제</button>
+                <button onClick={()=>{setIsEdit(!isEdit)}}>수정</button>
+              </div>
+            :
+              <div className='comBtn_box'>
+                <button onClick={()=>{setIsEdit(!isEdit)}}>수정취소</button>
+                <button onClick={()=>{edit_endCommit(c.id)}}>수정완료</button>
+              </div>
+            }
+          </div>
+        )  
+      })}
+    </ComListBox>
   </>
   )
 }
 
 
-const ComList_box = styled.div` 
+const ComListBox = styled.div` 
   padding: 15px 25px;
   box-sizing: border-box;
   .com_box{
@@ -145,7 +180,7 @@ const ComList_box = styled.div`
     }
   }
 `
-const ComWrite_box = styled(ComList_box)`
+const ComWriteBox = styled(ComListBox)`
   textarea{
     width: 100%;
     height: 60px;

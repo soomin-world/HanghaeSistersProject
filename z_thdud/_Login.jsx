@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import '../shared/Common/Common.css';
 
-const Login = () =>{
+const _Login = () =>{
   const navigate = useNavigate();
   const dispatch = useDispatch();
   
@@ -17,7 +17,7 @@ const Login = () =>{
   const [userPw, setUserPw] = useState('')
   const [userPwCheck, setUserPwCheck] = useState('')
 
-  // 아이디, 비밀번호 정규식
+  // 아이디, 비밀번호 정규식 
   // id:영문-숫자 4,10 , pw:영문,숫자 8-20자 
   function isId(asValue) {
     var regExp =  /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{4,10}$/g;    
@@ -36,7 +36,7 @@ const Login = () =>{
     }
     setUserCheck(true)
     console.log('중복체크pass', userCheck)
-    // dispatch(action)
+    dispatch()
   }
   
   // 로그인
@@ -307,4 +307,4 @@ const MoveBox = styled.div`
 `;
 
 
-export default Login;
+export default _Login;
