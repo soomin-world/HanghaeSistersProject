@@ -58,9 +58,9 @@ export const __deletePost = createAsyncThunk(
 export const __getPosts = createAsyncThunk(
   "getPosts",
   async (payload, thunkAPI) => {
+    console.log(payload);
     try {
       const data = await axios.get("http://localhost:3001/posts");
-      console.log(data.data);
       return thunkAPI.fulfillWithValue(data.data);
     } catch (error) {
       console.log(error);
@@ -79,7 +79,9 @@ export const postSlice = createSlice({
     },
     [__postPost.fulfilled]: (state, action) => {
       state.isLoading = false; // 네트워크 요청이 끝났으니, false로 변경합니다.
-      state.posts = action.payload; // Store에 있는 todos에 서버에서 가져온 todos를 넣습니다.
+      state.posts.push(action.payload); // Store에 있는 todos에 서버에서 가져온 todos를 넣습니다.
+      console.log(action);
+      console.log(action.payload);
     },
     [__postPost.rejected]: (state, action) => {
       state.isLoading = false; // 에러가 발생했지만, 네트워크 요청이 끝났으니, false로 변경합니다.

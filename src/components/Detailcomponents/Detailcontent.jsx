@@ -49,14 +49,8 @@ const DetailContent = () => {
       <article className="content">
         <h2>내 용</h2>
         <div className="img">
-          <img
-            src="https://www.mangoboard.net/mgImg/com/template/TPL03312_Minibanner_Template.jpg"
-            alt="이미지 전"
-          ></img>
-          <img
-            src="https://www.mangoboard.net/mgImg/com/template/TPL05466_Minibanner_Template.jpg"
-            alt="이미지 후"
-          ></img>
+          <img src={state.imageBefore} alt="이미지 전"></img>
+          <img src={state.imageAfter} alt="이미지 후"></img>
         </div>
 
         <div className="contentText">
