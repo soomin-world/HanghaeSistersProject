@@ -1,15 +1,17 @@
-import styled from "styled-components";
-import Comment from "../components/Comment";
+import Layout from "../components/layout/Layout";
+import DetailContent from "../components/Detailcomponents/Detailcontent";
 
 
 const Detail = () => {
   return (
-    // 윗부분 상세페이지
-    <CommentBox>
-      <Comment />
-    </CommentBox>
-  )
-}
+    <Layout>
+      <DetailContent />
+      <CommentBox>
+        <Comment />
+      </CommentBox>
+    </Layout>
+  );
+};
 
 const CommentBox = styled.div`
   width: 1200px;

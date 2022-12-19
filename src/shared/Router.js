@@ -13,11 +13,9 @@ const Router = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Main />} />
-        {/* 디테일은 테스트용 지워주세요 */}
-        <Route path="detail/" element={<Detail />} />
-        <Route path="detail/:id" element={<Detail />} />
-        <Route path="/posting" element={<PostingPage />} />
-        <Route path="/postingEdit/:id" element={<PostingEdit />} />
+        <Route path="/detail/:id" element={<Detail />} />
+        <Route path="/postingPage" element={<PostingPage />} />
+        <Route path="/postingEdit" element={<PostingEdit />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
       </Routes>
