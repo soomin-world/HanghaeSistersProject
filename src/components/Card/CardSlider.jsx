@@ -8,11 +8,11 @@ function CardSlider(props) {
   const selectedCategory = props.category;
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { posts, isLoading, error } = useSelector((state) => state.post);
   useEffect(() => {
     dispatch(__getPosts());
   }, [dispatch]);
 
-  const { posts, isLoading, error } = useSelector((state) => state.post);
   console.log(posts);
   // posts 가 category별로 넘어온 데이터라고 가정
   if (isLoading === true) {
