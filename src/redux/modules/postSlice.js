@@ -59,7 +59,6 @@ export const __deletePost = createAsyncThunk(
 export const __getPosts = createAsyncThunk(
   "getPosts",
   async (payload, thunkAPI) => {
-    console.log(payload);
     try {
       const data = await instance.get("/posts");
       return thunkAPI.fulfillWithValue(data.data);
@@ -106,7 +105,6 @@ export const postSlice = createSlice({
     [__getPosts.fulfilled]: (state, action) => {
       state.isLoading = false;
       state.posts = action.payload;
-      console.log(action.payload);
     },
     [__getPosts.rejected]: (state, action) => {
       state.isLoading = false;

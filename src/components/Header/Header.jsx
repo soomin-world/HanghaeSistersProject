@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import Lottie from "lottie-react";
+import face from "../../assets/lottie/face.json";
 
 function Header() {
   return (
@@ -6,14 +8,10 @@ function Header() {
       <STInner>
         <div className="logo">
           <a href="/" className="logo">
-            <img
-              src="https://cdn-icons-png.flaticon.com/512/5501/5501044.png"
-              alt="logo"
-              width="60px"
-              height="60px"
-            />
+            <Lottie animationData={face} />
           </a>
         </div>
+        {/* <div className="title">항해언니</div> */}
         <ul className="menu">
           <li>
             <a href="/logIn">로그인</a>
@@ -34,7 +32,7 @@ function Header() {
 const STNavbar = styled.header`
   width: 100%;
   height: 80px;
-  background-color: #dcd0e6da;
+  background-color: #e7a0be8f;
 `;
 
 const STInner = styled.div`
@@ -42,11 +40,17 @@ const STInner = styled.div`
   height: 80px;
   display: flex;
   justify-content: space-between;
+  div.title {
+    margin: 20px 0px 0px 90px;
+    font-size: 40px;
+    font-weight: bold;
+    color: #fd00c6;
+  }
 
   div.logo {
-    width: 60px;
-    height: 60px;
-    margin: 10px 0px 10px 15px;
+    width: 80px;
+    height: 80px;
+    margin: 0px 0px 5px 7px;
   }
   ul {
     display: flex;
@@ -59,10 +63,10 @@ const STInner = styled.div`
         padding: 13px 15px;
         display: block;
         font-size: 13px;
-        color: #5c5656;
+        color: #000000;
         text-decoration: none;
         &:hover {
-          background-color: #9179c9da;
+          background-color: #f551e76a;
           color: #ffffff;
         }
       }

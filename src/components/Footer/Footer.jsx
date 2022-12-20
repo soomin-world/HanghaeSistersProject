@@ -18,7 +18,7 @@ function Footer() {
 }
 
 const STFooter = styled.footer`
-  background-color: #dcd0e6da;
+  background-color: #d85d9061;
   width: 100%;
   height: 60px;
   padding: 10px;
@@ -36,4 +36,5 @@ const STFooter = styled.footer`
   }
 `;
 
+// 백 , 프론트 나눠서 각각 깃허브 주소 연결시키
 export default Footer;

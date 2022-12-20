@@ -1,20 +1,23 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { __getPosts } from "../../redux/modules/postSlice";
 
 function CardSlider(props) {
   const selectedCategory = props.category;
+  // mainbody컴포넌트에서 넘겨준 category값, get해올떄 payload 에 넣어줄 예정
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { posts, isLoading, error } = useSelector((state) => state.post);
+
   useEffect(() => {
     dispatch(__getPosts());
   }, [dispatch]);
-
+  // dispatch가 되면 멈춰라, dispatch가 될때까지만 렌더링 되어라
   console.log(posts);
   // posts 가 category별로 넘어온 데이터라고 가정
+
   if (isLoading === true) {
     return <div>로딩 중....</div>;
   }
@@ -22,28 +25,56 @@ function CardSlider(props) {
     return <div>{error.message}</div>;
   }
   return (
-    <div className="card-container">
-      <STInner clssName="inner">
-        {posts.map((post) => (
-          <STCard className="card">
-            <img
-              key={post.id}
-              src={post.imageAfter}
-              alt={"안녕하세요"}
-              onClick={() => {
-                navigate(`/detail/${post.id}`, { state: post });
-              }}
-            />
+    <STContainer>
+      <STInner>
+        {posts?.map((post) => (
+          <STCard
+            key={post.id}
+            onClick={() => {
+              navigate(`/detail/${post.id}`, { state: post });
+              // 이부분 질문 해봐야지
+            }}
+          >
+            <img src={post.imageAfter} alt={"안녕하세요"} />
             <div>{post.title}</div>
-            <div>{post.price}</div>
+            <div>{post.price}원</div>
           </STCard>
         ))}
       </STInner>
-    </div>
+    </STContainer>
   );
 }
 
-const STContainer = styled.div``;
+const STContainer = styled.div`
+  overflow: auto;
+  height: 400px;
+  width: 100%;
+  ::-webkit-scrollbar {
+    height: 12px;
+    width: 20%;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: #da5576; /*스크롤바의 색상*/
+    background-clip: padding-box;
+    border: 4px solid transparent;
+    border-top-left-radius: 50px;
+    border-bottom-right-radius: 50px;
+  }
+  ::-webkit-scrollbar-track {
+    background-color: #e7438834;
+  }
+`;
+
+const STInner = styled.div`
+  width: 1100px;
+  height: 400px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+`;
 const STCard = styled.div`
   margin-top: 30px;
   width: 250px;
@@ -52,6 +83,7 @@ const STCard = styled.div`
   box-shadow: 0 5px 18px -7px rgba(0, 0, 0, 2);
   transition: 0.5s;
   cursor: pointer;
+
   &:hover {
     transform: scale(1.1);
   }
@@ -69,12 +101,4 @@ const STCard = styled.div`
   }
 `;
 
-const STInner = styled.div`
-  width: 1100px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  flex-wrap: wrap;
-`;
 export default CardSlider;

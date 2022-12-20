@@ -2,25 +2,47 @@
   "posts": [
     {
       "title": "11",
-      "category": "eye",
-      "imageBefore": "https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMjA0MTdfMTMy%2FMDAxNjUwMjAxNzg3MjE0.5VncnxFbYPSUHM0ThnqW-c-TeTtVEMjaLMR4qUdo1TUg.k-riWOlKxNnV48DeosqAUcKxZR_1XihoSOadauEKo_Yg.JPEG.bnbnbn0707%2FIMG_5534.JPG&type=sc960_832",
-      "imageAfter": "https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMjA0MTdfMTMy%2FMDAxNjUwMjAxNzg3MjE0.5VncnxFbYPSUHM0ThnqW-c-TeTtVEMjaLMR4qUdo1TUg.k-riWOlKxNnV48DeosqAUcKxZR_1XihoSOadauEKo_Yg.JPEG.bnbnbn0707%2FIMG_5534.JPG&type=sc960_832",
-      "content": "1111",
-      "price": "11",
-      "hospitalAdress": "111",
-      "doctor": "11",
-      "id": 2
+      "category": "눈성형",
+      "imageBefore": "https://media.npr.org/assets/img/2022/09/15/ap22258667772996-b91d3e4e4ba023045eb4f908fc688243e531552d-s800-c85.webp",
+      "imageAfter": "https://media.npr.org/assets/img/2022/09/15/ap22258667772996-b91d3e4e4ba023045eb4f908fc688243e531552d-s800-c85.webp",
+      "content": "11",
+      "price": "1",
+      "hospitalAdress": "1",
+      "doctor": "1",
+      "id": 3
     },
     {
       "title": "11",
-      "category": "eye",
-      "imageBefore": "https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMjA0MTdfMTMy%2FMDAxNjUwMjAxNzg3MjE0.5VncnxFbYPSUHM0ThnqW-c-TeTtVEMjaLMR4qUdo1TUg.k-riWOlKxNnV48DeosqAUcKxZR_1XihoSOadauEKo_Yg.JPEG.bnbnbn0707%2FIMG_5534.JPG&type=sc960_832",
-      "imageAfter": "https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMjA0MTdfMTMy%2FMDAxNjUwMjAxNzg3MjE0.5VncnxFbYPSUHM0ThnqW-c-TeTtVEMjaLMR4qUdo1TUg.k-riWOlKxNnV48DeosqAUcKxZR_1XihoSOadauEKo_Yg.JPEG.bnbnbn0707%2FIMG_5534.JPG&type=sc960_832",
-      "content": "https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMjA0MTdfMTMy%2FMDAxNjUwMjAxNzg3MjE0.5VncnxFbYPSUHM0ThnqW-c-TeTtVEMjaLMR4qUdo1TUg.k-riWOlKxNnV48DeosqAUcKxZR_1XihoSOadauEKo_Yg.JPEG.bnbnbn0707%2FIMG_5534.JPG&type=sc960_832",
+      "category": "턱성형",
+      "imageBefore": "https://media.npr.org/assets/img/2022/09/15/ap22258667772996-b91d3e4e4ba023045eb4f908fc688243e531552d-s800-c85.webp",
+      "imageAfter": "https://media.npr.org/assets/img/2022/09/15/ap22258667772996-b91d3e4e4ba023045eb4f908fc688243e531552d-s800-c85.webp",
+      "content": "11",
       "price": "11",
       "hospitalAdress": "11",
       "doctor": "11",
-      "id": 3
+      "id": 7
+    },
+    {
+      "title": "111",
+      "category": "턱성형",
+      "imageBefore": "https://media.npr.org/assets/img/2022/09/15/ap22258667772996-b91d3e4e4ba023045eb4f908fc688243e531552d-s800-c85.webp",
+      "imageAfter": "https://media.npr.org/assets/img/2022/09/15/ap22258667772996-b91d3e4e4ba023045eb4f908fc688243e531552d-s800-c85.webp",
+      "content": "1",
+      "price": "11",
+      "hospitalAdress": "11",
+      "doctor": "11",
+      "id": 8
+    },
+    {
+      "title": "11",
+      "category": "코성형",
+      "imageBefore": "https://media.npr.org/assets/img/2022/09/15/ap22258667772996-b91d3e4e4ba023045eb4f908fc688243e531552d-s800-c85.webp",
+      "imageAfter": "https://media.npr.org/assets/img/2022/09/15/ap22258667772996-b91d3e4e4ba023045eb4f908fc688243e531552d-s800-c85.webp",
+      "content": "https://media.npr.org/assets/img/2022/09/15/ap22258667772996-b91d3e4e4ba023045eb4f908fc688243e531552d-s800-c85.webp",
+      "price": "1",
+      "hospitalAdress": "1",
+      "doctor": "1",
+      "id": 9
     }
   ]
 }
