@@ -10,7 +10,7 @@ function Banner() {
         <img src="/image/banner2.jpg" />
       </div>
       <div>
-        <img src="/image/banner3.jpg" />
+        <img src="/image/banner4.jpg" />
       </div>
     </Carousel>
   );

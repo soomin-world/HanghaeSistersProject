@@ -1,21 +1,22 @@
-import React from "react";
-import Banner from "../components/Banner/Banner";
-import Footer from "../components/Footer/Footer";
-import Header from "../components/Header/Header";
 import Layout from "../components/layout/Layout";
-import MainBody from "../components/MainBody/Mainbody";
+import Banner from "../components/Banner/Banner";
+import Header from "../components/Header/Header";
+import Mainbody from "../components/MainBody/Mainbody";
+import Footer from "../components/Footer/Footer";
+import CardSlider from "../components/Card/CardSlider";
 
-const Main = () => {
+function Main() {
   return (
     <>
       <Header />
       <Banner />
       <Layout>
-        <MainBody />
+        <Mainbody />
+        <CardSlider />
       </Layout>
       <Footer />
     </>
   );
-};
+}
 
 export default Main;
