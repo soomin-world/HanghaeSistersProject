@@ -3,7 +3,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 // API, cookie
-import instance from "../../shared/Request";
+import { instance } from "../../core/api/axios";
 import { setCookie } from "../../shared/Cookie";
 
 const initialState = {
@@ -15,23 +15,25 @@ const initialState = {
   error: null,
 };
 
-
 // --------------------------------------------------Diary 미들웨어
-// 중복체크 ( 유저 데이터 보내기, 결과 받기 ) 
+// 중복체크 ( 유저 데이터 보내기, 결과 받기 )
 export const __userCheck = createAsyncThunk(
   "userCheck",
   async (payload, thunkAPI) => {
-    console.log(payload)
+    console.log(payload);
     try {
-      const {data} = await instance.post("api/register", payload);
-      console.log('중복확인: ',data)
-      // 실제 서버통신 url 
+      const { data } = await instance.get(
+        `/api/user/idcheck?username=${payload}`
+      );
+      console.log("중복확인: ", data);
+
+      // 실제 서버통신 url
       // const data = await axios.post("https://------/api/user/idcheck", payload)
       // 중복확인에서 할 일 => 서버에서 status, msg출력해줌 => code에 따라서 메세지출력하기
 
-      // 여기서 결과가 출력되면 리듀서, 프론트 단에도 적용, 
-      // 비동기라... 응답 받는 즉시 앞단에 출력?... 
-      // dispatch끝난 다음 코드(console.)가 실행돼있어서. 
+      // 여기서 결과가 출력되면 리듀서, 프론트 단에도 적용,
+      // 비동기라... 응답 받는 즉시 앞단에 출력?...
+      // dispatch끝난 다음 코드(console.)가 실행돼있어서.
       return thunkAPI.fulfillWithValue(data, payload);
     } catch (err) {
       return thunkAPI.rejectWithValue(err);
@@ -39,14 +41,13 @@ export const __userCheck = createAsyncThunk(
   }
 );
 
-
-// 회원가입 ( 유저 데이터 보내기, 결과 받기) 
+// 회원가입 ( 유저 데이터 보내기, 결과 받기)
 export const __signUpUser = createAsyncThunk(
   "signUpUser",
   async (payload, thunkAPI) => {
-    console.log(payload)
+    console.log(payload);
     try {
-      const {data} = await instance.post('api/register', payload)
+      const { data } = await instance.post("/api/user/signup", payload);
       // console.log('로딩데이터: ', data)
       return thunkAPI.fulfillWithValue(data);
     } catch (err) {
@@ -55,15 +56,14 @@ export const __signUpUser = createAsyncThunk(
   }
 );
 
-
 // 로그인하기
 export const __loginUser = createAsyncThunk(
   "loginUser",
   async (payload, thunkAPI) => {
     try {
-      // 서버에 통신을 보낸다. 
-      // payload확인 
-      console.log(payload)
+      // 서버에 통신을 보낸다.
+      // payload확인
+      console.log(payload);
 
       // payload보내는 부분 체크
       // const {data} = await axios.post('https://reqres.in/api/login',{ })
@@ -71,46 +71,38 @@ export const __loginUser = createAsyncThunk(
       // const {data} = await axios.post('https://--------//api/user/login',{
       //   "email": "eve.holt@reqres.in",
       //   "password": "cityslicka" })
-      const {data} = await instance.post('api/login', payload)
-      console.log('로그인유저:', data)
+      const { data } = await instance.post("/api/user/login", payload);
+      console.log("로그인유저:", data);
 
       // 로그인 성공하면 서버에서 토큰, code:200 줌.
       // api호출 성공하면 token값 받아옴(경로확인), 헤더 저장
       // data는 axios에서 기본적으로 결과값들이 들어있는 프로퍼티
-      const token = data.token;
-      instance.defaults.headers.common["Authorization"] = token;
-
+      let token = instance.defaults.headers.common["Authorization"];
+      // const token = data.token;
+      console.log(token);
       // 쿠키에 is_login으로 토큰 저장 => 프론트가서 로그인 유지
-      // 토큰은 쿠키에 저장했으니, 스토어로 안감. 굳이.뭐하러. 
+      // 토큰은 쿠키에 저장했으니, 스토어로 안감. 굳이.뭐하러.
       // axios연결 이상 없는데, 리듀서로 가지 않으면 -> config에 연결확인해보기!
-      setCookie("is_login",token);
-      return thunkAPI.fulfillWithValue(data,payload);
-
-    }catch(err){
-      console.log(err)
+      setCookie("is_login", token);
+      return thunkAPI.fulfillWithValue(data, payload);
+    } catch (err) {
+      console.log(err);
       return thunkAPI.rejectWithValue(err);
       // 서버가 400번대 코드를 설정해놓으면
-      // axios가 여기로 보냄 
+      // axios가 여기로 보냄
     }
   }
 );
 
-
-
-
 // 로그인 유지는? 프론트에서 어려움이 있음?
 
-// 로그인 토큰 만료시간이 있음 
+// 로그인 토큰 만료시간이 있음
 // => 포스트/댓글/페이지이동을 할 때마다 로그인 체크
 
 // 1.프론트는 db가 없기 때문에, 새로고침을 하면 데이터가 다 날아감
 // 2.만료시간이 지나지 않은 유저에게 다시 로그인 요청을 해야 함, XXXX안됨!!
 // 3.쿠키에 저장해놓은 토큰을 가지고 로그인 요청을 하는 API를 새로 만들어야 하지 않을까
-// 4.제가 생각한 게 맞는지. 모르겠씀다. 
-
-
-
-
+// 4.제가 생각한 게 맞는지. 모르겠씀다.
 
 // ---------------------------- 리듀서
 export const userSlice = createSlice({
@@ -118,7 +110,6 @@ export const userSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: {
-
     // 중복확인  ---------------
     [__userCheck.pending]: (state) => {
       state.isLoading = true;
@@ -164,17 +155,17 @@ export const userSlice = createSlice({
       state.isLoading = false;
       // 여기서 뭐해줘야 하지? 스토어에 저장할 값.
       // 토큰은 쿠키에 저장했으니까 안해줘도 될거같고
-      // 유저 데이터랑, 성공메세지(알림띄움용) 보내주면 될듯. 
+      // 유저 데이터랑, 성공메세지(알림띄움용) 보내주면 될듯.
       console.log("action-서버값", action);
-      const username = action.meta.email
-      console.log(username)
+      const username = action.meta.email;
+      console.log(username);
 
       // store에 들어있는 값은 무엇? 로그인 한 유저의 정보만 있는건가?
-      // store는 모든 유저의 데이터가 들어있나??? 아닌것 같음. 
+      // store는 모든 유저의 데이터가 들어있나??? 아닌것 같음.
       // 리덕스는 새로고침하면 정보가 사라지니까
-      // 토큰도 스토어에 저장하면 안됨. 그렇네.  
-      // 그렇다면. 로그인 할때 store값은 별로 중요하지 않다 
-      state.user = { username }; 
+      // 토큰도 스토어에 저장하면 안됨. 그렇네.
+      // 그렇다면. 로그인 할때 store값은 별로 중요하지 않다
+      state.user = { username };
     },
     [__loginUser.rejected]: (state, action) => {
       state.isLoading = false;

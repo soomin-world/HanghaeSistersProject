@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
+
 import { instance } from "../../core/api/axios";
 
 const initialState = {
@@ -14,7 +14,7 @@ export const __postPost = createAsyncThunk(
   async (payload, thunkAPI) => {
     console.log(payload);
     try {
-      const data = await axios.post(" http://localhost:3001/posts", payload);
+      const data = await instance.post("/posts", payload);
       return thunkAPI.fulfillWithValue(data.data);
     } catch (error) {
       console.log(error);
@@ -27,10 +27,7 @@ export const __upDatePost = createAsyncThunk(
   "upDatePost",
   async (payload, thunkAPI) => {
     try {
-      const data = await axios.put(
-        `http://localhost:3001/posts/${payload.id}`,
-        payload
-      );
+      const data = await instance.put(`/posts/${payload.id}`, payload);
       return thunkAPI.fulfillWithValue(data.data);
     } catch (error) {
       alert("서버요청중 오류발생!");
@@ -44,9 +41,7 @@ export const __deletePost = createAsyncThunk(
   async (payload, thunkAPI) => {
     console.log(payload);
     try {
-      const data = await axios.delete(
-        `http://localhost:3001/posts/${payload.id}`
-      );
+      const data = await instance.delete(`/posts/${payload.id}`);
       return thunkAPI.fulfillWithValue(data.data);
     } catch (error) {
       console.log(error);
@@ -60,7 +55,9 @@ export const __getPosts = createAsyncThunk(
   async (payload, thunkAPI) => {
     console.log(payload);
     try {
-      const data = await instance.get("/posts");
+      const data = await instance.get(
+        `/api/posts/category?category=${payload}`
+      );
       return thunkAPI.fulfillWithValue(data.data);
     } catch (error) {
       console.log(error);

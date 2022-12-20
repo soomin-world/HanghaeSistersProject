@@ -12,7 +12,7 @@ function CardSlider(props) {
   const { posts, isLoading, error } = useSelector((state) => state.post);
 
   useEffect(() => {
-    dispatch(__getPosts());
+    dispatch(__getPosts(selectedCategory));
   }, [dispatch]);
   // dispatch가 되면 멈춰라, dispatch가 될때까지만 렌더링 되어라
   console.log(posts);
