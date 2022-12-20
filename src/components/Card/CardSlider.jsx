@@ -99,16 +99,4 @@ const STCard = styled.div`
     font-size: 15px;
   }
 `;
-
-<<<<<<< HEAD
-=======
-const STInner = styled.div`
-  width: 1100px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  flex-wrap: wrap;
-`;
->>>>>>> ab1bb0a875f33cb592dae374e697ef0faf97dd04
 export default CardSlider;
