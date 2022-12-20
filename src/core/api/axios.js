@@ -1,11 +1,17 @@
 import axios from "axios";
 
 export const instance = axios.create({
-  baseURL: "http://localhost:3001",
+  baseURL: "http://43.201.111.129",
+  headers: {
+    "Access-Control-Allow-Origin": "*",
+  },
 });
 
 export const baseURL = axios.create({
-  baseURL: "http://localhost:3001",
+  baseURL: "http://43.201.111.129",
+  headers: {
+    "Access-Control-Allow-Origin": "*",
+  },
 });
 
 //인스턴스 request header

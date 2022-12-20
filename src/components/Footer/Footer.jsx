@@ -4,14 +4,20 @@ function Footer() {
   return (
     <STFooter>
       <div className="inner">
-        <ul>
-          <li>KyuMin</li>
-          <li>Sora</li>
-          <li>ChumBaek</li>
-          <li>SoYoung</li>
-          <li>JinYoung</li>
-          <li>SuMin</li>
-        </ul>
+        <div className="backEnd">
+          <ul>
+            <li>KyuMin</li>
+            <li>Sora</li>
+            <li>ChumBaek</li>
+          </ul>
+        </div>
+        <div className="frontEnd">
+          <ul>
+            <li>SoYoung</li>
+            <li>JinYoung</li>
+            <li>SuMin</li>
+          </ul>
+        </div>
       </div>
     </STFooter>
   );
@@ -24,12 +30,13 @@ const STFooter = styled.footer`
   padding: 10px;
   margin-top: 100px;
   div {
+    display: flex;
+    justify-content: space-between;
     ul {
       list-style: none;
-      display: flex;
       justify-content: center;
       li {
-        margin-right: 20px;
+        margin: 10px 0px 10px 10px;
         font-size: 13px;
       }
     }
