@@ -136,6 +136,13 @@ const EditForm = () => {
       </STDoctor>
       <STBDIV>
         <STButton type="submit">수정완료</STButton>
+        <button
+          onClick={() => {
+            navigate(-1);
+          }}
+        >
+          이전으로
+        </button>
       </STBDIV>
     </STForm>
   );

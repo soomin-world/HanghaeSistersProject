@@ -59,6 +59,7 @@ export const __deletePost = createAsyncThunk(
 export const __getPosts = createAsyncThunk(
   "getPosts",
   async (payload, thunkAPI) => {
+    console.log(payload);
     try {
       const data = await instance.get("/posts");
       return thunkAPI.fulfillWithValue(data.data);

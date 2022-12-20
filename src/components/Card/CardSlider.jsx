@@ -83,7 +83,6 @@ const STCard = styled.div`
   box-shadow: 0 5px 18px -7px rgba(0, 0, 0, 2);
   transition: 0.5s;
   cursor: pointer;
-
   &:hover {
     transform: scale(1.1);
   }
@@ -101,4 +100,15 @@ const STCard = styled.div`
   }
 `;
 
+<<<<<<< HEAD
+=======
+const STInner = styled.div`
+  width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+`;
+>>>>>>> ab1bb0a875f33cb592dae374e697ef0faf97dd04
 export default CardSlider;
