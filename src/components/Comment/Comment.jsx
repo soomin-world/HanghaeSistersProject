@@ -7,6 +7,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 const Comment = (props) => {
   const { state } = props.state;
+  //메인페이지에서 get으로 받은 정보를 디테일페이지에서 state라는 이름으로 props로 받음.
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const commentList = useSelector((state) => state.comment.comment);
@@ -50,7 +51,7 @@ const Comment = (props) => {
                   // console.log(e.target.value)
                 }}
               />
-              <button onClick={add_comment}>등록</button>
+              <button onClick={add_comment()}>등록</button>
             </div>
             {/* <div>글자수:____</div> */}
           </>
