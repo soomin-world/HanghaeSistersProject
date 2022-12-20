@@ -2,12 +2,13 @@ import { Descriptions } from "antd";
 import { useEffect, useState } from "react";
 import ReactCardSlider from "react-card-slider-component";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { __getPosts } from "../../redux/modules/postSlice";
 
 function CardSlider(props) {
   const clickedCategory = props.category;
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   useEffect(() => {
     dispatch(__getPosts());
   }, [dispatch]);
@@ -30,7 +31,7 @@ function CardSlider(props) {
 
   return (
     <div>
-      <ReactCardSlider slides={slides} />{" "}
+      <ReactCardSlider slides={slides} />
     </div>
   );
 }

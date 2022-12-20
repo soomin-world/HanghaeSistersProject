@@ -4,8 +4,8 @@ import { useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import { __deletePost } from "../../redux/modules/postSlice";
 
-const DetailContent = () => {
-  const { state } = useLocation();
+const DetailContent = (props) => {
+  const state = props.state;
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -16,7 +16,7 @@ const DetailContent = () => {
   const deleteHandler = () => {
     if (!window.confirm("해당글을 삭제하시겠습니까?")) return;
     dispatch(__deletePost(state));
-    navigate(`/`);
+    window.location.href = "/";
   };
 
   const updateHandler = () => {
@@ -49,27 +49,22 @@ const DetailContent = () => {
       <article className="content">
         <h2>내 용</h2>
         <div className="img">
-          <img
-            src="https://www.mangoboard.net/mgImg/com/template/TPL03312_Minibanner_Template.jpg"
-            alt="이미지 전"
-          ></img>
-          <img
-            src="https://www.mangoboard.net/mgImg/com/template/TPL05466_Minibanner_Template.jpg"
-            alt="이미지 후"
-          ></img>
+          <img src={state.imageBefore} alt="이미지 전"></img>
+          <img src={state.imageAfter} alt="이미지 후"></img>
         </div>
-
+        <h2>시술 정보</h2>
         <div className="contentText">
-          <h2>시술 정보</h2>
-          <h3>가격: </h3>
-          <p className="price">{state.price}</p>
-          <p>
+          <p className="price">
+            <span>가격:</span>
+            {state.price}
+          </p>
+          <p className="price">
             <span>내용:</span>
             {state.content}
           </p>
         </div>
       </article>
-      <h2>병원 정보</h2>
+      <h2 className="infoT">병원 정보</h2>
       <div className="info">
         <p>
           <span>병원 주소:</span>
@@ -92,10 +87,14 @@ const DetailSection = styled.section`
   width: 100%;
   padding-top: 30px;
   font-family: "Noto Sans KR";
-
+  .infoT {
+    font-weight: bold;
+    font-size: 1.2rem;
+    padding: 2% 2%;
+  }
   //타이틀 css
   .title {
-    border: 2px solid black;
+    border: 2px solid #e5dbff;
     padding: 1% 2%;
     margin-bottom: 2%;
     p {
@@ -114,6 +113,10 @@ const DetailSection = styled.section`
     padding: 1% 2%;
     margin-bottom: 2%;
     box-sizing: border-box;
+    h2 {
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
     .img {
       display: flex;
 
@@ -135,6 +138,7 @@ const DetailSection = styled.section`
         display: inline-block;
         width: 80%;
         font-size: 1.2rem;
+        padding: 2% 2%;
       }
       h3 {
         display: inline-block;
@@ -148,7 +152,7 @@ const DetailSection = styled.section`
   .info {
     padding: 1% 2%;
     margin-bottom: 2%;
-    border: 2px solid black;
+    border: 2px solid #e5dbff;
     p {
       font-size: 1.2rem;
       span {
