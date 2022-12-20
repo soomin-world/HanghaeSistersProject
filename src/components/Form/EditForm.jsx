@@ -7,7 +7,6 @@ import styled from "styled-components";
 const EditForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [Selected, setSelected] = useState("");
 
   const { state } = useLocation();
 
@@ -137,6 +136,13 @@ const EditForm = () => {
       </STDoctor>
       <STBDIV>
         <STButton type="submit">수정완료</STButton>
+        <button
+          onClick={() => {
+            navigate(-1);
+          }}
+        >
+          이전으로
+        </button>
       </STBDIV>
     </STForm>
   );

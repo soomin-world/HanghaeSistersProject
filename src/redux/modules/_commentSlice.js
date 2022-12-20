@@ -1,15 +1,14 @@
-// import 먼저 하기 
-// redux-toolkit => 전역상태관리(store)를 하기 위함   
-// toolkit에 있는 API로 불러옴 
-// 1_thunk는 비동기 통신을 위함 (axios)랑 통신하기 위해서 
-//   => 리듀서에서는 비동기 통신을 할 수 없음 = 서버와 연동이 안됨 
-// 2_creadteSlice는 리듀서의 역할 
+// import 먼저 하기
+// redux-toolkit => 전역상태관리(store)를 하기 위함
+// toolkit에 있는 API로 불러옴
+// 1_thunk는 비동기 통신을 위함 (axios)랑 통신하기 위해서
+//   => 리듀서에서는 비동기 통신을 할 수 없음 = 서버와 연동이 안됨
+// 2_creadteSlice는 리듀서의 역할
 //   => 액션value, 액션함수, 리듀서를 합쳐놓았기 때문에 코드가 간략해짐
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 // axios => json-server에 있는 데이터를 가져오기 위함 (백엔드연습)
 import axios from "axios";
-
 
 // 기본데이터 diary안에 관리할 데이터가 들어가고
 // isLoading - 서버와의 통신결과
@@ -20,17 +19,16 @@ const initialState = {
   error: null,
 };
 
-
 // --------------------------------------------------Diary 미들웨어
 // middleware - thunk , axios 비동기처리 담당
 // "getDiary"첫번재 인자 : aciton value
 // "( ) => { }"두번째 인자 : 콜백함수 (payload, thunkAPI - thunk기능들)
-// 데이터 불러오기 
+// 데이터 불러오기
 export const __getComment = createAsyncThunk(
   "getComment",
   async (payload, thunkAPI) => {
     try {
-      const data = await axios.get("http://localhost:3005/diary");
+      const data = await axios.get("http://localhost:3005/comment");
       // console.log('로딩데이터: ', data)
       return thunkAPI.fulfillWithValue(data.data);
     } catch (err) {
@@ -40,14 +38,15 @@ export const __getComment = createAsyncThunk(
   }
 );
 // 데이터 추가
-// const data = 이후 부분은 axios에서 보내라는 형식으로 구성되는 부분 
+// const data = 이후 부분은 axios에서 보내라는 형식으로 구성되는 부분
 // axios.post(url,추가할 객체)
 export const __addComment = createAsyncThunk(
   "addComment",
   async (payload, thunkAPI) => {
     console.log(payload);
     try {
-      const data = await axios.post("http://localhost:3005/diary", payload);
+      const data = await axios.post("http://localhost:3001/comment", payload);
+      // `http://localhost:3001/comment/${postId}`,
       console.log("추가데이터: ", data);
       return thunkAPI.fulfillWithValue(data.data);
     } catch (err) {
@@ -56,8 +55,8 @@ export const __addComment = createAsyncThunk(
     }
   }
 );
-// 데이터삭제 : 서버에서는 데이터를 삭제했으므로, 
-// 아래 리듀서에 삭제할 데이터를 보낼 순 없다. 
+// 데이터삭제 : 서버에서는 데이터를 삭제했으므로,
+// 아래 리듀서에 삭제할 데이터를 보낼 순 없다.
 // 리듀서에서는 id값을 받아서 filter로 걸러낸 후 store에 있는 데이터를 출력해줘야함
 export const __delComment = createAsyncThunk(
   "delComment",
@@ -65,7 +64,9 @@ export const __delComment = createAsyncThunk(
     console.log(payload);
     try {
       const data = await axios.delete(
-        `http://localhost:3005/diary/${payload}`, payload );
+        `http://localhost:3005/comment/${payload}`,
+        payload
+      );
       console.log("데이터삭제, 리듀서는 id값 주기: ", payload);
       return thunkAPI.fulfillWithValue(payload);
     } catch (err) {
@@ -80,8 +81,11 @@ export const __editStartDiary = createAsyncThunk(
   async (payload, thunkAPI) => {
     console.log(payload);
     try {
-      const data = await axios.put(`http://localhost:3005/diary/${payload.id}`, payload )
-      console.log('수정: ', data)
+      const data = await axios.put(
+        `http://localhost:3005/comment/${payload.id}`,
+        payload
+      );
+      console.log("수정: ", data);
       return thunkAPI.fulfillWithValue(data.data);
     } catch (err) {
       console.log(err);
@@ -95,7 +99,10 @@ export const __editEndtDiary = createAsyncThunk(
   async (payload, thunkAPI) => {
     console.log(payload);
     try {
-      const data = await axios.put(`http://localhost:3005/diary/${payload.id}`,payload);
+      const data = await axios.put(
+        `http://localhost:3005/comment/${payload.id}`,
+        payload
+      );
       console.log(data);
       return thunkAPI.fulfillWithValue(data.data);
     } catch (err) {
@@ -104,7 +111,6 @@ export const __editEndtDiary = createAsyncThunk(
     }
   }
 );
-
 
 // --------------------------------------------------Diary 리듀서
 export const commentSlice = createSlice({
@@ -120,7 +126,7 @@ export const commentSlice = createSlice({
     [__getComment.fulfilled]: (state, action) => {
       // action으로 받아온 객체를 store에 있는 값에 넣어준다
       state.isLoading = false;
-      state.diary = action.payload;
+      state.comment = action.payload;
     },
     [__getComment.rejected]: (state, action) => {
       state.isLoading = false;
@@ -137,7 +143,7 @@ export const commentSlice = createSlice({
       // 액션으로 받은 값 = payload 추가해준다.
       console.log("action-서버값", action.payload);
       state.isLoading = false;
-      state.diary = [...state.diary, action.payload];
+      state.comment = [...state.diary, action.payload];
     },
     [__addComment.rejected]: (state, action) => {
       state.isLoading = false;
@@ -153,7 +159,7 @@ export const commentSlice = createSlice({
       console.log("action-서버값", action.payload);
       state.isLoading = false;
       const newList = state.diary.filter((t) => t.id !== action.payload);
-      state.diary = [...newList];
+      state.comment = [...newList];
     },
     [__delComment.rejected]: (state, action) => {
       state.isLoading = false;
@@ -170,8 +176,8 @@ export const commentSlice = createSlice({
       state.isLoading = false;
       const copy = [...state.diary];
       const index = state.diary.findIndex((c) => +c.id === +action.payload.id);
-      state.diary[index] = action.payload;
-      state.diary = [...state.diary];
+      state.comment[index] = action.payload;
+      state.comment = [...state.diary];
     },
     [__editStartDiary.rejected]: (state, action) => {
       state.isLoading = false;

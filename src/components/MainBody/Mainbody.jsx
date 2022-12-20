@@ -1,23 +1,10 @@
-import { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import styled from "styled-components";
-import CardSlider from "../CardSlider/CardSlider";
-import { __getPosts } from "../../redux/modules/postSlice";
+import CardSlider from "../Card/CardSlider";
 
 function MainBody() {
-  //const { isLoading, error, posts } = useSelector((state) => state.posts);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
   const [activeIndex, setActiveIndex] = useState(0);
   const [activeCategory, setActiveCategory] = useState("eye");
-  const { isLoading, error, posts } = useSelector((state) => state.post);
-
-  useEffect(() => {
-    dispatch(__getPosts());
-  }, [dispatch]);
-
   const tabContArr = [
     {
       tabTitle: (

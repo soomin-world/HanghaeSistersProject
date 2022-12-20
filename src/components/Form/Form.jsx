@@ -28,8 +28,8 @@ const Form = () => {
       alert("내용을 입력해주세요!");
     } else {
       dispatch(__postPost(post));
+      navigate("/");
     }
-    navigate(`/`);
   };
 
   return (
@@ -56,10 +56,10 @@ const Form = () => {
           <option value="" defaultValue>
             카테고리를 선택해주세요
           </option>
-          <option value="눈성형">눈성형</option>
-          <option value="코성형">코성형</option>
-          <option value="턱성형">턱성형</option>
-          <option value="지방흡입">지방흡입</option>
+          <option value="eye">눈성형</option>
+          <option value="nose">코성형</option>
+          <option value="chin">턱성형</option>
+          <option value="liposuction">지방흡입</option>
         </STSelect>
       </STCategory>
       <STImage>

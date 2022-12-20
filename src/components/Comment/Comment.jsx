@@ -1,13 +1,16 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
+import CommentLists from "./CommentLists";
 import styled from "styled-components";
+import { __addComment } from "../../redux/modules/_commentSlice";
+import { useLocation, useNavigate } from "react-router-dom";
 
-const Comment = () => {
+const Comment = (props) => {
+  const { state } = props.state;
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const commentList = useSelector((state) => state.comment.comment);
   // id로 넘어오는 값을 받는다 치고 1로 고정시켜서 데이터 출력함함
-  const idx = 1;
   console.log(commentList);
 
   //댓글창stae, 수정여부state
@@ -17,36 +20,11 @@ const Comment = () => {
   const [commentText, setCommentText] = useState("");
 
   const add_comment = () => {
-    if (commentText === "") {
-      alert("댓글을 입력해주세요");
-      return;
-    }
-    // commentId는 서버에서 넣어줌, 임시로넣음
-    // postId필요한가? 나만 필요한가?
-    const newComment = {
-      postId: 1,
-      commentId: Math.floor(Math.random() * 100),
-      comment: commentText,
-      username: "로그인아직",
-    };
-    console.log("댓글 등록/", newComment);
-    //dispatch(addComment(newComment));
+    if (commentText.trim() === "") return alert("댓글 칸을 채워주세요!");
+    dispatch(__addComment(commentText));
     setCommentText("");
-  };
-
-  const del_comment = (id) => {
-    console.log("댓글 삭제/", id);
-    // dispatch
-  };
-
-  const edit_starCommit = (id) => {
-    console.log("isEdit?/", id);
-    // dispatch
-  };
-
-  const edit_endCommit = () => {
-    console.log("수정완료/");
-    // dispatch
+    // console.log("comments", __postComments);
+    navigate(`/detail/:${state.id}`);
   };
 
   return (
@@ -64,11 +42,12 @@ const Comment = () => {
             <div className="com_box">
               <textarea
                 className="com_textarea"
-                value={commentText || ""}
+                value={commentText}
                 placeholder="좋은 정보는 모이면 모일수록, 좋지요~! 댓글을 작성해주세요."
-                onChange={(e) => {
+                onChange={(event) => {
+                  const { value } = event.target;
+                  setCommentText(value);
                   // console.log(e.target.value)
-                  setCommentText(e.target.value);
                 }}
               />
               <button onClick={add_comment}>등록</button>
@@ -77,66 +56,8 @@ const Comment = () => {
           </>
         )}
       </ComWriteBox>
-
       <ComListBox>
-        {commentList.map((c) => {
-          // console.log(c)
-          return (
-            <div key={c.id} className="com_box">
-              <div className="com_username">{c.username}</div>
-              {!isEdit ? (
-                <div className="com_text">{c.comment}</div>
-              ) : (
-                <>
-                  <textarea
-                    className="com_edit_textarea"
-                    defaultvalue={commentText || ""}
-                    onChange={(e) => {
-                      console.log(e.target.value);
-                      setCommentText(e.target.value);
-                    }}
-                  />
-                </>
-              )}
-              {/* id가 내 id면 삭제, 수정버튼 보여주기 */}
-              {!isEdit ? (
-                <div className="comBtn_box">
-                  <button
-                    onClick={() => {
-                      del_comment(c.id);
-                    }}
-                  >
-                    삭제
-                  </button>
-                  <button
-                    onClick={() => {
-                      setIsEdit(!isEdit);
-                    }}
-                  >
-                    수정
-                  </button>
-                </div>
-              ) : (
-                <div className="comBtn_box">
-                  <button
-                    onClick={() => {
-                      setIsEdit(!isEdit);
-                    }}
-                  >
-                    수정취소
-                  </button>
-                  <button
-                    onClick={() => {
-                      edit_endCommit(c.id);
-                    }}
-                  >
-                    수정완료
-                  </button>
-                </div>
-              )}
-            </div>
-          );
-        })}
+        <CommentLists />
       </ComListBox>
     </>
   );

@@ -4,8 +4,8 @@ import { useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import { __deletePost } from "../../redux/modules/postSlice";
 
-const DetailContent = () => {
-  const { state } = useLocation();
+const DetailContent = (props) => {
+  const state = props.state;
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -14,9 +14,9 @@ const DetailContent = () => {
   }, [state]);
 
   const deleteHandler = () => {
-    if (!window.confirm("해당글을 삭제하시겠습니까?"))
-      return dispatch(__deletePost());
-    navigate("/");
+    if (!window.confirm("해당글을 삭제하시겠습니까?")) return;
+    dispatch(__deletePost(state));
+    window.location.href = "/";
   };
 
   const updateHandler = () => {
