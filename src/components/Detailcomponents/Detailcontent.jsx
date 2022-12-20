@@ -43,14 +43,22 @@ const DetailContent = (props) => {
           <span>글번호:</span>
         </h3>
         <p>{state.id}</p>
-        <button onClick={deleteHandler}>게시글 삭제</button>
+        <button onClick={deleteHandler} className="titlebtn1">
+          게시글 삭제
+        </button>
         <button onClick={updateHandler}>게시글 수정하기</button>
       </div>
       <article className="content">
         <h2>내 용</h2>
-        <div className="img">
-          <img src={state.imageBefore} alt="이미지 전"></img>
-          <img src={state.imageAfter} alt="이미지 후"></img>
+        <div className="imgBox">
+          <div className="img">
+            <h2 className="imgAlt">성형 전</h2>
+            <img src={state.imageBefore} alt="이미지 전"></img>
+          </div>
+          <div className="img">
+            <h2 className="imgAlt">성형 후</h2>
+            <img src={state.imageAfter} alt="이미지 후"></img>
+          </div>
         </div>
         <h2>시술 정보</h2>
         <div className="contentText">
@@ -99,12 +107,24 @@ const DetailSection = styled.section`
     margin-bottom: 2%;
     p {
       display: inline-block;
-      width: 30%;
+      width: 25%;
       font-size: 1.2rem;
     }
     h3 {
       display: inline-block;
       width: 10%;
+    }
+    button {
+      display: inline-block;
+      position: relative;
+      height: 30px;
+      width: 110px;
+      border: none;
+      background-color: #dcd0e6da;
+      cursor: pointer;
+    }
+    .titlebtn1 {
+      margin-right: 20px;
     }
   }
 
@@ -117,12 +137,20 @@ const DetailSection = styled.section`
       font-weight: bold;
       font-size: 1.2rem;
     }
-    .img {
+    .imgBox {
       display: flex;
 
-      img {
+      .img {
         width: calc(100% - 20px);
         padding: 2% 2%;
+        .imgAlt {
+          display: block;
+          padding: 3% 3%;
+          text-align: center;
+        }
+        img {
+          width: 100%;
+        }
       }
     }
     .contentText {
