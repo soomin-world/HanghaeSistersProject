@@ -10,7 +10,7 @@ function MainBody() {
       tabTitle: (
         <li
           className={activeIndex === 0 ? "is-active" : ""}
-          onClick={() => tableClickHandler(0, "eye")}
+          onClick={() => tableClickHandler(0, "눈성형")}
         >
           눈
         </li>
@@ -20,7 +20,7 @@ function MainBody() {
       tabTitle: (
         <li
           className={activeIndex === 1 ? "is-active" : ""}
-          onClick={() => tableClickHandler(1, "nose")}
+          onClick={() => tableClickHandler(1, "코성형")}
         >
           코
         </li>
@@ -30,7 +30,7 @@ function MainBody() {
       tabTitle: (
         <li
           className={activeIndex === 2 ? "is-active" : ""}
-          onClick={() => tableClickHandler(2, "chin")}
+          onClick={() => tableClickHandler(2, "턱성형")}
         >
           턱
         </li>
@@ -40,7 +40,7 @@ function MainBody() {
       tabTitle: (
         <li
           className={activeIndex === 3 ? "is-active" : ""}
-          onClick={() => tableClickHandler(3, "liposuction")}
+          onClick={() => tableClickHandler(3, "지방흡입")}
         >
           지방흡입
         </li>
@@ -69,24 +69,25 @@ function MainBody() {
     </div>
   );
 }
-
 const STTab = styled.ul`
   display: flex;
   justify-content: space-between;
   list-style: none;
-  border: 3px solid purple;
+  width: 100%;
   padding: 0px 20px 0px 20px;
+  background-color: #e7a0beca;
   //border: 1px solid;
   li {
     text-align: center;
     width: 25%;
     padding: 13px 15px;
     display: block;
-    font-size: 13px;
-    color: #5c5656;
+    font-size: 17px;
+    font-weight: bold;
+    color: #ffffff;
     text-decoration: none;
     &:hover {
-      background-color: #9179c9da;
+      background-color: #dd5cbd47;
       color: #ffffff;
     }
   }
