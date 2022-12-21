@@ -54,10 +54,10 @@ const STNavbar = styled.header`
   width: 100%;
   height: 80px;
   background-color: #e7a0be8f;
+  font-family: "GongGothicMedium";
 `;
 
 const STInner = styled.div`
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New";
   width: 100%;
   height: 80px;
   display: flex;
@@ -66,7 +66,7 @@ const STInner = styled.div`
     div.title {
       margin: 40px 1600px 0px 0px;
       font-size: 25px;
-      font-weight: bold;
+
       color: #ffffff;
     }
   }

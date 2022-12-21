@@ -24,7 +24,7 @@ function CardSlider(props) {
     if (cookie) {
       navigate(`/detail/${post.postId}`, { state: post });
     } else {
-      alert("로그인이필요합니다");
+      alert("더 많은 정보를 얻으시려면 로그인이 필요합니다!");
       navigate("/login");
     }
   };
@@ -59,6 +59,7 @@ const STContainer = styled.div`
   overflow: auto;
   height: 400px;
   width: 100%;
+  font-family: "GongGothicMedium";
   ::-webkit-scrollbar {
     height: 12px;
     width: 20%;
@@ -105,8 +106,7 @@ const STCard = styled.div`
   div {
     text-align: center;
     margin: 0 15px;
-    font-weight: 700;
-    font-size: 15px;
+    font-size: 17px;
   }
 `;
 export default CardSlider;

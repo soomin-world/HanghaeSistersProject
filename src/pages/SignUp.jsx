@@ -23,23 +23,17 @@ const SignUp = () => {
   const [userPw, setUserPw] = useState("");
   const [userPwCheck, setUserPwCheck] = useState("");
 
-
   // 회원가입 정규식 확인 상태관리, 경고메세지 태그 출력용 ->사용아직안함.
-  const [ ExpId, setExpId ] = useState("")
-  const [ ExpPw, setExpPw ] = useState("")
-  const [ ExpPwCheck, setExpPwCheck ] = useState("") 
-
+  const [ExpId, setExpId] = useState("");
+  const [ExpPw, setExpPw] = useState("");
+  const [ExpPwCheck, setExpPwCheck] = useState("");
 
   // 서버에서 온 데이터 결과
-  const userDubCheck = useSelector((state)=>state.user.userCheck)
-  const userSignup = useSelector((state)=>state.user.userSignup)
+  const userDubCheck = useSelector((state) => state.user.userCheck);
+  const userSignup = useSelector((state) => state.user.userSignup);
   // console.log('중복확인-', userDubCheck)
 
   // console.log('회원가입-', userSignup)
-
-
-
-
 
   // 아이디, 비밀번호 정규식
   // id:영문-숫자 4,10 , pw:영문,숫자 8-20자
@@ -63,16 +57,15 @@ const SignUp = () => {
 
     // 2번씩 눌러야 나오는 ㅇㅅㅇ...
     // 바로 출력 안되는 문제
-    if(userDubCheck.statusCode ===  200) {
+    if (userDubCheck.statusCode === 200) {
       setUserCheck(true);
-      alert(userDubCheck.msg)
-    }else if(userDubCheck.statusCode === 400){
+      alert(userDubCheck.msg);
+    } else if (userDubCheck.statusCode === 400) {
       setUserCheck(false);
-      alert(userDubCheck.msg)
+      alert(userDubCheck.msg);
     }
   };
   // console.log(userCheck)
-
 
   // 회원가입
   const goSignIn = () => {
@@ -101,24 +94,19 @@ const SignUp = () => {
     };
     // 중복확인 여부
 
-    !userCheck? 
-      alert("아이디 중복확인을 해주세요")
-      : 
-      console.log("중복확인pass", userCheck);
-      dispatch(__signUpUser(signup_data));            
+    !userCheck
+      ? alert("아이디 중복확인을 해주세요")
+      : console.log("중복확인pass", userCheck);
+    dispatch(__signUpUser(signup_data));
 
-    
     setUsername("");
     setUserPw("");
     setUserPwCheck("");
 
-    
-    userSignup?.statusCode === 400 ? 
-      alert (userSignup?.msg)
-    :
-      alert (userSignup?.msg)
-      // navigate("/login");
-
+    userSignup?.statusCode === 400
+      ? alert(userSignup?.msg)
+      : alert(userSignup?.msg);
+    // navigate("/login");
   };
 
   // signIn T/F로 로그인-회원가입 창 분기함.
@@ -162,10 +150,10 @@ const SignUp = () => {
                     // console.log(userPw)
                     setUserPw(e.target.value);
                   }}
-                  />
-                  {/* 정규식 통과여부 아래 p추가 */}
-                  {/* <p>사용가능한 비밀번호입니다</p> */}
-                  {/* <p>비밀번호를 (조건)확인해주세요</p> */}
+                />
+                {/* 정규식 통과여부 아래 p추가 */}
+                {/* <p>사용가능한 비밀번호입니다</p> */}
+                {/* <p>비밀번호를 (조건)확인해주세요</p> */}
               </>
               <>
                 <p>비밀번호 확인</p>
@@ -177,9 +165,9 @@ const SignUp = () => {
                     // console.log(userPwCheck)
                     setUserPwCheck(e.target.value);
                   }}
-                  />
-                  {/* 위의 비밀번호랑 맞는지 있다가 추가 */}
-                  {/* <p className="warning">비밀번호를 확인해주세요</p>
+                />
+                {/* 위의 비밀번호랑 맞는지 있다가 추가 */}
+                {/* <p className="warning">비밀번호를 확인해주세요</p>
                   <p className="pass">비밀번호가 일치합니다</p> */}
               </>
             </IdBox>
@@ -203,7 +191,7 @@ const SignUp = () => {
       </BoxBox>
     </Contain>
   );
-}
+};
 
 const Contain = styled.div`
   width: 100vw;
@@ -306,10 +294,9 @@ const MoveBox = styled.div`
   }
 `;
 
-
 //server Msg
 const ServerMSG = styled.div`
-  color : ${(props)=> props.color };
-`
+  color: ${(props) => props.color};
+`;
 
 export default SignUp;
