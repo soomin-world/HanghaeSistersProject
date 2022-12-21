@@ -61,6 +61,8 @@ const Login = () => {
     .then((res)=>{
       console.log(res)      
       const token = res.headers.authorization;
+      instance.defaults.headers.common["X-AUTH-TOKEN"] = token;
+
       console.log(token)
       setCookie("Authorization", token);
       setUsername("");
