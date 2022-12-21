@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -8,7 +7,6 @@ import { __getPosts } from "../../redux/modules/postSlice";
 
 import { getCookie } from "../../shared/Cookie";
 
-
 function CardSlider(props) {
   const selectedCategory = props.category;
   // mainbody컴포넌트에서 넘겨준 category값, get해올떄 payload 에 넣어줄 예정
@@ -16,12 +14,15 @@ function CardSlider(props) {
   const navigate = useNavigate();
   const { posts, isLoading, error } = useSelector((state) => state.post);
 
+  // console.log("메인페이지 확인", posts);
+
   const [isCookie, setIsCookie] = useState(false);
   const cookie = getCookie("is_login");
 
   useEffect(() => {
     dispatch(__getPosts(selectedCategory));
-    if (cookie !== undefined || cookie !== null) {
+
+    if (cookie !== undefined && cookie !== null) {
       setIsCookie(true);
       console.log(isCookie);
     }
@@ -39,7 +40,6 @@ function CardSlider(props) {
     }
   };
 
-
   if (isLoading === true) {
     return <div>로딩 중....</div>;
   }
@@ -53,10 +53,7 @@ function CardSlider(props) {
           <STCard
             key={post.postId}
             onClick={() => {
-
               onClick(post);
-
-
             }}
           >
             <img src={post.imageAfter} alt={"안녕하세요"} />

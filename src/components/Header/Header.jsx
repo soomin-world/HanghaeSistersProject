@@ -6,13 +6,12 @@ import { deleteCookie, getCookie } from "../../shared/Cookie";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-
 function Header() {
   const navigate = useNavigate();
   const [isCookie, setIsCookie] = useState(false);
   const cookie = getCookie("is_login");
   useEffect(() => {
-    if (cookie !== undefined || cookie !== null) {
+    if (cookie !== undefined && cookie !== null) {
       setIsCookie(true);
       console.log(isCookie);
     }
@@ -59,7 +58,6 @@ function Header() {
             </li>
           </ul>
         )}
-
       </STInner>
     </STNavbar>
   );

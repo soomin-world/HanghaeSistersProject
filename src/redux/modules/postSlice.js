@@ -6,21 +6,22 @@ import { instance } from "../../core/api/axios";
 
 const initialState = {
   posts: [],
-  post: {},
   isLoading: true,
   error: null,
 };
 
-const config = {headers : {Authorization:`Bearer ${getCookie('is_login')}`}}
+const config = {
+  headers: { Authorization: `Bearer ${getCookie("is_login")}` },
+};
 
 export const __postPost = createAsyncThunk(
   "postPost",
   async (payload, thunkAPI) => {
     console.log(payload);
 
-    console.log(config)
+    console.log(config);
     try {
-      const data = await instance.post('/api/post', payload, config )
+      const data = await instance.post("/api/post", payload, config);
 
       return thunkAPI.fulfillWithValue(data.data);
     } catch (error) {
@@ -34,10 +35,13 @@ export const __upDatePost = createAsyncThunk(
   "upDatePost",
   async (payload, thunkAPI) => {
     try {
-
       console.log(payload);
 
-      const data = await instance.put(`/api/post/${payload.postId}`, payload);
+      const data = await instance.put(
+        `/api/post/${payload[0]}`,
+        payload[1],
+        config
+      );
       return thunkAPI.fulfillWithValue(data.data);
     } catch (error) {
       alert("서버요청중 오류발생!");
@@ -49,14 +53,13 @@ export const __upDatePost = createAsyncThunk(
 export const __deletePost = createAsyncThunk(
   "__deletePost",
   async (payload, thunkAPI) => {
-
-    console.log("페이로드 아이디", payload.postId);
+    // console.log("페이로드 아이디", payload.postId);
 
     try {
-      const data = await instance.delete(`/api/post/${payload.postId}`);
+      const data = await instance.delete(`/api/post/${payload.postId}`, config);
       return thunkAPI.fulfillWithValue(data.data);
     } catch (error) {
-      console.log("에러가 발생했습니다.", error);
+      // console.log("에러가 발생했습니다.", error);
       return thunkAPI.rejectWithValue(error);
     }
   }
@@ -67,7 +70,6 @@ export const __getPosts = createAsyncThunk(
   async (payload, thunkAPI) => {
     console.log(payload);
     try {
-
       const data = await instance.get(`/api/post/category?category=${payload}`);
 
       return thunkAPI.fulfillWithValue(data.data);

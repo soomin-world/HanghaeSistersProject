@@ -6,8 +6,8 @@
 // 2_creadteSlice는 리듀서의 역할
 //   => 액션value, 액션함수, 리듀서를 합쳐놓았기 때문에 코드가 간략해짐
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { getCookie } from "../../shared/Cookie";
 import { instance } from "../../core/api/axios";
-
 
 // axios => json-server에 있는 데이터를 가져오기 위함 (백엔드연습)
 import axios from "axios";
@@ -20,35 +20,30 @@ const initialState = {
   isLoading: false,
   error: null,
 };
-
+const config = {
+  headers: { Authorization: `Bearer ${getCookie("is_login")}` },
+};
 // --------------------------------------------------Diary 미들웨어
 // middleware - thunk , axios 비동기처리 담당
 // "getDiary"첫번재 인자 : aciton value
 // "( ) => { }"두번째 인자 : 콜백함수 (payload, thunkAPI - thunk기능들)
 // 데이터 불러오기
-export const __getComment = createAsyncThunk(
-  "getComment",
-  async (payload, thunkAPI) => {
-    try {
-      const data = await axios.get("http://localhost:3005/comment");
-      // console.log('로딩데이터: ', data)
-      return thunkAPI.fulfillWithValue(data.data);
-    } catch (err) {
-      console.log(err);
-      return thunkAPI.rejectWithValue(err);
-    }
-  }
-);
+
 // 데이터 추가
 // const data = 이후 부분은 axios에서 보내라는 형식으로 구성되는 부분
 // axios.post(url,추가할 객체)
 export const __addComment = createAsyncThunk(
   "addComment",
   async (payload, thunkAPI) => {
-    console.log(payload);
+    console.log("페이로드는?", payload);
     try {
-
-      const data = await instance.post(`/api/comment/${payload.id}`);
+      const data = await instance.post(
+        `/api/comment/${payload.postId}`,
+        {
+          content: payload.content,
+        },
+        config
+      );
 
       console.log("추가데이터: ", data);
       return thunkAPI.fulfillWithValue(data.data);
@@ -66,12 +61,12 @@ export const __delComment = createAsyncThunk(
   async (payload, thunkAPI) => {
     console.log(payload);
     try {
-      const data = await axios.delete(
-        `http://localhost:3005/comment/${payload}`,
+      const data = await instance.delete(
+        // `/api/post/${p}/comment/${commentId}`,
         payload
       );
       console.log("데이터삭제, 리듀서는 id값 주기: ", payload);
-      return thunkAPI.fulfillWithValue(payload);
+      return thunkAPI.fulfillWithValue(data.data);
     } catch (err) {
       console.log(err);
       return thunkAPI.rejectWithValue(err);
@@ -122,21 +117,6 @@ export const commentSlice = createSlice({
   reducers: {},
   extraReducers: {
     // 리스트 불러오기 ---------------
-    [__getComment.pending]: (state) => {
-      state.isLoading = true;
-      // 네트워크 요청 시작-> 로딩 true 변경합니다.
-    },
-    [__getComment.fulfilled]: (state, action) => {
-      // action으로 받아온 객체를 store에 있는 값에 넣어준다
-      state.isLoading = false;
-      state.comment = action.payload;
-    },
-    [__getComment.rejected]: (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload;
-      // 에러 발생-> 네트워크 요청은 끝,false
-      // catch 된 error 객체를 state.error에 넣습니다.
-    },
 
     // 리스트 추가 ------------------
     [__addComment.pending]: (state) => {
@@ -146,7 +126,7 @@ export const commentSlice = createSlice({
       // 액션으로 받은 값 = payload 추가해준다.
       console.log("action-서버값", action.payload);
       state.isLoading = false;
-      state.comment = [...state.diary, action.payload];
+      state.comment = action.payload;
     },
     [__addComment.rejected]: (state, action) => {
       state.isLoading = false;

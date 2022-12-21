@@ -13,13 +13,14 @@ const EditForm = () => {
   console.log("넘어오는 아이디값인가?", state.postId);
 
   const [inputs, setInputs] = useState({
+    postId: state.postId,
     title: state.title,
     category: state.category,
     imageBefore: state.imageBefore,
     imageAfter: state.imageAfter,
     content: state.content,
     price: state.price,
-    hospitalAdress: state.hospitalAdress,
+    hospitalAddress: state.hospitalAddress,
     doctor: state.doctor,
   });
 
@@ -31,7 +32,7 @@ const EditForm = () => {
     imageAfter,
     content,
     price,
-    hospitalAdress,
+    hospitalAddress,
     doctor,
   } = inputs;
 
@@ -56,15 +57,15 @@ const EditForm = () => {
       imageAfter: imageAfter,
       content: content,
       price: price,
-      hospitalAdress: hospitalAdress,
+      hospitalAddress: hospitalAddress,
       doctor: doctor,
     };
-
-    dispatch(__upDatePost(upDateContent));
+    const payload = [upDateContent.postId, upDateContent];
+    dispatch(__upDatePost(payload));
 
     console.log("잘 넘어갔나?", upDateContent);
 
-    navigate(`/detail/:${state.postId}`, { state: upDateContent });
+    navigate(`/detail`, { state: upDateContent });
   };
 
   return (
@@ -127,8 +128,8 @@ const EditForm = () => {
         <STInfoLabel>병원이름</STInfoLabel>
         <input
           type="text"
-          name="hospitalAdress"
-          value={hospitalAdress}
+          name="hospitalAddress"
+          value={hospitalAddress}
           onChange={onChnage}
         ></input>
         <STInfoLabel>원장님 성함</STInfoLabel>
