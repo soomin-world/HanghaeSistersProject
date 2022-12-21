@@ -9,7 +9,7 @@ function CardSlider(props) {
   // mainbody컴포넌트에서 넘겨준 category값, get해올떄 payload 에 넣어줄 예정
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { posts, isLoading, error } = useSelector((state) => state.post);
+  const { posts, isLoading, error } = useSelector((state) => state.post );
 
   useEffect(() => {
     dispatch(__getPosts(selectedCategory));

@@ -5,6 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { __loginUser } from "../redux/modules/userSlice";
 
+import { instance } from "../core/api/axios";
+import { setCookie } from "../shared/Cookie";
+
 // Lottie style
 import Lottie from "lottie-react";
 import { loginLottie } from "../assets/lottie";
@@ -12,6 +15,7 @@ import { pickLottie } from "../assets/lottie";
 
 // style
 import styled from "styled-components";
+
 
 const Login = () => {
   const navigate = useNavigate();
@@ -21,9 +25,6 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [userPw, setUserPw] = useState("");
 
-  // 로그인 정보가 있는 (토큰이 만료되기 전) 유저가 로그인을 시도.
-  // 로그인 과정을 또 거쳐야 하나? 아! 이건 서버까지 가지 않아도
-  // 내가 로그인 부분을 해결할 수 있지 않을까?
 
   // 아이디, 비밀번호 정규식 ---------------
   // id:영문-숫자 4,10 , pw:영문,숫자 8-20자
@@ -55,15 +56,25 @@ const Login = () => {
       username: username,
       password: userPw,
     };
-    // const login_data = {
-    //   "email": "janet.weaver@reqres.in",
-    //   "password": "Janet" }
-    console.log(login_data);
-    dispatch(__loginUser(login_data));
-    setUsername("");
-    setUserPw("");
-    //로그인 성공하면 메인페이지이동
-    navigate("/");
+
+    instance.post("/api/user/login", login_data)
+    .then((res)=>{
+      console.log(res)      
+      const token = res.headers.authorization;
+      console.log(token)
+      setCookie("Authorization", token);
+      setUsername("");
+      setUserPw("");
+      // dispatch(__loginUser(login_data))
+      // .then((res)=>{})      
+      // 로그인 성공하면 메인페이지이동
+      alert('로그인성공')
+      navigate("/");
+    })
+    .catch((err)=>{
+      alert('로그인실패',err)
+      console.log(err)
+    })
   };
 
   return (

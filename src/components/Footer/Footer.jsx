@@ -44,6 +44,7 @@ function Footer() {
             </li>
             <li>
               JinYoung
+
               <a href="https://github.com/jyk2022">
                 https://github.com/jyk2022
               </a>
@@ -66,7 +67,7 @@ const STFooter = styled.footer`
   width: 99%;
   height: 230px;
   padding: 10px;
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New";
+
   div {
     margin: 20px 0px 0px 20px;
     display: flex;
@@ -85,12 +86,16 @@ const STFooter = styled.footer`
         height: 80px;
       }
       ul {
+
         width: 500px;
+
         list-style: none;
         justify-content: center;
         li {
           margin: 10px 30px 30px 10px;
+
           font-size: 25px;
+
           font-weight: bold;
           color: #ffffff;
           a {
