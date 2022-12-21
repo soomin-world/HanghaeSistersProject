@@ -1,13 +1,9 @@
-
-import { useEffect, useState } from "react";
-
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { __getPosts } from "../../redux/modules/postSlice";
-
 import { getCookie } from "../../shared/Cookie";
-
 
 function CardSlider(props) {
   const selectedCategory = props.category;
@@ -16,29 +12,22 @@ function CardSlider(props) {
   const navigate = useNavigate();
   const { posts, isLoading, error } = useSelector((state) => state.post);
 
-  const [isCookie, setIsCookie] = useState(false);
   const cookie = getCookie("is_login");
 
   useEffect(() => {
     dispatch(__getPosts(selectedCategory));
-    if (cookie !== undefined || cookie !== null) {
-      setIsCookie(true);
-      console.log(isCookie);
-    }
-    return;
-  }, [selectedCategory, dispatch, cookie, isCookie]);
+  }, [selectedCategory, dispatch, cookie]);
   // dispatch가 되면 멈춰라, dispatch가 될때까지만 렌더링 되어라
   console.log(selectedCategory);
   // posts 가 category별로 넘어온 데이터라고 가정
   const onClick = (post) => {
-    if (isCookie === true) {
+    if (cookie) {
       navigate(`/detail/${post.postId}`, { state: post });
     } else {
       alert("로그인이필요합니다");
       navigate("/login");
     }
   };
-
 
   if (isLoading === true) {
     return <div>로딩 중....</div>;
@@ -53,10 +42,7 @@ function CardSlider(props) {
           <STCard
             key={post.postId}
             onClick={() => {
-
               onClick(post);
-
-
             }}
           >
             <img src={post.imageAfter} alt={"안녕하세요"} />
