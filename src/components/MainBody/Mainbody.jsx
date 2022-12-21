@@ -4,7 +4,7 @@ import CardSlider from "../Card/CardSlider";
 
 function MainBody() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [activeCategory, setActiveCategory] = useState("eye");
+  const [activeCategory, setActiveCategory] = useState("눈성형");
   const tabContArr = [
     {
       tabTitle: (
@@ -76,6 +76,7 @@ const STTab = styled.ul`
   width: 100%;
   padding: 0px 20px 0px 20px;
   background-color: #e7a0beca;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New";
   //border: 1px solid;
   li {
     text-align: center;

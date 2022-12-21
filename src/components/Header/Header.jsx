@@ -38,6 +38,7 @@ const STNavbar = styled.header`
 `;
 
 const STInner = styled.div`
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New";
   width: 100%;
   height: 80px;
   display: flex;
