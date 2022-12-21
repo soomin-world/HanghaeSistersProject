@@ -2,7 +2,30 @@ import styled from "styled-components";
 import Lottie from "lottie-react";
 import face from "../../assets/lottie/face.json";
 
+import { deleteCookie, getCookie } from "../../shared/Cookie";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+
 function Header() {
+  const navigate = useNavigate();
+  const [isCookie, setIsCookie] = useState(false);
+  const cookie = getCookie("is_login");
+  useEffect(() => {
+    if (cookie !== undefined || cookie !== null) {
+      setIsCookie(true);
+      console.log(isCookie);
+    }
+    return;
+  }, [cookie, isCookie]);
+
+  const deleteCookiehandler = () => {
+    deleteCookie("is_login");
+    setIsCookie(false);
+    navigate("/");
+    console.log(isCookie);
+  };
+
   return (
     <STNavbar>
       <STInner>
@@ -14,18 +37,29 @@ function Header() {
         <a href="/" className="logo">
           <div className="title">항해언니</div>
         </a>
-        <ul className="menu">
-          <li>
-            <a href="/logIn">로그인</a>
-            {/* login 값이 false이면 로그아웃 출력 되게 구현해야함 */}
-          </li>
-          <li>
-            <a href="logIn">회원가입</a>
-          </li>
-          <li>
-            <a href="/postingPage">글 작성</a>
-          </li>
-        </ul>
+
+        {isCookie ? (
+          <ul className="menu">
+            <li>
+              <div className="logOut" onClick={deleteCookiehandler}>
+                로그아웃
+              </div>
+            </li>
+            <li>
+              <a href="/postingPage">글 작성</a>
+            </li>
+          </ul>
+        ) : (
+          <ul className="menu">
+            <li>
+              <a href="/logIn">로그인</a>
+            </li>
+            <li>
+              <a href="/signUp">회원가입</a>
+            </li>
+          </ul>
+        )}
+
       </STInner>
     </STNavbar>
   );
@@ -64,6 +98,17 @@ const STInner = styled.div`
     display: flex;
     li {
       display: flex;
+      div {
+        padding: 13px 15px;
+        display: block;
+        font-size: 13px;
+        color: #000000;
+        cursor: pointer;
+        &:hover {
+          background-color: #f551e76a;
+          color: #ffffff;
+        }
+      }
       a {
         padding: 13px 15px;
         display: block;

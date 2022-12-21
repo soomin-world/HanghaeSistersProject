@@ -8,6 +8,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { instance } from "../../core/api/axios";
 
+
 // axios => json-server에 있는 데이터를 가져오기 위함 (백엔드연습)
 import axios from "axios";
 
@@ -46,6 +47,7 @@ export const __addComment = createAsyncThunk(
   async (payload, thunkAPI) => {
     console.log(payload);
     try {
+
       const data = await instance.post(`/api/comment/${payload.id}`);
 
       console.log("추가데이터: ", data);

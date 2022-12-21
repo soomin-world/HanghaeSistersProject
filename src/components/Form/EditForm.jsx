@@ -61,7 +61,9 @@ const EditForm = () => {
     };
 
     dispatch(__upDatePost(upDateContent));
+
     console.log("잘 넘어갔나?", upDateContent);
+
     navigate(`/detail/:${state.postId}`, { state: upDateContent });
   };
 

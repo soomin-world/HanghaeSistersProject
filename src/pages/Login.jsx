@@ -16,6 +16,7 @@ import { pickLottie } from "../assets/lottie";
 // style
 import styled from "styled-components";
 
+
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -23,6 +24,7 @@ const Login = () => {
   // 회원가입/ 로그인 state
   const [username, setUsername] = useState("");
   const [userPw, setUserPw] = useState("");
+
 
   // 아이디, 비밀번호 정규식 ---------------
   // id:영문-숫자 4,10 , pw:영문,숫자 8-20자
@@ -55,26 +57,28 @@ const Login = () => {
       password: userPw,
     };
 
-    instance
-      .post("/api/user/login", login_data)
-      .then((res) => {
-        console.log(res);
-        const token = res.headers.authorization;
-        instance.defaults.headers.common["Authorization"] = token;
-        console.log(token);
-        setCookie("Authorization", token);
-        setUsername("");
-        setUserPw("");
-        // dispatch(__loginUser(login_data))
-        // .then((res)=>{})
-        // 로그인 성공하면 메인페이지이동
-        alert("로그인성공");
-        navigate("/");
-      })
-      .catch((err) => {
-        alert("로그인실패", err);
-        console.log(err);
-      });
+    instance.post("/api/user/login", login_data)
+    .then((res)=>{
+      console.log(res)    
+      // 쿠키사용.
+      const token = res.headers.authorization;
+      instance.defaults.headers.common["Authorization"] = token;
+
+      console.log(token)
+      setCookie("is_login", token);
+      setUsername("");
+      setUserPw("");
+
+      // dispatch(__loginUser(login_data))
+      // .then((res)=>{})      
+      // 로그인 성공하면 메인페이지이동
+      alert('로그인성공')
+      navigate("/");
+    })
+    .catch((err)=>{
+      alert('로그인실패',err)
+      console.log(err)
+    })
   };
 
   return (
