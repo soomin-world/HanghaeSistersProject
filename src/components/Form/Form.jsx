@@ -15,7 +15,7 @@ const Form = () => {
     imageAfter: "",
     content: "",
     price: "",
-    hospitalAdress: "",
+    hospitalAddress: "",
     doctor: "",
   });
 
@@ -28,8 +28,8 @@ const Form = () => {
       alert("내용을 입력해주세요!");
     } else {
       dispatch(__postPost(post));
+      navigate("/");
     }
-    navigate(`/`);
   };
 
   return (

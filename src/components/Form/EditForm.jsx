@@ -7,12 +7,12 @@ import styled from "styled-components";
 const EditForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [Selected, setSelected] = useState("");
 
   const { state } = useLocation();
 
+  console.log("넘어오는 아이디값인가?", state.postId);
+
   const [inputs, setInputs] = useState({
-    id: state.id,
     title: state.title,
     category: state.category,
     imageBefore: state.imageBefore,
@@ -24,6 +24,7 @@ const EditForm = () => {
   });
 
   const {
+    postId,
     title,
     category,
     imageBefore,
@@ -48,7 +49,7 @@ const EditForm = () => {
       return;
     }
     const upDateContent = {
-      id: state.id,
+      postId: postId,
       title: title,
       category: category,
       imageBefore: imageBefore,
@@ -58,9 +59,10 @@ const EditForm = () => {
       hospitalAdress: hospitalAdress,
       doctor: doctor,
     };
-    console.log("잘 넘어갔나?", upDateContent);
+
     dispatch(__upDatePost(upDateContent));
-    navigate(`/detail/:${state.id}`, { state: upDateContent });
+    console.log("잘 넘어갔나?", upDateContent);
+    navigate(`/detail/:${state.postId}`, { state: upDateContent });
   };
 
   return (
@@ -137,6 +139,13 @@ const EditForm = () => {
       </STDoctor>
       <STBDIV>
         <STButton type="submit">수정완료</STButton>
+        <button
+          onClick={() => {
+            navigate(-1);
+          }}
+        >
+          이전으로
+        </button>
       </STBDIV>
     </STForm>
   );

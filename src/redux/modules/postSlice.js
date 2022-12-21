@@ -1,9 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import axios from "axios";
+import { instance } from "../../core/api/axios";
 
 const initialState = {
   posts: [],
+  post: {},
   isLoading: true,
   error: null,
 };
@@ -11,9 +12,9 @@ const initialState = {
 export const __postPost = createAsyncThunk(
   "postPost",
   async (payload, thunkAPI) => {
-    // console.log(payload);
+    console.log(payload);
     try {
-      const data = await axios.post(" http://localhost:3001/posts", payload);
+      const data = await instance.post("/api/post", payload);
       return thunkAPI.fulfillWithValue(data.data);
     } catch (error) {
       console.log(error);
@@ -26,7 +27,8 @@ export const __upDatePost = createAsyncThunk(
   "upDatePost",
   async (payload, thunkAPI) => {
     try {
-      const data = await axios.put(`http://localhost:3001/posts/${payload.id}`);
+      console.log(payload);
+      const data = await instance.put(`/api/post/${payload.postId}`, payload);
       return thunkAPI.fulfillWithValue(data.data);
     } catch (error) {
       alert("서버요청중 오류발생!");
@@ -38,15 +40,12 @@ export const __upDatePost = createAsyncThunk(
 export const __deletePost = createAsyncThunk(
   "__deletePost",
   async (payload, thunkAPI) => {
+    console.log("페이로드 아이디", payload.postId);
     try {
-      const data = await axios.delete(
-        "http://localhost:3001/posts/${payload.id}"
-      );
-      console.log("잘받아오나>?", payload.id);
-
+      const data = await instance.delete(`/api/post/${payload.postId}`);
       return thunkAPI.fulfillWithValue(data.data);
     } catch (error) {
-      console.log(error);
+      console.log("에러가 발생했습니다.", error);
       return thunkAPI.rejectWithValue(error);
     }
   }
@@ -55,9 +54,10 @@ export const __deletePost = createAsyncThunk(
 export const __getPosts = createAsyncThunk(
   "getPosts",
   async (payload, thunkAPI) => {
+    console.log(payload);
     try {
-      const data = await axios.get("http://localhost:3001/posts");
-      console.log(data.data);
+      const data = await instance.get(`/api/post/category?category=${payload}`);
+
       return thunkAPI.fulfillWithValue(data.data);
     } catch (error) {
       console.log(error);
@@ -76,13 +76,14 @@ export const postSlice = createSlice({
     },
     [__postPost.fulfilled]: (state, action) => {
       state.isLoading = false; // 네트워크 요청이 끝났으니, false로 변경합니다.
-      state.posts = action.payload; // Store에 있는 todos에 서버에서 가져온 todos를 넣습니다.
+      state.posts.push(action.payload); // Store에 있는 todos에 서버에서 가져온 todos를 넣습니다.
+      console.log(action);
+      console.log(action.payload);
     },
     [__postPost.rejected]: (state, action) => {
       state.isLoading = false; // 에러가 발생했지만, 네트워크 요청이 끝났으니, false로 변경합니다.
       state.error = action.payload; // catch 된 error 객체를 state.error에 넣습니다.
     },
-
     [__deletePost.pending]: (state) => {
       state.isLoading = true; // 네트워크 요청이 시작되면 로딩상태를 true로 변경합니다.
     },
@@ -101,7 +102,6 @@ export const postSlice = createSlice({
     [__getPosts.fulfilled]: (state, action) => {
       state.isLoading = false;
       state.posts = action.payload;
-      // console.log(action.payload);
     },
     [__getPosts.rejected]: (state, action) => {
       state.isLoading = false;

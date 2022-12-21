@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import comment from "../modules/_commentSlice";
+import comment from "../modules/commentSlice";
 import user from "../modules/userSlice";
 import post from "../modules/postSlice";
 

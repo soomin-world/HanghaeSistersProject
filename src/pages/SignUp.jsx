@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 //redux, middleware
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { __signUpUser, __userCheck } from "../redux/modules/userSlice";
 
 //Lottie style
@@ -11,22 +11,38 @@ import { loginLottie } from "../assets/lottie";
 
 //style
 import styled from "styled-components";
-import '../shared/Common/Common.css';
+import "../shared/Common/Common.css";
 
-const SignUp = () =>{
+const SignUp = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-    
-  // 회원가입/ 로그인 state
-  const [userCheck, setUserCheck] = useState(false)
-  const [username, setUsername] = useState('')
-  const [userPw, setUserPw] = useState('')
-  const [userPwCheck, setUserPwCheck] = useState('')
 
-  // 아이디, 비밀번호 정규식 
-  // id:영문-숫자 4,10 , pw:영문,숫자 8-20자 
+  // 회원가입/ 로그인 서버로 보내는 데이터 state
+  const [userCheck, setUserCheck] = useState("");
+  const [username, setUsername] = useState("");
+  const [userPw, setUserPw] = useState("");
+  const [userPwCheck, setUserPwCheck] = useState("");
+
+
+  // 회원가입 정규식 확인 상태관리, 경고메세지 태그 출력용 ->사용아직안함.
+  const [ ExpId, setExpId ] = useState("")
+  const [ ExpPw, setExpPw ] = useState("")
+  const [ ExpPwCheck, setExpPwCheck ] = useState("") 
+
+
+  // 서버에서 온 데이터 결과
+  const userDubCheck = useSelector((state)=>state.user.userCheck)
+  const userSignup = useSelector((state)=>state.user.userSignup)
+  // console.log('중복확인-', userDubCheck)
+  console.log('회원가입-', userSignup)
+
+
+
+
+  // 아이디, 비밀번호 정규식
+  // id:영문-숫자 4,10 , pw:영문,숫자 8-20자
   function isId(asValue) {
-    var regExp =  /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{4,10}$/g;    
+    var regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{4,10}$/g;
     return regExp.test(asValue);
   }
   function isPassword(asValue) {
@@ -35,86 +51,64 @@ const SignUp = () =>{
   }
 
   // 중복체크
-  const dupCheck = () =>{
-    if(!isId(username)){ 
-      alert('영문과 숫자를 포함하는 4-10자의 이내의 아이디를 입력해주세요')
-      return 
+  const dupCheck = () => {
+    if (!isId(username)) {
+      alert("영문과 숫자를 포함하는 4-10자의 이내의 아이디를 입력해주세요");
+      return;
     }
-    // 서버요청시 : id만, 지금은 test
-    const signup_data = {
-      "email": "janet.weaver@reqres.in",
-      "password": "Janet" 
+    console.log(username);
+    dispatch(__userCheck(username));
+
+    if(userDubCheck.statusCode == 200) {
+      console.log('중복체크pass', userCheck)
+      setUserCheck(true);
+      alert('사용가능한 아이디입니다')
+    }else{
+      alert('중복된 아이디입니다.')
     }
-    console.log(username)
-    dispatch(__userCheck(signup_data))
-    // 디스패치 -> 서버에 중복체크 요청 /api/user/idcheck
-    // useSelect에서 코드값 200이면 true로 바꿔.
-    // if(statuscode === 200) { 
-    //   console.log('중복체크pass', userCheck)
-      setUserCheck(true)
-    // }else{
-    //   alert('중복된 아이디입니다.')
-    // }
-  }
+  };
   
+
   // 회원가입
-  const goSignIn = () =>{
-    console.log('회원가입', username, userPw, userPwCheck)
+  const goSignIn = () => {
+    console.log("회원가입", username, userPw, userPwCheck);
     // 정규식 체크
-    if(!isId(username)){ 
-      console.log(isId(username)) 
-      alert('영문과 숫자를 포함하는 4-10자의 이내의 아이디를 입력해주세요')
-      return 
-    }
-    if(!isPassword(userPw)){ 
-      console.log(isPassword(userPw))
-      alert('영문과 숫자를 포함하는 8-15자 이내의 비밀번호를 입력해주세요')
-      return 
-    }
-    if(userPw !== userPwCheck){
-      alert('비밀번호를 다시 한번 더 입력하세요')
-      return
-    }
-    // user데이터전송
-    // const signup_data = {
-    //   username : username,
-    //   userPassword : userPw,
-    //   userPasswordCheck : userPwCheck,
+    // if (!isId(username)) {
+    //   console.log(isId(username));
+    //   alert("영문과 숫자를 포함하는 4-10자의 이내의 아이디를 입력해주세요");
+    //   return;
     // }
-    // test
+    // if (!isPassword(userPw)) {
+    //   console.log(isPassword(userPw));
+    //   alert("영문과 숫자를 포함하는 8-15자 이내의 비밀번호를 입력해주세요");
+    //   return;
+    // }
+    // if (userPw !== userPwCheck) {
+    //   alert("비밀번호를 다시 한번 더 입력하세요");
+    //   return;
+    // }
+    // user데이터전송
     const signup_data = {
-      "email": "janet.weaver@reqres.in",
-      "password": "Janet" }
+      username: username,
+      password: userPw,
+    };
     // 중복확인 여부
-    !userCheck ? 
-      alert('아이디 중복확인을 해주세요')
-    : 
-      console.log('중복확인pass', userCheck)
-      dispatch(__signUpUser(signup_data))
+    !userCheck
+      ? alert("아이디 중복확인을 해주세요")
+      : 
+      console.log("중복확인pass", userCheck);
+      dispatch(__signUpUser(signup_data));
+    
+    setUsername("");
+    setUserPw("");
+    setUserPwCheck("");
 
+    
+    // userSignup
 
-    //----------------------------------------
-    // 회원가입 버튼 누르면 
-    // /api/user/idcheck 중복확인 
-    // input에서 id 중복확인, 서버로 dispatch(결과404면 state:false)
-    // 결과T/F: userCheck -> T면, 회원가입 유저정보 서버에 넘김
-    // 정규식 처리후 데이터와 함께
-    // 서버 통신 id, pw, pwcheck 보냄 
-    // ---- dispatch, redux ---- 
-    // 서버 통신 => instance(url).post('/api/user/signup',유저데이터)
-    // 서버통신 성공! 
-    // ----결과 나오면 -----
-    // 회원가입 결과 띄우기 
-    // 로그인 컴포넌트로 넘어감, F커서=>id, 알림창띄우기
-    // input들은 초기화시키기
-//----------------------------------------
-    setUsername("")
-    setUserPw("")
-    setUserPwCheck("")
-    // 회원가입 성공하면 로그인 페이지로 이동
-    // navigate('/login')
-  }
-
+    alert('반갑습니다. 회원가입이 완료되었습니다.')
+    navigate("/login");
+  };
 
   // signIn T/F로 로그인-회원가입 창 분기함.
   return (
@@ -122,105 +116,122 @@ const SignUp = () =>{
       <BoxBox>
         <SignupBox>
           <Title>
-            <p className='maintit'>항해 언니</p>
-            <p className='subtit'>예뻐지고 싶은 언니들의 커뮤니티</p>
+            <p className="maintit">항해 언니</p>
+            <p className="subtit">예뻐지고 싶은 언니들의 커뮤니티</p>
           </Title>
           <Box>
             <p>회원 가입</p>
             <IdBox>
               <div className="signin_box">
                 <p>아이디</p>
-                <div className='double_btn'>
-                  <input 
+                <div className="double_btn">
+                  <input
                     value={username || ""}
-                    type='text'  
-                    placeholder='아이디를 입력해주세요'
-                    onChange={(e)=>{
+                    type="text"
+                    placeholder="아이디를 입력해주세요"
+                    onChange={(e) => {
                       // console.log(username)
-                      setUsername(e.target.value)}}
-                    />
+                      setUsername(e.target.value);
+                    }}
+                  />
                   <button onClick={dupCheck}>중복확인</button>
                 </div>
+                {/* ...태그를 추가하려면 좀더 처리해야 할 게 많음..;;; */}
+                {/* <ServerMSG color={userDubCheck.statusCode == "200"? 'green' : 'red' }>
+                  {userDubCheck.msg}
+                </ServerMSG> */}
               </div>
               <>
                 <p>비밀번호</p>
                 <input
-                  value={userPw || ""} 
-                  type='password' 
-                  placeholder='비밀번호를 입력해주세요'
-                  onChange={(e)=>{
+                  value={userPw || ""}
+                  type="password"
+                  placeholder="비밀번호를 입력해주세요"
+                  onChange={(e) => {
                     // console.log(userPw)
-                    setUserPw(e.target.value)}}
-                />
+                    setUserPw(e.target.value);
+                  }}
+                  />
+                  {/* 정규식 통과여부 아래 p추가 */}
+                  {/* <p>사용가능한 비밀번호입니다</p> */}
+                  {/* <p>비밀번호를 (조건)확인해주세요</p> */}
               </>
               <>
                 <p>비밀번호 확인</p>
                 <input
-                  value={userPwCheck || ""} 
-                  type='password' 
-                  placeholder='비밀번호를 한번 더 입력해주세요'
-                  onChange={(e)=>{
+                  value={userPwCheck || ""}
+                  type="password"
+                  placeholder="비밀번호를 한번 더 입력해주세요"
+                  onChange={(e) => {
                     // console.log(userPwCheck)
-                    setUserPwCheck(e.target.value)}}
-                />
+                    setUserPwCheck(e.target.value);
+                  }}
+                  />
+                  {/* 위의 비밀번호랑 맞는지 있다가 추가 */}
+                  {/* <p className="warning">비밀번호를 확인해주세요</p>
+                  <p className="pass">비밀번호가 일치합니다</p> */}
               </>
             </IdBox>
             <MoveBox>
-              <button className='login_btn' onClick={goSignIn}>
+              <button className="login_btn" onClick={goSignIn}>
                 회원가입하기
               </button>
-              <p onClick={()=>{navigate("/login")}}>
+              <p
+                onClick={() => {
+                  navigate("/login");
+                }}
+              >
                 이미 회원이신가요?
               </p>
             </MoveBox>
-          </Box>      
+          </Box>
         </SignupBox>
         <ImgBox>
-          <Lottie animationData ={loginLottie}/>
+          <Lottie animationData={loginLottie} />
         </ImgBox>
       </BoxBox>
     </Contain>
-  )
+  );
 }
 
 const Contain = styled.div`
   width: 100vw;
-	height: 100vh;
-	background-color: #ffec99;
-	/* background-color: #fff3bf; */
-	/* background-color: #e5dbff; */
-`
+  height: 100vh;
+  background-color: #ffec99;
+  /* background-color: #fff3bf; */
+  /* background-color: #e5dbff; */
+`;
 const BoxBox = styled.div`
   position: relative;
   width: 1400px;
-  height:900px;
+  height: 900px;
   margin: 0 auto;
   /* border: 1px solid red; */
-`
+`;
 const SignupBox = styled.div`
-  position : absolute;
+  position: absolute;
   z-index: 10;
   top: 20%;
   left: 7%;
   /* transform: translate(-50%, -50%); */
-`
+`;
 const ImgBox = styled.div`
   width: 900px;
   height: 700px;
-  position : absolute;
+  position: absolute;
   /* top: 2%; */
   left: 35%;
-`
+`;
 const Title = styled.div`
   margin-bottom: 30px;
   text-align: center;
-  font-family: 'GongGothicMedium';
+  font-family: "GongGothicMedium";
   border: 1px solid red;
-  .maintit{
+  .maintit {
     font-size: 65px;
     margin-bottom: 10px;
   }
-  .subtit{
+  .subtit {
     font-size: 30px;
   }
 `;
@@ -232,35 +243,35 @@ const Box = styled.div`
   background-color: white;
   border-radius: 10px;
   box-shadow: 1px 1px 3px gray;
-  font-family: 'GongGothicMedium';
+  font-family: "GongGothicMedium";
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  p{
-    font-size : 25px;
+  p {
+    font-size: 25px;
     margin: 10px 0 30px;
   }
 `;
-const IdBox= styled.div`
+const IdBox = styled.div`
   width: 100%;
-  p{
+  p {
     font-size: 18px;
     margin: 10px 0 5px 0;
   }
-  input{
-  width:100%;
-  height: 40px;
-  border-radius: 5px;
-  padding-left: 15px;
-  box-sizing: border-box;
-  margin-bottom: 15px;
-  border: 1px solid #74c0fc;
+  input {
+    width: 100%;
+    height: 40px;
+    border-radius: 5px;
+    padding-left: 15px;
+    box-sizing: border-box;
+    margin-bottom: 15px;
+    border: 1px solid #74c0fc;
   }
-  .double_btn{
+  .double_btn {
     display: flex;
     button {
-      width : 100px;
+      width: 100px;
       height: 40px;
     }
   }
@@ -272,17 +283,22 @@ const MoveBox = styled.div`
   justify-content: center;
   align-items: center;
   margin-top: 10px;
-  button{
+  button {
     margin: 15px 0 10px;
     height: 35px;
     width: 40%;
     cursor: pointer;
   }
-  p{
+  p {
     cursor: pointer;
-    font-size:16px;
+    font-size: 16px;
   }
 `;
 
+
+//server Msg
+const ServerMSG = styled.div`
+  color : ${(props)=> props.color };
+`
 
 export default SignUp;
