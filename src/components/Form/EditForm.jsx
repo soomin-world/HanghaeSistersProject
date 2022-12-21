@@ -10,6 +10,8 @@ const EditForm = () => {
 
   const { state } = useLocation();
 
+  console.log("넘어오는 아이디값인가?", state.postId);
+
   const [inputs, setInputs] = useState({
     title: state.title,
     category: state.category,
@@ -57,8 +59,11 @@ const EditForm = () => {
       hospitalAdress: hospitalAdress,
       doctor: doctor,
     };
-    console.log("잘 넘어갔나?", upDateContent);
+
     dispatch(__upDatePost(upDateContent));
+
+    console.log("잘 넘어갔나?", upDateContent);
+
     navigate(`/detail/:${state.postId}`, { state: upDateContent });
   };
 

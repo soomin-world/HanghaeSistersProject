@@ -1,9 +1,11 @@
 import styled from "styled-components";
 import Lottie from "lottie-react";
 import face from "../../assets/lottie/face.json";
+
 import { deleteCookie, getCookie } from "../../shared/Cookie";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 
 function Header() {
   const navigate = useNavigate();
@@ -35,6 +37,7 @@ function Header() {
         <a href="/" className="logo">
           <div className="title">항해언니</div>
         </a>
+
         {isCookie ? (
           <ul className="menu">
             <li>
@@ -56,6 +59,7 @@ function Header() {
             </li>
           </ul>
         )}
+
       </STInner>
     </STNavbar>
   );

@@ -1,13 +1,15 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { __deletePost } from "../../redux/modules/postSlice";
 
 const DetailContent = (props) => {
   const state = props.state;
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  console.log("아이디값", state.postId);
 
   useEffect(() => {
     // console.log(state);

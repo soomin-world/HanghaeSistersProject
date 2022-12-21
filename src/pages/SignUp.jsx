@@ -34,7 +34,9 @@ const SignUp = () => {
   const userDubCheck = useSelector((state)=>state.user.userCheck)
   const userSignup = useSelector((state)=>state.user.userSignup)
   // console.log('중복확인-', userDubCheck)
+
   // console.log('회원가입-', userSignup)
+
 
 
 
@@ -58,6 +60,7 @@ const SignUp = () => {
     }
     console.log(username);
     dispatch(__userCheck(username));
+
     // 2번씩 눌러야 나오는 ㅇㅅㅇ...
     // 바로 출력 안되는 문제
     if(userDubCheck.statusCode ===  200) {
@@ -70,6 +73,7 @@ const SignUp = () => {
   };
   // console.log(userCheck)
 
+
   // 회원가입
   const goSignIn = () => {
     console.log("회원가입", username, userPw, userPwCheck);
@@ -78,12 +82,14 @@ const SignUp = () => {
     //   console.log(isId(username));
     //   alert("영문과 숫자를 포함하는 4-10자의 이내의 아이디를 입력해주세요");
     //   return;
+
     // }
     // if (!isPassword(userPw)) {
     //   console.log(isPassword(userPw));
     //   alert("영문과 숫자를 포함하는 8-15자 이내의 비밀번호를 입력해주세요");
     //   return;
     // }
+
     // if (userPw !== userPwCheck) {
     //   alert("비밀번호를 다시 한번 더 입력하세요");
     //   return;
@@ -94,15 +100,18 @@ const SignUp = () => {
       password: userPw,
     };
     // 중복확인 여부
+
     !userCheck? 
       alert("아이디 중복확인을 해주세요")
       : 
       console.log("중복확인pass", userCheck);
       dispatch(__signUpUser(signup_data));            
+
     
     setUsername("");
     setUserPw("");
     setUserPwCheck("");
+
     
     userSignup?.statusCode === 400 ? 
       alert (userSignup?.msg)

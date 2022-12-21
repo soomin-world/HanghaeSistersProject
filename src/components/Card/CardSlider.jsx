@@ -1,9 +1,13 @@
+
 import { useEffect, useState } from "react";
+
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { __getPosts } from "../../redux/modules/postSlice";
+
 import { getCookie } from "../../shared/Cookie";
+
 
 function CardSlider(props) {
   const selectedCategory = props.category;
@@ -11,6 +15,7 @@ function CardSlider(props) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { posts, isLoading, error } = useSelector((state) => state.post);
+
   const [isCookie, setIsCookie] = useState(false);
   const cookie = getCookie("is_login");
 
@@ -34,6 +39,7 @@ function CardSlider(props) {
     }
   };
 
+
   if (isLoading === true) {
     return <div>로딩 중....</div>;
   }
@@ -47,7 +53,9 @@ function CardSlider(props) {
           <STCard
             key={post.postId}
             onClick={() => {
+
               onClick(post);
+
 
             }}
           >

@@ -6,6 +6,8 @@
 // 2_creadteSlice는 리듀서의 역할
 //   => 액션value, 액션함수, 리듀서를 합쳐놓았기 때문에 코드가 간략해짐
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { instance } from "../../core/api/axios";
+
 
 // axios => json-server에 있는 데이터를 가져오기 위함 (백엔드연습)
 import axios from "axios";
@@ -45,8 +47,9 @@ export const __addComment = createAsyncThunk(
   async (payload, thunkAPI) => {
     console.log(payload);
     try {
-      const data = await axios.post("http://localhost:3001/comment", payload);
-      // `http://localhost:3001/comment/${postId}`,
+
+      const data = await instance.post(`/api/comment/${payload.id}`);
+
       console.log("추가데이터: ", data);
       return thunkAPI.fulfillWithValue(data.data);
     } catch (err) {
