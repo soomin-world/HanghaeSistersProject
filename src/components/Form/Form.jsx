@@ -15,7 +15,7 @@ const Form = () => {
     imageAfter: "",
     content: "",
     price: "",
-    hospitalAdress: "",
+    hospitalAddress: "",
     doctor: "",
   });
 
@@ -106,7 +106,7 @@ const Form = () => {
           type="text"
           onChange={(e) => {
             const { value } = e.target;
-            setPost({ ...post, hospitalAdress: value });
+            setPost({ ...post, hospitalAddress: value });
           }}
         ></input>
         <STInfoLabel>원장님 성함</STInfoLabel>

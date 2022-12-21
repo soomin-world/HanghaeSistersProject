@@ -1,22 +1,38 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { __getPosts } from "../../redux/modules/postSlice";
+import { getCookie } from "../../shared/Cookie";
 
 function CardSlider(props) {
   const selectedCategory = props.category;
   // mainbody컴포넌트에서 넘겨준 category값, get해올떄 payload 에 넣어줄 예정
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { posts, isLoading, error } = useSelector((state) => state.post );
+  const { posts, isLoading, error } = useSelector((state) => state.post);
+  const [isCookie, setIsCookie] = useState(false);
+  const cookie = getCookie("is_login");
 
   useEffect(() => {
     dispatch(__getPosts(selectedCategory));
-  }, [selectedCategory]);
+    if (cookie !== undefined || cookie !== null) {
+      setIsCookie(true);
+      console.log(isCookie);
+    }
+    return;
+  }, [selectedCategory, dispatch, cookie, isCookie]);
   // dispatch가 되면 멈춰라, dispatch가 될때까지만 렌더링 되어라
   console.log(selectedCategory);
   // posts 가 category별로 넘어온 데이터라고 가정
+  const onClick = (post) => {
+    if (isCookie === true) {
+      navigate(`/detail/${post.postId}`, { state: post });
+    } else {
+      alert("로그인이필요합니다");
+      navigate("/login");
+    }
+  };
 
   if (isLoading === true) {
     return <div>로딩 중....</div>;
@@ -29,10 +45,9 @@ function CardSlider(props) {
       <STInner>
         {posts?.map((post) => (
           <STCard
-            key={post.id}
+            key={post.postId}
             onClick={() => {
-              navigate(`/detail/${post.id}`, { state: post });
-              // 이부분 질문 해봐야지
+              onClick(post);
             }}
           >
             <img src={post.imageAfter} alt={"안녕하세요"} />

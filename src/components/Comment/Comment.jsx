@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CommentLists from "./CommentLists";
 import styled from "styled-components";
-import { __addComment } from "../../redux/modules/_commentSlice";
+import { __addComment } from "../../redux/modules/commentSlice";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const Comment = (props) => {
