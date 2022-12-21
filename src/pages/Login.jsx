@@ -62,7 +62,7 @@ const Login = () => {
       console.log(res)      
       const token = res.headers.authorization;
       console.log(token)
-      setCookie("is_login", token);
+      setCookie("Authorization", token);
       setUsername("");
       setUserPw("");
       // dispatch(__loginUser(login_data))

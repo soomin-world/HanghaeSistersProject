@@ -14,7 +14,7 @@ export const __postPost = createAsyncThunk(
   async (payload, thunkAPI) => {
     console.log(payload);
     try {
-      const data = await instance.post("/posts", payload);
+      const data = await instance.post("/api/post", payload);
       return thunkAPI.fulfillWithValue(data.data);
     } catch (error) {
       console.log(error);
@@ -27,7 +27,7 @@ export const __upDatePost = createAsyncThunk(
   "upDatePost",
   async (payload, thunkAPI) => {
     try {
-      const data = await instance.put(`/posts/${payload.id}`, payload);
+      const data = await instance.put(`/api/post/${payload.id}`, payload);
       return thunkAPI.fulfillWithValue(data.data);
     } catch (error) {
       alert("서버요청중 오류발생!");
@@ -41,7 +41,7 @@ export const __deletePost = createAsyncThunk(
   async (payload, thunkAPI) => {
     console.log(payload);
     try {
-      const data = await instance.delete(`/posts/${payload.id}`);
+      const data = await instance.delete(`/api/post/${payload.id}`);
       return thunkAPI.fulfillWithValue(data.data);
     } catch (error) {
       console.log(error);
@@ -56,7 +56,7 @@ export const __getPosts = createAsyncThunk(
     console.log(payload);
     try {
       const data = await instance.get(
-        `/api/posts/category?category=${payload}`
+        `/api/post/category?category=${payload}`
       );
       return thunkAPI.fulfillWithValue(data.data);
     } catch (error) {
