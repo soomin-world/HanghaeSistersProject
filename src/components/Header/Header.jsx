@@ -11,7 +11,9 @@ function Header() {
             <Lottie animationData={face} />
           </a>
         </div>
-        {/* <div className="title">항해언니</div> */}
+        <a href="/" className="logo">
+          <div className="title">항해언니</div>
+        </a>
         <ul className="menu">
           <li>
             <a href="/logIn">로그인</a>
@@ -36,15 +38,18 @@ const STNavbar = styled.header`
 `;
 
 const STInner = styled.div`
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New";
   width: 100%;
   height: 80px;
   display: flex;
-  justify-content: space-between;
-  div.title {
-    margin: 20px 0px 0px 90px;
-    font-size: 40px;
-    font-weight: bold;
-    color: #fd00c6;
+  a {
+    text-decoration-line: none;
+    div.title {
+      margin: 40px 1600px 0px 0px;
+      font-size: 25px;
+      font-weight: bold;
+      color: #ffffff;
+    }
   }
 
   div.logo {

@@ -14,6 +14,7 @@ const Layout = ({ children }) => {
 const StLayout = styled.div`
   max-width: 1200px;
   min-width: 800px;
+  min-height: 500px;
   margin: 0 auto;
   padding-top: 30px;
   @font-face {
