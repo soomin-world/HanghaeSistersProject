@@ -48,6 +48,7 @@ function CardSlider(props) {
             key={post.postId}
             onClick={() => {
               onClick(post);
+
             }}
           >
             <img src={post.imageAfter} alt={"안녕하세요"} />
