@@ -59,14 +59,16 @@ const Login = () => {
 
     instance.post("/api/user/login", login_data)
     .then((res)=>{
-      console.log(res)      
+      console.log(res)    
+      // 쿠키사용.
       const token = res.headers.authorization;
-      instance.defaults.headers.common["X-AUTH-TOKEN"] = token;
+      instance.defaults.headers.common["Authorization"] = token;
 
       console.log(token)
-      setCookie("Authorization", token);
+      setCookie("is_login", token);
       setUsername("");
       setUserPw("");
+
       // dispatch(__loginUser(login_data))
       // .then((res)=>{})      
       // 로그인 성공하면 메인페이지이동

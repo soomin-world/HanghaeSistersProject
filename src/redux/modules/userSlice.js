@@ -4,7 +4,7 @@ import axios from "axios";
 
 // API, cookie
 import { instance } from "../../core/api/axios";
-import { setCookie } from "../../shared/Cookie";
+import { getCookie, setCookie } from "../../shared/Cookie";
 
 const initialState = {
   // user안에 리듀서가 관리할 데이터가 들어가고
@@ -17,6 +17,8 @@ const initialState = {
   isLoading: false,
   error: null,
 };
+
+const config = {headers : {Authorization:`${getCookie('is_login')}`}}
 
 // ------------------------------------------------- 미들웨어
 // 중복체크 ( 유저 데이터 보내기, 결과 받기 )
@@ -43,7 +45,7 @@ export const __signUpUser = createAsyncThunk(
     console.log(payload);
     try {
       const { data } = await instance.post("/api/user/signup", payload);
-      // console.log('로딩데이터: ', data)
+      console.log('로딩데이터: ', data)
       return thunkAPI.fulfillWithValue(data);
     } catch (err) {
       return thunkAPI.rejectWithValue(err);
@@ -56,9 +58,9 @@ export const __loginUser = createAsyncThunk(
   "loginUser",
   async (payload, thunkAPI) => {
     try {
-
       console.log(payload);
-      const { data } = await instance.post("/api/user/login", payload);
+      const { data } = await instance.post("/api/user/login", payload, config)
+
       // let token = instance.defaults.headers.common["Authorization"];
       // // const token = data.token;
       // console.log(token);
@@ -92,10 +94,8 @@ export const userSlice = createSlice({
     // 중복확인  ---------------
     [__userCheck.pending]: (state) => {
       state.isLoading = true;
-      // 네트워크 요청 시작-> 로딩 true 변경합니다.
     },
     [__userCheck.fulfilled]: (state, action) => {
-      // action으로 받아온 객체를 store에 있는 값에 넣어준다
       console.log("action-서버값", action);
       state.isLoading = false;
       // 서버에서 받아오는 값을 저장할 공간이 겹쳤음 -> 새로 check로 만들어줌 
@@ -104,17 +104,13 @@ export const userSlice = createSlice({
     [__userCheck.rejected]: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
-      // 에러 발생-> 네트워크 요청은 끝,false
-      // catch 된 error 객체를 state.error에 넣습니다.
     },
 
     // 회원가입  ---------------
     [__signUpUser.pending]: (state) => {
       state.isLoading = true;
-      // 네트워크 요청 시작-> 로딩 true 변경합니다.
     },
     [__signUpUser.fulfilled]: (state, action) => {
-      // action으로 받아온 객체를 store에 있는 값에 넣어준다
       console.log("action-서버값", action);
       state.isLoading = false;
       state.userSignup = action.payload;
@@ -122,8 +118,6 @@ export const userSlice = createSlice({
     [__signUpUser.rejected]: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
-      // 에러 발생-> 네트워크 요청은 끝,false
-      // catch 된 error 객체를 state.error에 넣습니다.
     },
 
     // 로그인 -----------------받음 payload(username),data
@@ -136,7 +130,6 @@ export const userSlice = createSlice({
       // 토큰은 쿠키에 저장했으니까 안해줘도 될거같고
       // 유저 데이터랑, 성공메세지(알림띄움용) 보내주면 될듯.
       console.log("action-서버값", action);
-      console.log()
       state.user = action.payload;
     },
     [__loginUser.rejected]: (state, action) => {

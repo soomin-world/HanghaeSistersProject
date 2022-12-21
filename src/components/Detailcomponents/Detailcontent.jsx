@@ -16,7 +16,7 @@ const DetailContent = (props) => {
   const deleteHandler = () => {
     if (!window.confirm("해당글을 삭제하시겠습니까?")) return;
     dispatch(__deletePost(state));
-    window.location.href = "/";
+    // window.location.href = "/";
   };
 
   const updateHandler = () => {
@@ -42,7 +42,7 @@ const DetailContent = (props) => {
         <h3>
           <span>글번호:</span>
         </h3>
-        <p>{state.id}</p>
+        <p>{state.postId}</p>
         <button onClick={deleteHandler} className="titlebtn1">
           게시글 삭제
         </button>

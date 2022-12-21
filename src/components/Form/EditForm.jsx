@@ -22,6 +22,7 @@ const EditForm = () => {
   });
 
   const {
+    postId,
     title,
     category,
     imageBefore,
@@ -46,6 +47,7 @@ const EditForm = () => {
       return;
     }
     const upDateContent = {
+      postId: postId,
       title: title,
       category: category,
       imageBefore: imageBefore,

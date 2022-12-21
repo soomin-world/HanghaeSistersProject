@@ -29,9 +29,9 @@ function CardSlider(props) {
       <STInner>
         {posts?.map((post) => (
           <STCard
-            key={post.id}
+            key={post.postId}
             onClick={() => {
-              navigate(`/detail/${post.id}`, { state: post });
+              navigate(`/detail/${post.postId}`, { state: post });
               // 이부분 질문 해봐야지
             }}
           >
