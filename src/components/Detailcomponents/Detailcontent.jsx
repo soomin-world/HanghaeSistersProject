@@ -22,9 +22,9 @@ const DetailContent = (props) => {
   const updateHandler = () => {
     if (!window.confirm("해당글을 수정하시겠습니까?")) return;
     const newContent = {
-      id: state.id,
-      category: state.category,
+      postId: state.postId,
       title: state.title,
+      category: state.category,
       price: state.price,
       content: state.content,
       imageBefore: state.imageBefore,

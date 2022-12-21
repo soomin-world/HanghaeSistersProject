@@ -13,9 +13,9 @@ function CardSlider(props) {
 
   useEffect(() => {
     dispatch(__getPosts(selectedCategory));
-  }, [dispatch]);
+  }, [selectedCategory]);
   // dispatch가 되면 멈춰라, dispatch가 될때까지만 렌더링 되어라
-  console.log(posts);
+  console.log(selectedCategory);
   // posts 가 category별로 넘어온 데이터라고 가정
 
   if (isLoading === true) {

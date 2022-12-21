@@ -38,20 +38,21 @@ function Footer() {
           <ul>
             <li>
               SoYoung
-              <a href="https://github.com/dev-rara">
-                https://github.com/dev-rara
+              <a href="https://github.com/thdud2262">
+                https://github.com/thdud2262
               </a>
             </li>
             <li>
               JinYoung
-              <a href="https://github.com/starMinK">
-                https://github.com/starMinK
+
+              <a href="https://github.com/jyk2022">
+                https://github.com/jyk2022
               </a>
             </li>
             <li>
-              SuMin
-              <a href="https://github.com/starMinK">
-                https://github.com/starMinK
+              SooMin
+              <a href="https://github.com/soomin-world">
+                https://github.com/soomin-world
               </a>
             </li>
           </ul>
@@ -66,6 +67,7 @@ const STFooter = styled.footer`
   width: 99%;
   height: 230px;
   padding: 10px;
+
   div {
     margin: 20px 0px 0px 20px;
     display: flex;
@@ -84,12 +86,16 @@ const STFooter = styled.footer`
         height: 80px;
       }
       ul {
-        width: 450px;
+
+        width: 500px;
+
         list-style: none;
         justify-content: center;
         li {
           margin: 10px 30px 30px 10px;
-          font-size: 20px;
+
+          font-size: 25px;
+
           font-weight: bold;
           color: #ffffff;
           a {

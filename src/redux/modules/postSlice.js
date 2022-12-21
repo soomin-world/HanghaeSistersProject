@@ -55,9 +55,10 @@ export const __getPosts = createAsyncThunk(
   async (payload, thunkAPI) => {
     console.log(payload);
     try {
-      const data = await instance.get(
-        `/api/post/category?category=${payload}`
-      );
+
+
+      const data = await instance.get(`/api/post/category?category=${payload}`);
+
       return thunkAPI.fulfillWithValue(data.data);
     } catch (error) {
       console.log(error);

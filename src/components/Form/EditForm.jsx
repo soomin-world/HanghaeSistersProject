@@ -11,7 +11,6 @@ const EditForm = () => {
   const { state } = useLocation();
 
   const [inputs, setInputs] = useState({
-    id: state.id,
     title: state.title,
     category: state.category,
     imageBefore: state.imageBefore,
@@ -47,7 +46,6 @@ const EditForm = () => {
       return;
     }
     const upDateContent = {
-      id: state.id,
       title: title,
       category: category,
       imageBefore: imageBefore,
@@ -59,7 +57,7 @@ const EditForm = () => {
     };
     console.log("잘 넘어갔나?", upDateContent);
     dispatch(__upDatePost(upDateContent));
-    navigate(`/detail/:${state.id}`, { state: upDateContent });
+    navigate(`/detail/:${state.postId}`, { state: upDateContent });
   };
 
   return (
