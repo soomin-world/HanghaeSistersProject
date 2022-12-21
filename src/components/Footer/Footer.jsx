@@ -44,7 +44,6 @@ function Footer() {
             </li>
             <li>
               JinYoung
-
               <a href="https://github.com/jyk2022">
                 https://github.com/jyk2022
               </a>
@@ -86,7 +85,6 @@ const STFooter = styled.footer`
         height: 80px;
       }
       ul {
-
         width: 500px;
 
         list-style: none;

@@ -98,8 +98,8 @@ export const userSlice = createSlice({
     [__userCheck.fulfilled]: (state, action) => {
       console.log("action-서버값", action);
       state.isLoading = false;
-      // 서버에서 받아오는 값을 저장할 공간이 겹쳤음 -> 새로 check로 만들어줌 
-      state.userCheck= action.payload;
+      // 서버에서 받아오는 값을 저장할 공간이 겹쳤음 -> 새로 check로 만들어줌
+      state.userCheck = action.payload;
     },
     [__userCheck.rejected]: (state, action) => {
       state.isLoading = false;
