@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 //redux, middleware
@@ -12,6 +12,7 @@ import { loginLottie } from "../assets/lottie";
 //style
 import styled from "styled-components";
 import "../shared/Common/Common.css";
+import { instance } from "../core/api/axios";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -22,21 +23,12 @@ const SignUp = () => {
   const [userPw, setUserPw] = useState("");
   const [userPwCheck, setUserPwCheck] = useState("");
 
+  // 서버에서 온 데이터 상태관리
+  const [ localMSG, setLocalMSG ] = useState("")
+  const [ localCODE, setLocalCODE ] = useState("")
 
-  // 회원가입 정규식 확인 상태관리, 경고메세지 태그 출력용 ->사용아직안함.
-  const [ ExpId, setExpId ] = useState("")
-  const [ ExpPw, setExpPw ] = useState("")
-  const [ ExpPwCheck, setExpPwCheck ] = useState("") 
-
-
-  // 서버에서 온 데이터 결과
+  // 서버에서 받은 데이터 store에 저장해서 가져온 값. (굳이 리덕스 안써도 될법한 것.)
   const userDubCheck = useSelector((state)=>state.user.userCheck)
-  const userSignup = useSelector((state)=>state.user.userSignup)
-  // console.log('중복확인-', userDubCheck)
-  console.log('회원가입-', userSignup)
-
-
-
 
   // 아이디, 비밀번호 정규식
   // id:영문-숫자 4,10 , pw:영문,숫자 8-20자
@@ -58,7 +50,6 @@ const SignUp = () => {
     console.log(username);
     dispatch(__userCheck(username));
   }
-
 
   // 회원가입
   const goSignIn = () => {
@@ -84,31 +75,37 @@ const SignUp = () => {
       username: username,
       password: userPw,
     };
-    dispatch(__signUpUser(signup_data));      
-    console.log(signup_data)
-    console.log(userSignup)     
-    
-    setUsername("");
-    setUserPw("");
-    setUserPwCheck("");
 
-    userSignup?.statusCode === 400 ? 
-      alert (userSignup?.msg)
-    :
-      alert (userSignup?.msg)
-      // navigate("/login");
+    // 리듀서, middleware 사용안하고 화면단에서 서버통신하네요? 
+    // 서버통신할 때 굳이 리듀서 사용을 안해도 되는 거였네요/?흠.
 
-    // if(userSignup === true){
-    //   return alert ('회원가입 되었습니다')
-    // }else{
-    //   return alert (userSignupMsg)
-    // }
-
-    // if( userSignup === true ) {
-    //     alert ('회원가입 되었습니다')
-    //     navigate("/login");
-    // }
+    instance.post("/api/user/signup", signup_data)
+    .then((res)=>{
+      // console.log(res)
+      const signUpMsg = res.data.msg
+      const signUpCode = res.data.statusCode
+      console.log(signUpMsg,signUpCode)
+      if(signUpCode === 200){
+        setUsername("");
+        setUserPw("");
+        setUserPwCheck("");
+        alert(signUpMsg)
+        navigate("/login");
+      }else{
+        // alert(signUpMsg)
+        setLocalMSG(signUpMsg)
+        setLocalCODE(signUpCode)
+        return
+      }
+    })
+    .catch((err)=>{
+      alert('로그인실패',err)
+      console.log(err)
+    })
   }
+
+
+
   // signIn T/F로 로그인-회원가입 창 분기함.
   return (
     <Contain>
@@ -170,6 +167,13 @@ const SignUp = () => {
                     setUserPwCheck(e.target.value);
                   }}
                   />
+                  <ServerMSG color={localCODE===200? 'green' : 'red'} >
+                  { localMSG ? 
+                    <span>{localMSG}</span>
+                  :
+                    <span>{localMSG}</span>
+                  }
+                  </ServerMSG>
                   {/* 위의 비밀번호랑 맞는지 있다가 추가 */}
                   {/* <p className="warning">비밀번호를 확인해주세요</p>
                   <p className="pass">비밀번호가 일치합니다</p> */}
