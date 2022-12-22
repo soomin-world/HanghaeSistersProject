@@ -69,9 +69,7 @@ const Login = () => {
       setUsername("");
       setUserPw("");
 
-      // dispatch(__loginUser(login_data))
-      // .then((res)=>{})      
-      // 로그인 성공하면 메인페이지이동
+
       alert('로그인성공')
       navigate("/");
     })
@@ -95,8 +93,10 @@ const Login = () => {
           </div>
         </BBox>
         <LoginBox>
-          <Title>항해 언니</Title>
-          <p>예뻐지고 싶은 언니들의 커뮤니티</p>
+          <Title>
+            <p className="maintit">항해 언니</p>
+            <p className="subtit">예뻐지고 싶은 언니들의 커뮤니티</p>
+          </Title>
           <Box>
             <p>로그인</p>
             <IdBox>
@@ -190,12 +190,18 @@ const LoginBox = styled.div`
   left: 10%;
   transform: translateY(-50%);
 `;
-const Title = styled.p`
-  font-size: 65px;
-  font-weight: 600;
+const Title = styled.div`
   margin-bottom: 30px;
   text-align: center;
   font-family: "GongGothicMedium";
+  font-style: oblique;
+  .maintit {
+    font-size: 65px;
+    margin-bottom: 10px;
+  }
+  .subtit {
+    font-size: 30px;
+  }
 `;
 const Box = styled.div`
   width: 550px;

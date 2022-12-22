@@ -1,8 +1,9 @@
 // 키값 기준으로 쿠키에 저장된 값을 가져오는 함수
 const getCookie = (name) => {
+    // aa=xx; user_id=aaa; abbb=sssss; 여기서 user_id의 키값(aaa)을 알고 싶다
+    // [aa=xx, aaa; abbb=sssss;]
     let value = "; " + document.cookie;
     let parts = value.split("; " + name + "="); 
-    
     if (parts.length === 2) 
         return parts.pop().split(";").shift();
 };
