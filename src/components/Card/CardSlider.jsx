@@ -1,13 +1,9 @@
-
-import { useEffect, useState } from "react";
-
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { __getPosts } from "../../redux/modules/postSlice";
-
 import { getCookie } from "../../shared/Cookie";
-
 
 function CardSlider(props) {
   const selectedCategory = props.category;
@@ -16,29 +12,22 @@ function CardSlider(props) {
   const navigate = useNavigate();
   const { posts, isLoading, error } = useSelector((state) => state.post);
 
-  const [isCookie, setIsCookie] = useState(false);
   const cookie = getCookie("is_login");
 
   useEffect(() => {
     dispatch(__getPosts(selectedCategory));
-    if (cookie !== undefined || cookie !== null) {
-      setIsCookie(true);
-      console.log(isCookie);
-    }
-    return;
-  }, [selectedCategory, dispatch, cookie, isCookie]);
+  }, [selectedCategory, dispatch, cookie]);
   // dispatch가 되면 멈춰라, dispatch가 될때까지만 렌더링 되어라
   console.log(selectedCategory);
   // posts 가 category별로 넘어온 데이터라고 가정
   const onClick = (post) => {
-    if (isCookie === true) {
+    if (cookie) {
       navigate(`/detail/${post.postId}`, { state: post });
     } else {
-      alert("로그인이필요합니다");
+      alert("더 많은 정보를 얻으시려면 로그인이 필요합니다!");
       navigate("/login");
     }
   };
-
 
   if (isLoading === true) {
     return <div>로딩 중....</div>;
@@ -53,10 +42,7 @@ function CardSlider(props) {
           <STCard
             key={post.postId}
             onClick={() => {
-
               onClick(post);
-
-
             }}
           >
             <img src={post.imageAfter} alt={"안녕하세요"} />
@@ -73,6 +59,7 @@ const STContainer = styled.div`
   overflow: auto;
   height: 400px;
   width: 100%;
+  font-family: "GongGothicMedium";
   ::-webkit-scrollbar {
     height: 12px;
     width: 20%;
@@ -119,8 +106,7 @@ const STCard = styled.div`
   div {
     text-align: center;
     margin: 0 15px;
-    font-weight: 700;
-    font-size: 15px;
+    font-size: 17px;
   }
 `;
 export default CardSlider;

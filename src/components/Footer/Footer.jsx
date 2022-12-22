@@ -63,12 +63,12 @@ function Footer() {
 
 const STFooter = styled.footer`
   background-color: #d85d9061;
-  width: 99%;
+  width: 100%;
   height: 230px;
   padding: 10px;
-
+  font-family: "GongGothicMedium";
   div {
-    margin: 20px 0px 0px 20px;
+    margin: 20px 0px 0px 15px;
     display: flex;
     justify-content: center;
     gap: 70px;
@@ -91,9 +91,7 @@ const STFooter = styled.footer`
         justify-content: center;
         li {
           margin: 10px 30px 30px 10px;
-
           font-size: 25px;
-
           font-weight: bold;
           color: #ffffff;
           a {

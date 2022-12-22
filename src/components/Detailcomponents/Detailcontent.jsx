@@ -18,7 +18,7 @@ const DetailContent = (props) => {
   const deleteHandler = () => {
     if (!window.confirm("해당글을 삭제하시겠습니까?")) return;
     dispatch(__deletePost(state));
-    // window.location.href = "/";
+    window.location.href = "/";
   };
 
   const updateHandler = () => {
@@ -96,9 +96,8 @@ const DetailSection = styled.section`
   flex-direction: column;
   width: 100%;
   padding-top: 30px;
-  font-family: "Noto Sans KR";
+  font-family: "GongGothicMedium";
   .infoT {
-    font-weight: bold;
     font-size: 1.2rem;
     padding: 2% 2%;
   }

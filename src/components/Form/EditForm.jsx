@@ -155,10 +155,11 @@ const EditForm = () => {
 const STForm = styled.form`
   margin: 2% 0% 5% 15%;
   width: 60%;
-  border: 1px solid black;
+  border: 20px solid rgba(212, 186, 210, 0.63);
   border-radius: 25px;
-  background-color: rgb(255, 255, 255);
+  background-color: rgba(228, 198, 225, 0.233);
   padding: 50px 50px 30px 40px;
+  font-family: "GongGothicMedium";
 `;
 const STTitle = styled.div`
   width: 800px;
@@ -169,7 +170,7 @@ const STTitle = styled.div`
 const STLabel = styled.label`
   font-size: 30px;
   margin-right: 20px;
-  font-weight: bold;
+  color: #3b3737;
 `;
 
 const STInput = styled.input`
@@ -186,7 +187,6 @@ const STCategory = styled.div`
 const STCLabel = styled.label`
   margin-right: 20px;
   font-size: 20px;
-  font-weight: bold;
 `;
 
 const STSelect = styled.select``;
@@ -198,7 +198,6 @@ const STImage = styled.div`
 const STImageLabel = styled.label`
   margin-right: 10px;
   font-size: 20px;
-  font-weight: bold;
 `;
 
 const STContent = styled.div`
@@ -220,7 +219,6 @@ const STPrice = styled.div`
 const STPriceLabel = styled.label`
   margin: 0px 10px 0px 10px;
   font-size: 20px;
-  font-weight: bold;
 `;
 
 const STDoctor = styled.div`
@@ -231,7 +229,6 @@ const STDoctor = styled.div`
 const STInfoLabel = styled.label`
   margin: 0px 10px 0px 10px;
   font-size: 20px;
-  font-weight: bold;
 `;
 
 const STButton = styled.button`

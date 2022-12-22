@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { __postPost } from "../../redux/modules/postSlice";
 import styled from "styled-components";
@@ -19,7 +19,23 @@ const Form = () => {
     doctor: "",
   });
 
+  //const hospitalCheck = useSelector((state)=>{ state.post.??})
+  // 병원 유효성 검사 상상중
+  // const [isHospitalCheck, setIsHospitalCheck] = useState(false);
+  // const hospitalCheckHandler = () => {
+  //   if (hospitalCheck.statusCode === 200) {
+  //     alert("확인되었습니다!");
+  //     setHospitalCheck(true);
+  //   } else if (hospitalCheck.statusCode === 400) {
+  //     setHospitalCheck(false);
+  //     alert("병원명을 다시 확인해주세요");
+  //   }
+  // };
+
   const onSubmitHandler = () => {
+    // if (hospitalCheck === false) {
+    //   alert("병원명 확인을 진행해주세요!");
+    // } else
     if (post.title === "") {
       alert("제목을 입력해주세요");
     } else if (post.category === "") {
@@ -62,10 +78,38 @@ const Form = () => {
           <option value="지방흡입">지방흡입</option>
         </STSelect>
       </STCategory>
+      <STDoctor>
+        <div className="hospital-info">
+          <STInfoLabel>병원이름</STInfoLabel>
+          <input
+            type="text"
+            onChange={(e) => {
+              const { value } = e.target;
+              setPost({ ...post, hospitalAddress: value });
+            }}
+            placeholder="병원이름을 정확히 기재해주세요!"
+          ></input>
+          <button type="button">
+            {/* onClick={hospitalCheckHandler} */}
+            확인{" "}
+          </button>
+        </div>
+        <div className="doctor-info">
+          <STInfoLabel>원장님 성함</STInfoLabel>
+          <input
+            type="text"
+            onChange={(e) => {
+              const { value } = e.target;
+              setPost({ ...post, doctor: value });
+            }}
+          ></input>
+        </div>
+      </STDoctor>
       <STImage>
         <STImageLabel>전</STImageLabel>
         <input
           type="url"
+          placeholder="성형전 이미지url을 입력해주세요"
           onChange={(e) => {
             const { value } = e.target;
             setPost({ ...post, imageBefore: value });
@@ -74,6 +118,7 @@ const Form = () => {
         <STImageLabel>후</STImageLabel>
         <input
           type="url"
+          placeholder="성형gn 이미지url을 입력해주세요"
           onChange={(e) => {
             const { value } = e.target;
             setPost({ ...post, imageAfter: value });
@@ -100,24 +145,7 @@ const Form = () => {
         />
         <STPriceLabel> 원</STPriceLabel>
       </STPrice>
-      <STDoctor>
-        <STInfoLabel>병원이름</STInfoLabel>
-        <input
-          type="text"
-          onChange={(e) => {
-            const { value } = e.target;
-            setPost({ ...post, hospitalAddress: value });
-          }}
-        ></input>
-        <STInfoLabel>원장님 성함</STInfoLabel>
-        <input
-          type="text"
-          onChange={(e) => {
-            const { value } = e.target;
-            setPost({ ...post, doctor: value });
-          }}
-        ></input>
-      </STDoctor>
+
       <STBDIV>
         <STButton type="submit">완료</STButton>
       </STBDIV>
@@ -128,10 +156,11 @@ const Form = () => {
 const STForm = styled.form`
   margin: 2% 0% 5% 15%;
   width: 60%;
-  border: 1px solid black;
+  border: 20px solid rgba(212, 186, 210, 0.63);
   border-radius: 25px;
-  background-color: rgb(255, 255, 255);
+  background-color: rgba(228, 198, 225, 0.233);
   padding: 50px 50px 30px 40px;
+  font-family: "GongGothicMedium";
 `;
 const STTitle = styled.div`
   width: 800px;
@@ -142,7 +171,7 @@ const STTitle = styled.div`
 const STLabel = styled.label`
   font-size: 30px;
   margin-right: 20px;
-  font-weight: bold;
+  color: #3b3737;
 `;
 
 const STInput = styled.input`
@@ -153,25 +182,27 @@ const STInput = styled.input`
 const STCategory = styled.div`
   width: 60%;
   height: 30px;
-  margin-bottom: 20px;
+  margin: 0px 0px 15px 10px;
 `;
 
 const STCLabel = styled.label`
   margin-right: 20px;
   font-size: 20px;
-  font-weight: bold;
 `;
 
 const STSelect = styled.select``;
 
 const STImage = styled.div`
-  margin-bottom: 20px;
+  margin: 0px 0px 20px 10px;
+  input {
+    width: 250px;
+    margin-right: 15px;
+  }
 `;
 
 const STImageLabel = styled.label`
   margin-right: 10px;
   font-size: 20px;
-  font-weight: bold;
 `;
 
 const STContent = styled.div`
@@ -193,18 +224,25 @@ const STPrice = styled.div`
 const STPriceLabel = styled.label`
   margin: 0px 10px 0px 10px;
   font-size: 20px;
-  font-weight: bold;
 `;
 
 const STDoctor = styled.div`
   margin-bottom: 20px;
   display: flex;
+  div {
+    input {
+      margin-top: 10px;
+      width: 200px;
+    }
+    button {
+      margin-left: 10px;
+    }
+  }
 `;
 
 const STInfoLabel = styled.label`
   margin: 0px 10px 0px 10px;
   font-size: 20px;
-  font-weight: bold;
 `;
 
 const STButton = styled.button`
@@ -217,4 +255,5 @@ const STBDIV = styled.div`
   display: flex;
   flex-direction: row-reverse;
 `;
+
 export default Form;

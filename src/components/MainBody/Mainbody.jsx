@@ -76,15 +76,15 @@ const STTab = styled.ul`
   width: 100%;
   padding: 0px 20px 0px 20px;
   background-color: #e7a0beca;
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New";
+  font-family: "GongGothicMedium";
   //border: 1px solid;
   li {
     text-align: center;
     width: 25%;
     padding: 13px 15px;
     display: block;
-    font-size: 17px;
-    font-weight: bold;
+    font-size: 20px;
+
     color: #ffffff;
     text-decoration: none;
     &:hover {

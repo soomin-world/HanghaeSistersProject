@@ -23,12 +23,14 @@ const SignUp = () => {
   const [userPw, setUserPw] = useState("");
   const [userPwCheck, setUserPwCheck] = useState("");
 
+
   // 서버에서 온 데이터 상태관리
   const [ localMSG, setLocalMSG ] = useState("")
   const [ localCODE, setLocalCODE ] = useState("")
 
   // 서버에서 받은 데이터 store에 저장해서 가져온 값. (굳이 리덕스 안써도 될법한 것.)
   const userDubCheck = useSelector((state)=>state.user.userCheck)
+
 
   // 아이디, 비밀번호 정규식
   // id:영문-숫자 4,10 , pw:영문,숫자 8-20자
@@ -49,7 +51,9 @@ const SignUp = () => {
     }
     console.log(username);
     dispatch(__userCheck(username));
+
   }
+
 
   // 회원가입
   const goSignIn = () => {
@@ -75,6 +79,7 @@ const SignUp = () => {
       username: username,
       password: userPw,
     };
+
 
     // 리듀서, middleware 사용안하고 화면단에서 서버통신하네요? 
     // 서버통신할 때 굳이 리듀서 사용을 안해도 되는 거였네요/?흠.
@@ -151,10 +156,12 @@ const SignUp = () => {
                     // console.log(userPw)  
                     setUserPw(e.target.value);
                   }}
+
                   />
                   {/* 정규식 통과여부 아래 p추가
                   <p>사용가능한 비밀번호입니다</p>
                   <p>비밀번호를 (조건)확인해주세요</p> */}
+
               </>
               <>
                 <p>비밀번호 확인</p>
@@ -166,6 +173,7 @@ const SignUp = () => {
                     // console.log(userPwCheck)
                     setUserPwCheck(e.target.value);
                   }}
+
                   />
                   <ServerMSG color={localCODE===200? 'green' : 'red'} >
                   { localMSG ? 
@@ -176,6 +184,7 @@ const SignUp = () => {
                   </ServerMSG>
                   {/* 위의 비밀번호랑 맞는지 있다가 추가 */}
                   {/* <p className="warning">비밀번호를 확인해주세요</p>
+
                   <p className="pass">비밀번호가 일치합니다</p> */}
               </>
             </IdBox>
@@ -199,7 +208,7 @@ const SignUp = () => {
       </BoxBox>
     </Contain>
   );
-}
+};
 
 const Contain = styled.div`
   width: 100vw;
@@ -302,13 +311,14 @@ const MoveBox = styled.div`
   }
 `;
 
-
 //server Msg
 const ServerMSG = styled.div`
+
   color : ${(props)=> props.color };
   font-size : 14px;
   margin: 0 0 15px 5px;
 
 `
+
 
 export default SignUp;
