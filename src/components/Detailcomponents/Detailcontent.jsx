@@ -11,7 +11,9 @@ const DetailContent = ({ state, posts }) => {
   const deleteHandler = () => {
     if (!window.confirm("해당글을 삭제하시겠습니까?")) return;
     dispatch(__deletePost(posts.postId));
+
     window.location.href = "/";
+
   };
 
   const updateHandler = () => {
@@ -135,8 +137,9 @@ const DetailSection = styled.section`
     margin-bottom: 2%;
     box-sizing: border-box;
     h2 {
-      font-weight: bold;
+
       font-size: 1.6rem;
+
     }
     .imgBox {
       display: flex;
@@ -158,7 +161,6 @@ const DetailSection = styled.section`
       padding: 2% 2% p {
         span {
           padding-right: 1%;
-          font-weight: bold;
         }
       }
       .price {
@@ -185,7 +187,6 @@ const DetailSection = styled.section`
       span {
         display: inline-block;
         padding: 1% 1%;
-        font-weight: bold;
       }
     }
   }
