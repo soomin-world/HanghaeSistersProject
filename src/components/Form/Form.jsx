@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+
 import { __getHospital, __postPost } from "../../redux/modules/postSlice";
 import styled from "styled-components";
-import { MdLaptopWindows } from "react-icons/md";
 
 const Form = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+
   const [isHospitalChk, setIsHospitalChk] = useState(false);
   const [post, setPost] = useState({
     title: "",

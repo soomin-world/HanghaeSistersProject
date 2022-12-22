@@ -13,7 +13,6 @@ const DetailContent = ({ state, posts }) => {
     dispatch(__deletePost(posts.postId));
 
     window.location.href = "/";
-
   };
 
   const updateHandler = () => {
@@ -137,9 +136,7 @@ const DetailSection = styled.section`
     margin-bottom: 2%;
     box-sizing: border-box;
     h2 {
-
       font-size: 1.6rem;
-
     }
     .imgBox {
       display: flex;
