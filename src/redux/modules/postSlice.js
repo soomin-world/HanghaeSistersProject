@@ -55,7 +55,7 @@ export const __deletePost = createAsyncThunk(
   "__deletePost",
   async (payload, thunkAPI) => {
     try {
-      const data = await instance.delete(`/api/post/${payload.postId}`, config);
+      const data = await instance.delete(`/api/post/${payload}`, config);
       return thunkAPI.fulfillWithValue(data.data);
     } catch (error) {
       // console.log("에러가 발생했습니다.", error);
