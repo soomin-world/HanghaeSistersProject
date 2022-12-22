@@ -26,7 +26,10 @@ const Detail = () => {
   //23번, 24번줄은 토큰 권한을 받기 위해 필요한 것들
 
   useEffect(() => {
-    dispatch(__getPostss(id));
+    if(cookie){
+
+      dispatch(__getPostss(id));
+    }
 
     if (cookie !== undefined && cookie !== null) {
       setIsCookie(true);
@@ -35,6 +38,20 @@ const Detail = () => {
     return;
   }, [dispatch, cookie, isCookie, id, state]);
   // dispatch가 되면 멈춰라, dispatch가 될때까지만 렌더링 되어라
+
+
+
+
+
+  // 댓글을 쓰면 댓글에 대한 정보만 업데이트 해야 되지 않나?
+  // 포스트에 댓글이 딸려있지만, 댓글만 업데이트 할 것이기 때문에
+  // 댓글을 가져오는 APi가 있었어야 하지 않을까.. 
+  // 지금 추가하지는 않을거지만, api가 없다면? 댓글은 새로고침을 해야 보인다.
+  // 의견을 뭉러봊보자. 
+  // useEffect(()=>{
+  //   dispatch(__getComment())
+  // })
+
 
   if (isLoading === true) {
     return <div>로딩 중....</div>;
