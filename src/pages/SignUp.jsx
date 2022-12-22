@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 //redux, middleware
@@ -12,33 +12,24 @@ import { loginLottie } from "../assets/lottie";
 //style
 import styled from "styled-components";
 import "../shared/Common/Common.css";
+import { instance } from "../core/api/axios";
 
 const SignUp = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   // 회원가입/ 로그인 서버로 보내는 데이터 state
-  const [userCheck, setUserCheck] = useState("");
   const [username, setUsername] = useState("");
   const [userPw, setUserPw] = useState("");
   const [userPwCheck, setUserPwCheck] = useState("");
 
 
-  // 회원가입 정규식 확인 상태관리, 경고메세지 태그 출력용 ->사용아직안함.
-  const [ ExpId, setExpId ] = useState("")
-  const [ ExpPw, setExpPw ] = useState("")
-  const [ ExpPwCheck, setExpPwCheck ] = useState("") 
+  // 서버에서 온 데이터 상태관리
+  const [ localMSG, setLocalMSG ] = useState("")
+  const [ localCODE, setLocalCODE ] = useState("")
 
-
-  // 서버에서 온 데이터 결과
+  // 서버에서 받은 데이터 store에 저장해서 가져온 값. (굳이 리덕스 안써도 될법한 것.)
   const userDubCheck = useSelector((state)=>state.user.userCheck)
-  const userSignup = useSelector((state)=>state.user.userSignup)
-  // console.log('중복확인-', userDubCheck)
-
-  // console.log('회원가입-', userSignup)
-
-
-
 
 
   // 아이디, 비밀번호 정규식
@@ -48,7 +39,7 @@ const SignUp = () => {
     return regExp.test(asValue);
   }
   function isPassword(asValue) {
-    var regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,20}$/;
+    var regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*]{8,20}$/;
     return regExp.test(asValue);
   }
 
@@ -61,65 +52,64 @@ const SignUp = () => {
     console.log(username);
     dispatch(__userCheck(username));
 
-    // 2번씩 눌러야 나오는 ㅇㅅㅇ...
-    // 바로 출력 안되는 문제
-    if(userDubCheck.statusCode ===  200) {
-      setUserCheck(true);
-      alert(userDubCheck.msg)
-    }else if(userDubCheck.statusCode === 400){
-      setUserCheck(false);
-      alert(userDubCheck.msg)
-    }
-  };
-  // console.log(userCheck)
+  }
 
 
   // 회원가입
   const goSignIn = () => {
     console.log("회원가입", username, userPw, userPwCheck);
-    // 정규식 체크
-    // if (!isId(username)) {
-    //   console.log(isId(username));
-    //   alert("영문과 숫자를 포함하는 4-10자의 이내의 아이디를 입력해주세요");
-    //   return;
+    if (!isPassword(userPw)) {
+      console.log(isPassword(userPw));
+      alert("대,소문자의 영문과 숫자, 특수문자를 포함하는 8-15자 이내의 비밀번호를 입력해주세요");
+      return;
+    }
+    if (userPw !== userPwCheck) {
+      alert("비밀번호를 다시 한번 더 확인하세요");
+      return;
+    }
+    // 중복확인 여부
+    if(!userDubCheck){
+      console.log('중복확인X')
+      return alert("아이디 중복확인을 해주세요")
+    } 
+    console.log("중복확인pass", userDubCheck);
 
-    // }
-    // if (!isPassword(userPw)) {
-    //   console.log(isPassword(userPw));
-    //   alert("영문과 숫자를 포함하는 8-15자 이내의 비밀번호를 입력해주세요");
-    //   return;
-    // }
-
-    // if (userPw !== userPwCheck) {
-    //   alert("비밀번호를 다시 한번 더 입력하세요");
-    //   return;
-    // }
     // user데이터전송
     const signup_data = {
       username: username,
       password: userPw,
     };
-    // 중복확인 여부
 
-    !userCheck? 
-      alert("아이디 중복확인을 해주세요")
-      : 
-      console.log("중복확인pass", userCheck);
-      dispatch(__signUpUser(signup_data));            
 
-    
-    setUsername("");
-    setUserPw("");
-    setUserPwCheck("");
+    // 리듀서, middleware 사용안하고 화면단에서 서버통신하네요? 
+    // 서버통신할 때 굳이 리듀서 사용을 안해도 되는 거였네요/?흠.
 
-    
-    userSignup?.statusCode === 400 ? 
-      alert (userSignup?.msg)
-    :
-      alert (userSignup?.msg)
-      // navigate("/login");
+    instance.post("/api/user/signup", signup_data)
+    .then((res)=>{
+      // console.log(res)
+      const signUpMsg = res.data.msg
+      const signUpCode = res.data.statusCode
+      console.log(signUpMsg,signUpCode)
+      if(signUpCode === 200){
+        setUsername("");
+        setUserPw("");
+        setUserPwCheck("");
+        alert(signUpMsg)
+        navigate("/login");
+      }else{
+        // alert(signUpMsg)
+        setLocalMSG(signUpMsg)
+        setLocalCODE(signUpCode)
+        return
+      }
+    })
+    .catch((err)=>{
+      alert('로그인실패',err)
+      console.log(err)
+    })
+  }
 
-  };
+
 
   // signIn T/F로 로그인-회원가입 창 분기함.
   return (
@@ -147,10 +137,14 @@ const SignUp = () => {
                   />
                   <button onClick={dupCheck}>중복확인</button>
                 </div>
-                {/* ...태그를 추가하려면 좀더 처리해야 할 게 많음..;;; */}
-                {/* <ServerMSG color={userDubCheck.statusCode == "200"? 'green' : 'red' }>
-                  {userDubCheck.msg}
-                </ServerMSG> */}
+                <ServerMSG color={userDubCheck? 'green' : 'red' }>
+                  { userDubCheck === null ? null : 
+                    userDubCheck ? 
+                      <span>사용 가능한 아이디입니다</span>
+                    :
+                      <span>중복된 아이디 입니다</span>
+                    }
+                </ServerMSG>
               </div>
               <>
                 <p>비밀번호</p>
@@ -159,27 +153,38 @@ const SignUp = () => {
                   type="password"
                   placeholder="비밀번호를 입력해주세요"
                   onChange={(e) => {
-                    // console.log(userPw)
+                    // console.log(userPw)  
                     setUserPw(e.target.value);
                   }}
+
                   />
-                  {/* 정규식 통과여부 아래 p추가 */}
-                  {/* <p>사용가능한 비밀번호입니다</p> */}
-                  {/* <p>비밀번호를 (조건)확인해주세요</p> */}
+                  {/* 정규식 통과여부 아래 p추가
+                  <p>사용가능한 비밀번호입니다</p>
+                  <p>비밀번호를 (조건)확인해주세요</p> */}
+
               </>
               <>
                 <p>비밀번호 확인</p>
                 <input
                   value={userPwCheck || ""}
                   type="password"
-                  placeholder="비밀번호를 한번 더 입력해주세요"
+                  placeholder="비밀번호를 한번 더 확인해주세요"
                   onChange={(e) => {
                     // console.log(userPwCheck)
                     setUserPwCheck(e.target.value);
                   }}
+
                   />
+                  <ServerMSG color={localCODE===200? 'green' : 'red'} >
+                  { localMSG ? 
+                    <span>{localMSG}</span>
+                  :
+                    <span>{localMSG}</span>
+                  }
+                  </ServerMSG>
                   {/* 위의 비밀번호랑 맞는지 있다가 추가 */}
                   {/* <p className="warning">비밀번호를 확인해주세요</p>
+
                   <p className="pass">비밀번호가 일치합니다</p> */}
               </>
             </IdBox>
@@ -203,7 +208,7 @@ const SignUp = () => {
       </BoxBox>
     </Contain>
   );
-}
+};
 
 const Contain = styled.div`
   width: 100vw;
@@ -237,7 +242,7 @@ const Title = styled.div`
   margin-bottom: 30px;
   text-align: center;
   font-family: "GongGothicMedium";
-  border: 1px solid red;
+  font-style: oblique;
   .maintit {
     font-size: 65px;
     margin-bottom: 10px;
@@ -276,7 +281,7 @@ const IdBox = styled.div`
     border-radius: 5px;
     padding-left: 15px;
     box-sizing: border-box;
-    margin-bottom: 15px;
+    margin-bottom: 5px;
     border: 1px solid #74c0fc;
   }
   .double_btn {
@@ -306,10 +311,14 @@ const MoveBox = styled.div`
   }
 `;
 
-
 //server Msg
 const ServerMSG = styled.div`
+
   color : ${(props)=> props.color };
+  font-size : 14px;
+  margin: 0 0 15px 5px;
+
 `
+
 
 export default SignUp;

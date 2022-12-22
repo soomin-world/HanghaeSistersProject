@@ -46,6 +46,7 @@ const ComListBox = styled.ul`
     border: none;
     padding: 5px 10px;
     box-sizing: border-box;
+    font-family: "GongGothicMedium";
   }
   button {
     width: 130px;

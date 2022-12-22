@@ -3,26 +3,15 @@ import Lottie from "lottie-react";
 import face from "../../assets/lottie/face.json";
 
 import { deleteCookie, getCookie } from "../../shared/Cookie";
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function Header() {
   const navigate = useNavigate();
-  const [isCookie, setIsCookie] = useState(false);
   const cookie = getCookie("is_login");
-  useEffect(() => {
-    if (cookie !== undefined && cookie !== null) {
-      setIsCookie(true);
-      console.log(isCookie);
-    }
-    return;
-  }, [cookie, isCookie]);
 
   const deleteCookiehandler = () => {
     deleteCookie("is_login");
-    setIsCookie(false);
     navigate("/");
-    console.log(isCookie);
   };
 
   return (
@@ -36,8 +25,7 @@ function Header() {
         <a href="/" className="logo">
           <div className="title">항해언니</div>
         </a>
-
-        {isCookie ? (
+        {cookie ? (
           <ul className="menu">
             <li>
               <div className="logOut" onClick={deleteCookiehandler}>
@@ -67,10 +55,10 @@ const STNavbar = styled.header`
   width: 100%;
   height: 80px;
   background-color: #e7a0be8f;
+  font-family: "GongGothicMedium";
 `;
 
 const STInner = styled.div`
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New";
   width: 100%;
   height: 80px;
   display: flex;
@@ -79,7 +67,7 @@ const STInner = styled.div`
     div.title {
       margin: 40px 1600px 0px 0px;
       font-size: 25px;
-      font-weight: bold;
+
       color: #ffffff;
     }
   }

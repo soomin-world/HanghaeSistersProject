@@ -72,6 +72,7 @@ const Comment = ({ posts }) => {
 const ComListBox = styled.div`
   padding: 15px 25px;
   box-sizing: border-box;
+  font-family: "GongGothicMedium";
   .com_box {
     border: 3px solid #e5dbff;
     width: 100%;

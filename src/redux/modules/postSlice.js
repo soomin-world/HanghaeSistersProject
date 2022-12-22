@@ -53,8 +53,6 @@ export const __upDatePost = createAsyncThunk(
 export const __deletePost = createAsyncThunk(
   "__deletePost",
   async (payload, thunkAPI) => {
-    // console.log("페이로드 아이디", payload.postId);
-
     try {
       const data = await instance.delete(`/api/post/${payload.postId}`, config);
       return thunkAPI.fulfillWithValue(data.data);
