@@ -36,6 +36,8 @@ const SignUp = () => {
   console.log('회원가입-', userSignup)
 
 
+
+
   // 아이디, 비밀번호 정규식
   // id:영문-숫자 4,10 , pw:영문,숫자 8-20자
   function isId(asValue) {
@@ -57,6 +59,7 @@ const SignUp = () => {
     dispatch(__userCheck(username));
   }
 
+
   // 회원가입
   const goSignIn = () => {
     console.log("회원가입", username, userPw, userPwCheck);
@@ -75,7 +78,7 @@ const SignUp = () => {
       return alert("아이디 중복확인을 해주세요")
     } 
     console.log("중복확인pass", userDubCheck);
-    
+
     // user데이터전송
     const signup_data = {
       username: username,
@@ -88,6 +91,12 @@ const SignUp = () => {
     setUsername("");
     setUserPw("");
     setUserPwCheck("");
+
+    userSignup?.statusCode === 400 ? 
+      alert (userSignup?.msg)
+    :
+      alert (userSignup?.msg)
+      // navigate("/login");
 
     // if(userSignup === true){
     //   return alert ('회원가입 되었습니다')
