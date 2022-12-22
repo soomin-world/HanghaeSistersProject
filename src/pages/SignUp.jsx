@@ -18,7 +18,6 @@ const SignUp = () => {
   const dispatch = useDispatch();
 
   // 회원가입/ 로그인 서버로 보내는 데이터 state
-  const [userCheck, setUserCheck] = useState("");
   const [username, setUsername] = useState("");
   const [userPw, setUserPw] = useState("");
   const [userPwCheck, setUserPwCheck] = useState("");
@@ -34,9 +33,7 @@ const SignUp = () => {
   const userDubCheck = useSelector((state)=>state.user.userCheck)
   const userSignup = useSelector((state)=>state.user.userSignup)
   // console.log('중복확인-', userDubCheck)
-  // console.log('회원가입-', userSignup)
-
-
+  console.log('회원가입-', userSignup)
 
 
   // 아이디, 비밀번호 정규식
@@ -46,7 +43,7 @@ const SignUp = () => {
     return regExp.test(asValue);
   }
   function isPassword(asValue) {
-    var regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,20}$/;
+    var regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*]{8,20}$/;
     return regExp.test(asValue);
   }
 
@@ -58,60 +55,51 @@ const SignUp = () => {
     }
     console.log(username);
     dispatch(__userCheck(username));
-    // 2번씩 눌러야 나오는 ㅇㅅㅇ...
-    // 바로 출력 안되는 문제
-    if(userDubCheck.statusCode ===  200) {
-      setUserCheck(true);
-      alert(userDubCheck.msg)
-    }else if(userDubCheck.statusCode === 400){
-      setUserCheck(false);
-      alert(userDubCheck.msg)
-    }
-  };
-  // console.log(userCheck)
+  }
 
   // 회원가입
   const goSignIn = () => {
     console.log("회원가입", username, userPw, userPwCheck);
-    // 정규식 체크
-    // if (!isId(username)) {
-    //   console.log(isId(username));
-    //   alert("영문과 숫자를 포함하는 4-10자의 이내의 아이디를 입력해주세요");
-    //   return;
-    // }
-    // if (!isPassword(userPw)) {
-    //   console.log(isPassword(userPw));
-    //   alert("영문과 숫자를 포함하는 8-15자 이내의 비밀번호를 입력해주세요");
-    //   return;
-    // }
-    // if (userPw !== userPwCheck) {
-    //   alert("비밀번호를 다시 한번 더 입력하세요");
-    //   return;
-    // }
+    if (!isPassword(userPw)) {
+      console.log(isPassword(userPw));
+      alert("대,소문자의 영문과 숫자, 특수문자를 포함하는 8-15자 이내의 비밀번호를 입력해주세요");
+      return;
+    }
+    if (userPw !== userPwCheck) {
+      alert("비밀번호를 다시 한번 더 확인하세요");
+      return;
+    }
+    // 중복확인 여부
+    if(!userDubCheck){
+      console.log('중복확인X')
+      return alert("아이디 중복확인을 해주세요")
+    } 
+    console.log("중복확인pass", userDubCheck);
+    
     // user데이터전송
     const signup_data = {
       username: username,
       password: userPw,
     };
-    // 중복확인 여부
-    !userCheck? 
-      alert("아이디 중복확인을 해주세요")
-      : 
-      console.log("중복확인pass", userCheck);
-      dispatch(__signUpUser(signup_data));            
+    dispatch(__signUpUser(signup_data));      
+    console.log(signup_data)
+    console.log(userSignup)     
     
     setUsername("");
     setUserPw("");
     setUserPwCheck("");
-    
-    userSignup?.statusCode === 400 ? 
-      alert (userSignup?.msg)
-    :
-      alert (userSignup?.msg)
-      // navigate("/login");
 
-  };
+    // if(userSignup === true){
+    //   return alert ('회원가입 되었습니다')
+    // }else{
+    //   return alert (userSignupMsg)
+    // }
 
+    // if( userSignup === true ) {
+    //     alert ('회원가입 되었습니다')
+    //     navigate("/login");
+    // }
+  }
   // signIn T/F로 로그인-회원가입 창 분기함.
   return (
     <Contain>
@@ -138,10 +126,14 @@ const SignUp = () => {
                   />
                   <button onClick={dupCheck}>중복확인</button>
                 </div>
-                {/* ...태그를 추가하려면 좀더 처리해야 할 게 많음..;;; */}
-                {/* <ServerMSG color={userDubCheck.statusCode == "200"? 'green' : 'red' }>
-                  {userDubCheck.msg}
-                </ServerMSG> */}
+                <ServerMSG color={userDubCheck? 'green' : 'red' }>
+                  { userDubCheck === null ? null : 
+                    userDubCheck ? 
+                      <span>사용 가능한 아이디입니다</span>
+                    :
+                      <span>중복된 아이디 입니다</span>
+                    }
+                </ServerMSG>
               </div>
               <>
                 <p>비밀번호</p>
@@ -150,20 +142,20 @@ const SignUp = () => {
                   type="password"
                   placeholder="비밀번호를 입력해주세요"
                   onChange={(e) => {
-                    // console.log(userPw)
+                    // console.log(userPw)  
                     setUserPw(e.target.value);
                   }}
                   />
-                  {/* 정규식 통과여부 아래 p추가 */}
-                  {/* <p>사용가능한 비밀번호입니다</p> */}
-                  {/* <p>비밀번호를 (조건)확인해주세요</p> */}
+                  {/* 정규식 통과여부 아래 p추가
+                  <p>사용가능한 비밀번호입니다</p>
+                  <p>비밀번호를 (조건)확인해주세요</p> */}
               </>
               <>
                 <p>비밀번호 확인</p>
                 <input
                   value={userPwCheck || ""}
                   type="password"
-                  placeholder="비밀번호를 한번 더 입력해주세요"
+                  placeholder="비밀번호를 한번 더 확인해주세요"
                   onChange={(e) => {
                     // console.log(userPwCheck)
                     setUserPwCheck(e.target.value);
@@ -228,7 +220,7 @@ const Title = styled.div`
   margin-bottom: 30px;
   text-align: center;
   font-family: "GongGothicMedium";
-  border: 1px solid red;
+  font-style: oblique;
   .maintit {
     font-size: 65px;
     margin-bottom: 10px;
@@ -267,7 +259,7 @@ const IdBox = styled.div`
     border-radius: 5px;
     padding-left: 15px;
     box-sizing: border-box;
-    margin-bottom: 15px;
+    margin-bottom: 5px;
     border: 1px solid #74c0fc;
   }
   .double_btn {
@@ -301,6 +293,9 @@ const MoveBox = styled.div`
 //server Msg
 const ServerMSG = styled.div`
   color : ${(props)=> props.color };
+  font-size : 14px;
+  margin: 0 0 15px 5px;
+
 `
 
 export default SignUp;

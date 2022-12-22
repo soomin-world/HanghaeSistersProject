@@ -12,7 +12,7 @@ const initialState = {
   // error - 에러객체 저장
   // 유저의 상태에 따라 추가 가능?
   user: [],
-  userCheck: [],
+  userCheck: null,
   userSignup: null,
   isLoading: false,
   error: null,
@@ -48,6 +48,7 @@ export const __signUpUser = createAsyncThunk(
       console.log('로딩데이터: ', data)
       return thunkAPI.fulfillWithValue(data);
     } catch (err) {
+      console.log('미들웨어-',err)
       return thunkAPI.rejectWithValue(err);
     }
   }
@@ -69,21 +70,9 @@ export const __loginUser = createAsyncThunk(
     } catch (err) {
       console.log(err);
       return thunkAPI.rejectWithValue(err);
-      // 서버가 400번대 코드를 설정해놓으면
-      // axios가 여기로 보냄
     }
   }
 );
-
-// 로그인 유지는? 프론트에서 어려움이 있음?
-
-// 로그인 토큰 만료시간이 있음
-// => 포스트/댓글/페이지이동을 할 때마다 로그인 체크
-
-// 1.프론트는 db가 없기 때문에, 새로고침을 하면 데이터가 다 날아감
-// 2.만료시간이 지나지 않은 유저에게 다시 로그인 요청을 해야 함, XXXX안됨!!
-// 3.쿠키에 저장해놓은 토큰을 가지고 로그인 요청을 하는 API를 새로 만들어야 하지 않을까
-// 4.제가 생각한 게 맞는지. 모르겠씀다.
 
 // ---------------------------- 리듀서
 export const userSlice = createSlice({
@@ -93,13 +82,15 @@ export const userSlice = createSlice({
   extraReducers: {
     // 중복확인  ---------------
     [__userCheck.pending]: (state) => {
+      state.userCheck = "--"
       state.isLoading = true;
     },
     [__userCheck.fulfilled]: (state, action) => {
-      console.log("action-서버값", action);
+      console.log("중복확인action", action);
       state.isLoading = false;
-      // 서버에서 받아오는 값을 저장할 공간이 겹쳤음 -> 새로 check로 만들어줌 
-      state.userCheck= action.payload;
+      action.payload.statusCode === 200? state.userCheck = true : state.userCheck = false
+      console.log( state.userCheck)
+      
     },
     [__userCheck.rejected]: (state, action) => {
       state.isLoading = false;
@@ -111,12 +102,15 @@ export const userSlice = createSlice({
       state.isLoading = true;
     },
     [__signUpUser.fulfilled]: (state, action) => {
-      console.log("action-서버값", action);
+      console.log("회원가입action", action);
       state.isLoading = false;
-      state.userSignup = action.payload;
+      // 렌더하는 부분에서 
+      // 메세지를 조금 더 ..활용할 수 있는 방법은? ㅠㅠ
+      state.userSignup = action.payload
     },
     [__signUpUser.rejected]: (state, action) => {
       state.isLoading = false;
+      console.log('리듀서 에러-',action)
       state.error = action.payload;
     },
 
