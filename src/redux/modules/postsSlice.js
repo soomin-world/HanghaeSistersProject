@@ -3,6 +3,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getCookie } from "../../shared/Cookie";
 
 import { instance } from "../../core/api/axios";
+import axios from "axios";
 
 const initialState = {
   posts: [],
@@ -18,9 +19,9 @@ export const __getPostss = createAsyncThunk(
   "getPostss",
   async (payload, thunkAPI) => {
     console.log(payload);
+    console.log(config)
     try {
-      const data = await instance.get(`/api/post/${payload}`, config);
-
+      const data = await axios.get(`http://43.201.111.129/api/post/${payload}`, config);
       return thunkAPI.fulfillWithValue(data.data);
     } catch (error) {
       console.log("겟이 어렵습니다.", error);

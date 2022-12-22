@@ -20,9 +20,9 @@ const initialState = {
   error: null,
 };
 
-
+console.log(getCookie('is_login'))
 const config = {headers : {Authorization:`Bearer ${getCookie('is_login')}`}}
-
+console.log(config)
 
 // ------------------------------------------------- 미들웨어
 // 중복체크 ( 유저 데이터 보내기, 결과 받기 )
@@ -63,9 +63,11 @@ export const __loginUser = createAsyncThunk(
   "loginUser",
   async (payload, thunkAPI) => {
     try {
-      console.log(payload);
       const { data } = await instance.post("/api/user/login", payload, config)
-      
+      console.log(config)
+      const token = data.headers.authorization;
+      instance.defaults.headers.common["Authorization"] = token;
+
       return thunkAPI.fulfillWithValue(data, payload);
     } catch (err) {
       console.log(err);
@@ -122,18 +124,18 @@ export const userSlice = createSlice({
     // },
 
     // 로그인 -----------------받음 payload(username),data
-    // [__loginUser.pending]: (state) => {
-    //   state.isLoading = true;
-    // },
-    // [__loginUser.fulfilled]: (state, action) => {
-    //   state.isLoading = false;
-    //   console.log("action-서버값", action);
-    //   state.user = action.payload;
-    // },
-    // [__loginUser.rejected]: (state, action) => {
-    //   state.isLoading = false;
-    //   state.error = action.payload;
-    // },
+    [__loginUser.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [__loginUser.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      console.log("action-서버값", action);
+      state.user = action.payload;
+    },
+    [__loginUser.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
   },
 });
 

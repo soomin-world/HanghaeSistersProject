@@ -1,20 +1,11 @@
-// import 먼저 하기
-// redux-toolkit => 전역상태관리(store)를 하기 위함
-// toolkit에 있는 API로 불러옴
-// 1_thunk는 비동기 통신을 위함 (axios)랑 통신하기 위해서
-//   => 리듀서에서는 비동기 통신을 할 수 없음 = 서버와 연동이 안됨
-// 2_creadteSlice는 리듀서의 역할
-//   => 액션value, 액션함수, 리듀서를 합쳐놓았기 때문에 코드가 간략해짐
+
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getCookie } from "../../shared/Cookie";
 import { instance } from "../../core/api/axios";
 
-// axios => json-server에 있는 데이터를 가져오기 위함 (백엔드연습)
+
 import axios from "axios";
 
-// 기본데이터 diary안에 관리할 데이터가 들어가고
-// isLoading - 서버와의 통신결과
-// error - 에러객체 저장
 const initialState = {
   comment: [],
   isLoading: false,
@@ -23,27 +14,19 @@ const initialState = {
 const config = {
   headers: { Authorization: `Bearer ${getCookie("is_login")}` },
 };
-// --------------------------------------------------Diary 미들웨어
-// middleware - thunk , axios 비동기처리 담당
-// "getDiary"첫번재 인자 : aciton value
-// "( ) => { }"두번째 인자 : 콜백함수 (payload, thunkAPI - thunk기능들)
-// 데이터 불러오기
 
-// 데이터 추가
-// const data = 이후 부분은 axios에서 보내라는 형식으로 구성되는 부분
-// axios.post(url,추가할 객체)
 export const __addComment = createAsyncThunk(
   "addComment",
   async (payload, thunkAPI) => {
     console.log("페이로드는?", payload);
     try {
-      const data = await instance.post(
-        `/api/comment/${payload.postId}`,
-        {
-          content: payload.content,
-        },
-        config
-      );
+      // const data = await instance.post(
+      //   `/api/comment/${payload.postId}`,{content: payload.content}, config );
+        // 네트워크에서 Bearer이 안붙은 토큰이 감..오ㅐ? 
+        // => 인터셉터 설정은 베어러 없음.나중에 나눠서 고쳐
+      const data = await axios.post(
+        `http://43.201.111.129/api/comment/${payload.postId}`, 
+        {content: payload.content}, config);
 
       console.log("추가데이터: ", data);
       return thunkAPI.fulfillWithValue(data.data);
@@ -61,11 +44,12 @@ export const __delComment = createAsyncThunk(
   async (payload, thunkAPI) => {
     console.log(payload);
     try {
-      const data = await instance.delete(
-        // `/api/post/${p}/comment/${commentId}`,
-        payload
-      );
-      console.log("데이터삭제, 리듀서는 id값 주기: ", payload);
+      // const data = await instance.delete(
+      //   `/api/comment/${payload}`, config);
+      // console.log("데이터삭제, 리듀서는 id값 주기: ", payload);
+      const data = await axios.delete(
+        `http://43.201.111.129/api/comment/${payload}`, config);
+        console.log(data.data)
       return thunkAPI.fulfillWithValue(data.data);
     } catch (err) {
       console.log(err);
@@ -116,9 +100,7 @@ export const commentSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: {
-    // 리스트 불러오기 ---------------
-
-    // 리스트 추가 ------------------
+    // 댓글 추가 ------------------
     [__addComment.pending]: (state) => {
       state.isLoading = true;
     },
@@ -133,23 +115,23 @@ export const commentSlice = createSlice({
       state.error = action.payload;
     },
 
-    // 리스트 삭제 ------------------
+    // 댓글 삭제 ------------------
     [__delComment.pending]: (state) => {
       state.isLoading = true;
     },
     [__delComment.fulfilled]: (state, action) => {
       // 미들웨어를 통해 받은 action값이 무엇인지 항상 확인한다
       console.log("action-서버값", action.payload);
-      state.isLoading = false;
-      const newList = state.diary.filter((t) => t.id !== action.payload);
-      state.comment = [...newList];
+      state.isLoading = false; 
+      state.comment =  state.comment.filter((t) => t.id !== action.payload) 
+      console.log( state.comment.filter((t) => t.id !== action.payload) )
     },
     [__delComment.rejected]: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
     },
 
-    // 수정 버튼 클릭 -----------------
+    // 수정 버튼 클릭 -----------------  아직 
     [__editStartDiary.pending]: (state) => {
       state.isLoading = true;
     },

@@ -25,10 +25,6 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [userPw, setUserPw] = useState("");
 
-  // 서버에서 온 데이터 state
-  const [ localMSG, setLocalMSG ] = useState("")
-  const [ localCODE, setLocalCODE ] = useState("")
-
 
   // 아이디, 비밀번호 정규식 ---------------
   // id:영문-숫자 4,10 , pw:영문,숫자 8-20자
@@ -57,39 +53,45 @@ const Login = () => {
 
     //user데이터전송
     const login_data = {
-      username: username,
-      password: userPw,
+      "username": 'thdud4455',
+      "password": 'thdud44JJ**',
     };
 
-    const config = {headers : {Authorization:`Bearer ${getCookie('is_login')}`}}
-       
+
     instance.post("/api/user/login", login_data)
     .then((res)=>{
       console.log(res)    
-      // 쿠키생성 -> 토큰 저장
+      // 토큰 저장
       const token = res.headers.authorization;
       instance.defaults.headers.common["Authorization"] = token;
-      console.log(token)
       setCookie("is_login", token);
+      console.log(getCookie("is_login"))
+    
       // 로그인 요청이 2번 되는 문제.
       // 토큰을 서버에 보내려면 어떻게 하면 좋을까요?
       // 현재상황 앞에서 로그인 요청, 결과받고
       // 스토어, 미들웨어 thunk 에서 3번째 인자로 토큰 config값 넘겨줌
       // 앞에 헤더를 추가해보면 될 것 같은데. 잘 안됨 
+      
+      // dispatch(__loginUser(token))
+      const loginMsg = res.data.msg
+      const loginCode = res.data.statusCode
 
-      dispatch(__loginUser(login_data))
-      setUsername("");
-      setUserPw("");
-
-
-      alert('로그인성공')
-      // navigate("/");
+      console.log(loginMsg, loginCode)
+      if(loginCode ===200){
+        setUsername("");
+        setUserPw("");
+        alert(loginMsg)
+        // navigate("/");
+        window.location.href='/'
+      }
     })
     .catch((err)=>{
-      alert('로그인실패',err)
-      console.log(err)
+        alert(err.response.data.msg)
+        console.log(err)
     })
   };
+
 
   return (
     <Contain>

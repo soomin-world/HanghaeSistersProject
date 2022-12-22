@@ -8,7 +8,7 @@ import { __getPosts } from "../../redux/modules/postSlice";
 
 const Comment = ({ posts }) => {
   console.log("댓글확인중입니다.", posts.commentList);
-  //메인페이지에서 get으로 받은 정보를 디테일페이지에서 state라는 이름으로 props로 받음.
+  // 메인페이지에서 get으로 받은 정보를 디테일페이지에서 state라는 이름으로 props로 받음.
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id } = useParams();
@@ -16,9 +16,10 @@ const Comment = ({ posts }) => {
   // const content = useSelector((state) => state.props);
   // id로 넘어오는 값을 받는다 치고 1로 고정시켜서 데이터 출력함함
   // console.log("어떤값이 오나?", content);
-  //댓글창stae, 수정여부state
+  // 댓글창stae, 수정여부state
   const [isComment, setIsComment] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
+
   // 댓글text
   const [commentText, setCommentText] = useState("");
 
@@ -26,6 +27,7 @@ const Comment = ({ posts }) => {
     if (commentText.trim() === "") return alert("댓글 칸을 채워주세요!");
     const payload = { postId: id, content: commentText };
     dispatch(__addComment(payload));
+    console.log(payload)
     setCommentText("");
     // console.log("comments", __postComments);
   };
@@ -40,25 +42,26 @@ const Comment = ({ posts }) => {
         >
           (말풍선) 댓글쓰기
         </CommentBtn>
-        {!isComment ? null : (
-          <>
-            <div className="com_box">
-              <textarea
-                className="com_textarea"
-                value={commentText}
-                placeholder="좋은 정보는 모이면 모일수록, 좋지요~! 댓글을 작성해주세요."
-                onChange={(event) => {
-                  const { value } = event.target;
-                  setCommentText(value);
-                  // console.log(e.target.value)
-                }}
-              />
-              <button onClick={add_comment}>등록</button>
-            </div>
-            {/* <div>글자수:____</div> */}
-          </>
-        )}
+          {!isComment ? null : (
+            <>
+              <div className="com_box">
+                <textarea
+                  className="com_textarea"
+                  value={commentText}
+                  placeholder="좋은 정보는 모이면 모일수록, 좋지요~! 댓글을 작성해주세요."
+                  onChange={(event) => {
+                    const { value } = event.target;
+                    setCommentText(value);
+                    // console.log(e.target.value)
+                  }}
+                />
+                <button onClick={add_comment}>등록</button>
+              </div>
+              {/* <div>글자수:____</div> */}
+            </>
+          )}
       </ComWriteBox>
+
       <ComListBox>
         {posts.commentList.map((comment) => (
           <CommentLists key={comment.commentId} comment={comment} />
@@ -69,10 +72,27 @@ const Comment = ({ posts }) => {
   );
 };
 
-const ComListBox = styled.div`
+const ComWriteBox = styled.div`
   padding: 15px 25px;
   box-sizing: border-box;
   font-family: "GongGothicMedium";
+    textarea {
+      width: 100%;
+      height: 60px;
+      /* resize: none; */
+      outline: none;
+      border: none;
+      padding: 5px 10px;
+      box-sizing: border-box;
+    }
+    button {
+      width: 130px;
+      height: 100%;
+      background-color: #dcd0e6da;
+      border: none;
+      cursor: pointer;
+      /* margin: 10px; */
+    }
   .com_box {
     border: 3px solid #e5dbff;
     width: 100%;
@@ -128,25 +148,6 @@ const ComListBox = styled.div`
     }
   }
 `;
-const ComWriteBox = styled(ComListBox)`
-  textarea {
-    width: 100%;
-    height: 60px;
-    /* resize: none; */
-    outline: none;
-    border: none;
-    padding: 5px 10px;
-    box-sizing: border-box;
-  }
-  button {
-    width: 130px;
-    height: 100%;
-    background-color: #dcd0e6da;
-    border: none;
-    cursor: pointer;
-    /* margin: 10px; */
-  }
-`;
 const CommentBtn = styled.p`
   width: 200px;
   height: 40px;
@@ -157,6 +158,9 @@ const CommentBtn = styled.p`
   align-items: center;
   justify-content: center;
   border-bottom: 2px solid #dcd0e6da;
+`;
+  
+const ComListBox = styled.div`
 `;
 export default Comment;
 
