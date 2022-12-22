@@ -21,7 +21,7 @@ const initialState = {
 };
 
 
-const config = {headers : {Authorization:`${getCookie('is_login')}`}}
+const config = {headers : {Authorization:`Bearer ${getCookie('is_login')}`}}
 
 
 // ------------------------------------------------- 미들웨어
@@ -43,37 +43,29 @@ export const __userCheck = createAsyncThunk(
 );
 
 // 회원가입 ( 유저 데이터 보내기, 결과 받기)
-export const __signUpUser = createAsyncThunk(
-  "signUpUser",
-  async (payload, thunkAPI) => {
-    console.log(payload);
-    try {
-      const { data } = await instance.post("/api/user/signup", payload);
+// export const __signUpUser = createAsyncThunk(
+//   "signUpUser",
+//   async (payload, thunkAPI) => {
+//     console.log(payload);
+//     try {
+//       const { data } = await instance.post("/api/user/signup", payload);
+//       console.log('로딩데이터: ', data)
+//       return thunkAPI.fulfillWithValue(data);
+//     } catch (err) {
+//       console.log('미들웨어-',err)
+//       return thunkAPI.rejectWithValue(err);
+//     }
+//   }
+// );
 
-      console.log('로딩데이터: ', data)
-
-      return thunkAPI.fulfillWithValue(data);
-    } catch (err) {
-      console.log('미들웨어-',err)
-      return thunkAPI.rejectWithValue(err);
-    }
-  }
-);
-
-// 로그인하기
+// 로그인하기 -> 서버에 토큰 보내줌. 
 export const __loginUser = createAsyncThunk(
   "loginUser",
   async (payload, thunkAPI) => {
     try {
-
       console.log(payload);
       const { data } = await instance.post("/api/user/login", payload, config)
-
-
-      // let token = instance.defaults.headers.common["Authorization"];
-      // // const token = data.token;
-      // console.log(token);
-      // setCookie("is_login", token);
+      
       return thunkAPI.fulfillWithValue(data, payload);
     } catch (err) {
       console.log(err);
@@ -98,6 +90,7 @@ export const userSlice = createSlice({
       state.isLoading = false;
       action.payload.statusCode === 200? state.userCheck = true : state.userCheck = false
       console.log( state.userCheck)
+      localStorage.setItem('msg', action.payload.msg)
       
 
     },
@@ -107,41 +100,40 @@ export const userSlice = createSlice({
     },
 
     // 회원가입  ---------------
-    [__signUpUser.pending]: (state) => {
-      state.isLoading = true;
-    },
-    [__signUpUser.fulfilled]: (state, action) => {
-      console.log("회원가입action", action);
-      state.isLoading = false;
-      // 렌더하는 부분에서 
-      // 메세지를 조금 더 ..활용할 수 있는 방법은? ㅠㅠ
-      state.userSignup = action.payload
-    },
-    [__signUpUser.rejected]: (state, action) => {
-      state.isLoading = false;
-      console.log('리듀서 에러-',action)
-      state.error = action.payload;
-    },
+    // [__signUpUser.pending]: (state) => {
+    //   state.isLoading = true;
+    // },
+    // [__signUpUser.fulfilled]: (state, action) => {
+    //   console.log("회원가입action", action);
+    //   state.isLoading = false;
+
+    //   // 렌더하는 부분에서 메세지를 조금 더 ..활용할 수 있는 방법은? ㅠㅠ
+    //   // 쿠키에 데이터를 저장한다. .. -> 로컬에 저장해서 사
+    //   localStorage.setItem('msg', action.payload.msg)
+    //   const localMsg = localStorage.getItem('msg')
+    //   console.log(localMsg)
+    //   state.userSignup = localMsg
+
+    // },
+    // [__signUpUser.rejected]: (state, action) => {
+    //   state.isLoading = false;
+    //   console.log('리듀서 에러-',action)
+    //   state.error = action.payload;
+    // },
 
     // 로그인 -----------------받음 payload(username),data
-    [__loginUser.pending]: (state) => {
-      state.isLoading = true;
-    },
-    [__loginUser.fulfilled]: (state, action) => {
-      state.isLoading = false;
-      // 여기서 뭐해줘야 하지? 스토어에 저장할 값.
-      // 토큰은 쿠키에 저장했으니까 안해줘도 될거같고
-      // 유저 데이터랑, 성공메세지(알림띄움용) 보내주면 될듯.
-      console.log("action-서버값", action);
-
-      console.log()
-
-      state.user = action.payload;
-    },
-    [__loginUser.rejected]: (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload;
-    },
+    // [__loginUser.pending]: (state) => {
+    //   state.isLoading = true;
+    // },
+    // [__loginUser.fulfilled]: (state, action) => {
+    //   state.isLoading = false;
+    //   console.log("action-서버값", action);
+    //   state.user = action.payload;
+    // },
+    // [__loginUser.rejected]: (state, action) => {
+    //   state.isLoading = false;
+    //   state.error = action.payload;
+    // },
   },
 });
 

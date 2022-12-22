@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { __loginUser } from "../redux/modules/userSlice";
 
 import { instance } from "../core/api/axios";
-import { setCookie } from "../shared/Cookie";
+import { getCookie, setCookie } from "../shared/Cookie";
 
 // Lottie style
 import Lottie from "lottie-react";
@@ -25,6 +25,10 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [userPw, setUserPw] = useState("");
 
+  // 서버에서 온 데이터 state
+  const [ localMSG, setLocalMSG ] = useState("")
+  const [ localCODE, setLocalCODE ] = useState("")
+
 
   // 아이디, 비밀번호 정규식 ---------------
   // id:영문-숫자 4,10 , pw:영문,숫자 8-20자
@@ -33,23 +37,23 @@ const Login = () => {
     return regExp.test(asValue);
   }
   function isPassword(asValue) {
-    var regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,20}$/;
+    var regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*]{8,20}$/;
     return regExp.test(asValue);
   }
 
   // 로그인 버튼 클릭 -----------------
   const goLogin = () => {
     // 정규식 체크
-    // if (!isId(username)) {
-    //   console.log(isId(username));
-    //   alert("영문과 숫자를 포함하는 4-10자의 이내의 아이디를 입력해주세요");
-    //   return;
-    // }
-    // if (!isPassword(userPw)) {
-    //   console.log(isPassword(userPw));
-    //   alert("영문과 숫자를 포함하는 8-15자 이내의 비밀번호를 입력해주세요");
-    //   return;
-    // }
+    if (!isId(username)) {
+      console.log(isId(username));
+      alert("영문과 숫자를 포함하는 4-10자의 이내의 아이디를 입력해주세요");
+      return;
+    }
+    if (!isPassword(userPw)) {
+      console.log(isPassword(userPw));
+      alert("영문과 숫자를 포함하는 8-15자 이내의 비밀번호를 입력해주세요");
+      return;
+    }
 
     //user데이터전송
     const login_data = {
@@ -57,21 +61,29 @@ const Login = () => {
       password: userPw,
     };
 
+    const config = {headers : {Authorization:`Bearer ${getCookie('is_login')}`}}
+       
     instance.post("/api/user/login", login_data)
     .then((res)=>{
       console.log(res)    
-      // 쿠키사용.
+      // 쿠키생성 -> 토큰 저장
       const token = res.headers.authorization;
       instance.defaults.headers.common["Authorization"] = token;
-
       console.log(token)
       setCookie("is_login", token);
+      // 로그인 요청이 2번 되는 문제.
+      // 토큰을 서버에 보내려면 어떻게 하면 좋을까요?
+      // 현재상황 앞에서 로그인 요청, 결과받고
+      // 스토어, 미들웨어 thunk 에서 3번째 인자로 토큰 config값 넘겨줌
+      // 앞에 헤더를 추가해보면 될 것 같은데. 잘 안됨 
+
+      dispatch(__loginUser(login_data))
       setUsername("");
       setUserPw("");
 
 
       alert('로그인성공')
-      navigate("/");
+      // navigate("/");
     })
     .catch((err)=>{
       alert('로그인실패',err)
