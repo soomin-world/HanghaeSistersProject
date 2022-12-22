@@ -10,10 +10,8 @@ const DetailContent = ({ state, posts }) => {
 
   const deleteHandler = () => {
     if (!window.confirm("해당글을 삭제하시겠습니까?")) return;
-
     dispatch(__deletePost(posts.postId));
-    // window.location.href = "/";
-
+    window.location.href = "/";
   };
 
   const updateHandler = () => {
@@ -50,12 +48,12 @@ const DetailContent = ({ state, posts }) => {
         <h2>내 용</h2>
         <div className="imgBox">
           <div className="img">
-            <h2 className="imgAlt">성형 전</h2>
             <img src={posts.imageBefore} alt="이미지 전"></img>
+            <h2 className="imgAlt">성형 전</h2>
           </div>
           <div className="img">
-            <h2 className="imgAlt">성형 후</h2>
             <img src={posts.imageAfter} alt="이미지 후"></img>
+            <h2 className="imgAlt">성형 후</h2>
           </div>
         </div>
         <h2>시술 정보</h2>
@@ -91,8 +89,14 @@ const DetailSection = styled.section`
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding-top: 30px;
+  padding: 30px 30px;
   font-family: "GongGothicMedium";
+  border: 2px solid #e5dbff;
+  box-sizing: border-box;
+
+  button {
+    font-family: "GongGothicMedium";
+  }
   .infoT {
     font-size: 1.2rem;
     padding: 2% 2%;
@@ -132,7 +136,7 @@ const DetailSection = styled.section`
     box-sizing: border-box;
     h2 {
       font-weight: bold;
-      font-size: 1.2rem;
+      font-size: 1.6rem;
     }
     .imgBox {
       display: flex;
@@ -151,9 +155,7 @@ const DetailSection = styled.section`
       }
     }
     .contentText {
-      padding: 2% 2%;
-      p {
-        font-size: 1.2rem;
+      padding: 2% 2% p {
         span {
           padding-right: 1%;
           font-weight: bold;
