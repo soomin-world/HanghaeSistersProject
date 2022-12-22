@@ -7,7 +7,6 @@ import { instance } from "../../core/api/axios";
 
 import { getCookie, setCookie } from "../../shared/Cookie";
 
-
 const initialState = {
   // user안에 리듀서가 관리할 데이터가 들어가고
   // isLoading - 서버와의 통신결과
@@ -20,9 +19,9 @@ const initialState = {
   error: null,
 };
 
-
-const config = {headers : {Authorization:`Bearer ${getCookie('is_login')}`}}
-
+const config = {
+  headers: { Authorization: `Bearer ${getCookie("is_login")}` },
+};
 
 // ------------------------------------------------- 미들웨어
 // 중복체크 ( 유저 데이터 보내기, 결과 받기 )
@@ -58,14 +57,14 @@ export const __userCheck = createAsyncThunk(
 //   }
 // );
 
-// 로그인하기 -> 서버에 토큰 보내줌. 
+// 로그인하기 -> 서버에 토큰 보내줌.
 export const __loginUser = createAsyncThunk(
   "loginUser",
   async (payload, thunkAPI) => {
     try {
       console.log(payload);
-      const { data } = await instance.post("/api/user/login", payload, config)
-      
+      const { data } = await instance.post("/api/user/login", payload, config);
+
       return thunkAPI.fulfillWithValue(data, payload);
     } catch (err) {
       console.log(err);
@@ -82,17 +81,17 @@ export const userSlice = createSlice({
   extraReducers: {
     // 중복확인  ---------------
     [__userCheck.pending]: (state) => {
-      state.userCheck = "--"
+      state.userCheck = "--";
       state.isLoading = true;
     },
     [__userCheck.fulfilled]: (state, action) => {
       console.log("중복확인action", action);
       state.isLoading = false;
-      action.payload.statusCode === 200? state.userCheck = true : state.userCheck = false
-      console.log( state.userCheck)
-      localStorage.setItem('msg', action.payload.msg)
-      
-
+      action.payload.statusCode === 200
+        ? (state.userCheck = true)
+        : (state.userCheck = false);
+      console.log(state.userCheck);
+      localStorage.setItem("msg", action.payload.msg);
     },
     [__userCheck.rejected]: (state, action) => {
       state.isLoading = false;
@@ -122,18 +121,18 @@ export const userSlice = createSlice({
     // },
 
     // 로그인 -----------------받음 payload(username),data
-    // [__loginUser.pending]: (state) => {
-    //   state.isLoading = true;
-    // },
-    // [__loginUser.fulfilled]: (state, action) => {
-    //   state.isLoading = false;
-    //   console.log("action-서버값", action);
-    //   state.user = action.payload;
-    // },
-    // [__loginUser.rejected]: (state, action) => {
-    //   state.isLoading = false;
-    //   state.error = action.payload;
-    // },
+    [__loginUser.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [__loginUser.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      console.log("action-서버값", action);
+      state.user = action.payload;
+    },
+    [__loginUser.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
   },
 });
 

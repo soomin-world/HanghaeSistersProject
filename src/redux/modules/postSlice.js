@@ -8,6 +8,7 @@ const initialState = {
   posts: [],
   isLoading: true,
   error: null,
+  hospitalCheck: false,
 };
 
 const config = {
@@ -78,6 +79,22 @@ export const __getPosts = createAsyncThunk(
   }
 );
 
+export const __getHospital = createAsyncThunk(
+  "postHospital",
+  async (payload, thunkAPI) => {
+    console.log(payload);
+    try {
+      const data = await instance.get(
+        `api/post/hospital?hospital-name=${payload}`
+      );
+      return thunkAPI.fulfillWithValue(data.data);
+    } catch (error) {
+      console.log(error);
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
 export const postSlice = createSlice({
   name: "post",
   initialState,
@@ -116,6 +133,21 @@ export const postSlice = createSlice({
       state.posts = action.payload;
     },
     [__getPosts.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+    [__getHospital.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [__getHospital.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      console.log(state, action);
+      action.payload.statusCode === 200
+        ? (state.hospitalCheck = true)
+        : (state.hospitalCheck = false);
+      console.log(state.hospitalCheck);
+    },
+    [__getHospital.rejected]: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
     },

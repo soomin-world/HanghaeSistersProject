@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { __postPost } from "../../redux/modules/postSlice";
+import { __getHospital, __postPost } from "../../redux/modules/postSlice";
 import styled from "styled-components";
+import { MdLaptopWindows } from "react-icons/md";
 
 const Form = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const [isHospitalChk, setIsHospitalChk] = useState(false);
   const [post, setPost] = useState({
     title: "",
     category: "",
@@ -19,32 +20,27 @@ const Form = () => {
     doctor: "",
   });
 
-  //const hospitalCheck = useSelector((state)=>{ state.post.??})
-  // 병원 유효성 검사 상상중
-  // const [isHospitalCheck, setIsHospitalCheck] = useState(false);
-  // const hospitalCheckHandler = () => {
-  //   if (hospitalCheck.statusCode === 200) {
-  //     alert("확인되었습니다!");
-  //     setHospitalCheck(true);
-  //   } else if (hospitalCheck.statusCode === 400) {
-  //     setHospitalCheck(false);
-  //     alert("병원명을 다시 확인해주세요");
-  //   }
-  // };
+  const hospitalChk = useSelector((state) => state.post.hospitalCheck);
+  console.log(hospitalChk);
 
-  const onSubmitHandler = () => {
-    // if (hospitalCheck === false) {
-    //   alert("병원명 확인을 진행해주세요!");
-    // } else
+  const hospitalCheckHandler = () => {
+    dispatch(__getHospital(post.hospitalAddress));
+    hospitalChk ? setIsHospitalChk(true) : setIsHospitalChk(false);
+  };
+
+  const onSubmitHandler = (event) => {
+    event.preventDefault();
     if (post.title === "") {
       alert("제목을 입력해주세요");
     } else if (post.category === "") {
       alert("카테고리를 선택해주세요!");
     } else if (post.content === "") {
       alert("내용을 입력해주세요!");
+    } else if (hospitalChk === false) {
+      alert("병원명 확인을 진행해주세요!");
     } else {
       dispatch(__postPost(post));
-      navigate("/");
+      window.location.href = "/";
     }
   };
 
@@ -89,8 +85,7 @@ const Form = () => {
             }}
             placeholder="병원이름을 정확히 기재해주세요!"
           ></input>
-          <button type="button">
-            {/* onClick={hospitalCheckHandler} */}
+          <button type="button" onClick={hospitalCheckHandler}>
             확인{" "}
           </button>
         </div>
@@ -105,6 +100,12 @@ const Form = () => {
           ></input>
         </div>
       </STDoctor>
+      {isHospitalChk ? (
+        <p style={{ color: "green" }}>확인되었습니다!</p>
+      ) : (
+        <p style={{ color: "red" }}>병원명을 확인해주세요 </p>
+      )}
+      {/* 버튼을 두번눌러야 합니다.. 비동기처리 못했읍니다..죄송합니다 */}
       <STImage>
         <STImageLabel>전</STImageLabel>
         <input
@@ -118,7 +119,7 @@ const Form = () => {
         <STImageLabel>후</STImageLabel>
         <input
           type="url"
-          placeholder="성형gn 이미지url을 입력해주세요"
+          placeholder="성형후 이미지url을 입력해주세요"
           onChange={(e) => {
             const { value } = e.target;
             setPost({ ...post, imageAfter: value });
@@ -161,6 +162,9 @@ const STForm = styled.form`
   background-color: rgba(228, 198, 225, 0.233);
   padding: 50px 50px 30px 40px;
   font-family: "GongGothicMedium";
+  p {
+    margin: 0px 0px 15px 100px;
+  }
 `;
 const STTitle = styled.div`
   width: 800px;
@@ -227,7 +231,7 @@ const STPriceLabel = styled.label`
 `;
 
 const STDoctor = styled.div`
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   display: flex;
   div {
     input {

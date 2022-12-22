@@ -13,7 +13,6 @@ const DetailContent = ({ state, posts }) => {
 
     dispatch(__deletePost(posts.postId));
     // window.location.href = "/";
-
   };
 
   const updateHandler = () => {
@@ -131,7 +130,6 @@ const DetailSection = styled.section`
     margin-bottom: 2%;
     box-sizing: border-box;
     h2 {
-      font-weight: bold;
       font-size: 1.2rem;
     }
     .imgBox {
@@ -156,7 +154,6 @@ const DetailSection = styled.section`
         font-size: 1.2rem;
         span {
           padding-right: 1%;
-          font-weight: bold;
         }
       }
       .price {
@@ -183,7 +180,6 @@ const DetailSection = styled.section`
       span {
         display: inline-block;
         padding: 1% 1%;
-        font-weight: bold;
       }
     }
   }

@@ -16,7 +16,6 @@ import { pickLottie } from "../assets/lottie";
 // style
 import styled from "styled-components";
 
-
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -26,9 +25,8 @@ const Login = () => {
   const [userPw, setUserPw] = useState("");
 
   // 서버에서 온 데이터 state
-  const [ localMSG, setLocalMSG ] = useState("")
-  const [ localCODE, setLocalCODE ] = useState("")
-
+  const [localMSG, setLocalMSG] = useState("");
+  const [localCODE, setLocalCODE] = useState("");
 
   // 아이디, 비밀번호 정규식 ---------------
   // id:영문-숫자 4,10 , pw:영문,숫자 8-20자
@@ -61,34 +59,36 @@ const Login = () => {
       password: userPw,
     };
 
-    const config = {headers : {Authorization:`Bearer ${getCookie('is_login')}`}}
-       
-    instance.post("/api/user/login", login_data)
-    .then((res)=>{
-      console.log(res)    
-      // 쿠키생성 -> 토큰 저장
-      const token = res.headers.authorization;
-      instance.defaults.headers.common["Authorization"] = token;
-      console.log(token)
-      setCookie("is_login", token);
-      // 로그인 요청이 2번 되는 문제.
-      // 토큰을 서버에 보내려면 어떻게 하면 좋을까요?
-      // 현재상황 앞에서 로그인 요청, 결과받고
-      // 스토어, 미들웨어 thunk 에서 3번째 인자로 토큰 config값 넘겨줌
-      // 앞에 헤더를 추가해보면 될 것 같은데. 잘 안됨 
+    const config = {
+      headers: { Authorization: `Bearer ${getCookie("is_login")}` },
+    };
 
-      dispatch(__loginUser(login_data))
-      setUsername("");
-      setUserPw("");
+    instance
+      .post("/api/user/login", login_data)
+      .then((res) => {
+        console.log(res);
+        // 쿠키생성 -> 토큰 저장
+        const token = res.headers.authorization;
+        instance.defaults.headers.common["Authorization"] = token;
+        console.log(token);
+        setCookie("is_login", token);
+        // 로그인 요청이 2번 되는 문제.
+        // 토큰을 서버에 보내려면 어떻게 하면 좋을까요?
+        // 현재상황 앞에서 로그인 요청, 결과받고
+        // 스토어, 미들웨어 thunk 에서 3번째 인자로 토큰 config값 넘겨줌
+        // 앞에 헤더를 추가해보면 될 것 같은데. 잘 안됨
 
+        //dispatch(__loginUser(login_data));
+        setUsername("");
+        setUserPw("");
 
-      alert('로그인성공')
-      // navigate("/");
-    })
-    .catch((err)=>{
-      alert('로그인실패',err)
-      console.log(err)
-    })
+        alert("로그인성공");
+        navigate("/");
+      })
+      .catch((err) => {
+        alert("로그인실패", err);
+        console.log(err);
+      });
   };
 
   return (
