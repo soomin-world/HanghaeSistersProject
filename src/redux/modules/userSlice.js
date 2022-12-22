@@ -7,7 +7,6 @@ import { instance } from "../../core/api/axios";
 
 import { getCookie, setCookie } from "../../shared/Cookie";
 
-
 const initialState = {
   // user안에 리듀서가 관리할 데이터가 들어가고
   // isLoading - 서버와의 통신결과
@@ -19,6 +18,7 @@ const initialState = {
   isLoading: false,
   error: null,
 };
+
 
 console.log(getCookie('is_login'))
 const config = {headers : {Authorization:`Bearer ${getCookie('is_login')}`}}
@@ -58,15 +58,17 @@ export const __userCheck = createAsyncThunk(
 //   }
 // );
 
-// 로그인하기 -> 서버에 토큰 보내줌. 
+// 로그인하기 -> 서버에 토큰 보내줌.
 export const __loginUser = createAsyncThunk(
   "loginUser",
   async (payload, thunkAPI) => {
     try {
+
       const { data } = await instance.post("/api/user/login", payload, config)
       console.log(config)
       const token = data.headers.authorization;
       instance.defaults.headers.common["Authorization"] = token;
+
 
       return thunkAPI.fulfillWithValue(data, payload);
     } catch (err) {
@@ -84,17 +86,17 @@ export const userSlice = createSlice({
   extraReducers: {
     // 중복확인  ---------------
     [__userCheck.pending]: (state) => {
-      state.userCheck = "--"
+      state.userCheck = "--";
       state.isLoading = true;
     },
     [__userCheck.fulfilled]: (state, action) => {
       console.log("중복확인action", action);
       state.isLoading = false;
-      action.payload.statusCode === 200? state.userCheck = true : state.userCheck = false
-      console.log( state.userCheck)
-      localStorage.setItem('msg', action.payload.msg)
-      
-
+      action.payload.statusCode === 200
+        ? (state.userCheck = true)
+        : (state.userCheck = false);
+      console.log(state.userCheck);
+      localStorage.setItem("msg", action.payload.msg);
     },
     [__userCheck.rejected]: (state, action) => {
       state.isLoading = false;

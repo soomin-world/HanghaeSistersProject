@@ -16,7 +16,6 @@ import { pickLottie } from "../assets/lottie";
 // style
 import styled from "styled-components";
 
-
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -24,6 +23,7 @@ const Login = () => {
   // 회원가입/ 로그인 state
   const [username, setUsername] = useState("");
   const [userPw, setUserPw] = useState("");
+
 
 
   // 아이디, 비밀번호 정규식 ---------------
@@ -58,6 +58,7 @@ const Login = () => {
     };
 
 
+
     instance.post("/api/user/login", login_data)
     .then((res)=>{
       console.log(res)    
@@ -90,6 +91,7 @@ const Login = () => {
         alert(err.response.data.msg)
         console.log(err)
     })
+
   };
 
 

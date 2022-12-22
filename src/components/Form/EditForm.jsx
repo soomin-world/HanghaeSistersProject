@@ -128,7 +128,7 @@ const EditForm = () => {
         <STInfoLabel>병원이름</STInfoLabel>
         <input
           type="text"
-          name="hospitalAddress"
+          name="hospital-name"
           value={hospitalAddress}
           onChange={onChnage}
         ></input>

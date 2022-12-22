@@ -8,6 +8,7 @@ const initialState = {
   posts: [],
   isLoading: true,
   error: null,
+  hospitalCheck: false,
 };
 
 const config = {
@@ -54,7 +55,7 @@ export const __deletePost = createAsyncThunk(
   "__deletePost",
   async (payload, thunkAPI) => {
     try {
-      const data = await instance.delete(`/api/post/${payload.postId}`, config);
+      const data = await instance.delete(`/api/post/${payload}`, config);
       return thunkAPI.fulfillWithValue(data.data);
     } catch (error) {
       // console.log("에러가 발생했습니다.", error);
@@ -70,6 +71,22 @@ export const __getPosts = createAsyncThunk(
     try {
       const data = await instance.get(`/api/post/category?category=${payload}`);
 
+      return thunkAPI.fulfillWithValue(data.data);
+    } catch (error) {
+      console.log(error);
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+export const __getHospital = createAsyncThunk(
+  "postHospital",
+  async (payload, thunkAPI) => {
+    console.log(payload);
+    try {
+      const data = await instance.get(
+        `api/post/hospital?hospital-name=${payload}`
+      );
       return thunkAPI.fulfillWithValue(data.data);
     } catch (error) {
       console.log(error);
@@ -116,6 +133,21 @@ export const postSlice = createSlice({
       state.posts = action.payload;
     },
     [__getPosts.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+    [__getHospital.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [__getHospital.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      console.log(state, action);
+      action.payload.statusCode === 200
+        ? (state.hospitalCheck = true)
+        : (state.hospitalCheck = false);
+      console.log(state.hospitalCheck);
+    },
+    [__getHospital.rejected]: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
     },
