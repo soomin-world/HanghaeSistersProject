@@ -1,16 +1,17 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
 import styled from "styled-components";
 
-const CommentLists = () => {
+const CommentLists = ({ comment }) => {
+  //comment 컴포넌트에서 댓글리스트를 props로 넘겨받음.
+  console.log("댓글 리스트는", comment);
+  //console.log에 댓글 리스트들 잘 출력되고 있음.
   const dispatch = useDispatch();
-  const [isComment, setIsComment] = useState(false);
-  const [commentText, setCommentText] = useState("");
-  const [isEdit, setIsEdit] = useState(false);
+  const [update, setUpdate] = useState(false);
+  const [editcontent, setEditcontent] = useState("");
 
-  const del_comment = (id) => {
-    console.log("댓글 삭제/", id);
+  const del_comment = () => {
+    console.log("댓글 삭제/");
     // dispatch
   };
 
@@ -19,67 +20,24 @@ const CommentLists = () => {
     // dispatch
   };
 
-  const edit_endCommit = () => {
+  const upDatecontent = () => {
     console.log("수정완료/");
     // dispatch
   };
   return (
-    <ComListBox>
-      {!isEdit ? (
-        <div className="com_text">{}</div>
-      ) : (
-        <>
-          <textarea
-            className="com_edit_textarea"
-            defaultvalue={commentText || ""}
-            onChange={(e) => {
-              console.log(e.target.value);
-              setCommentText(e.target.value);
-            }}
-          />
-        </>
-      )}
-      {/* id가 내 id면 삭제, 수정버튼 보여주기 */}
-      {!isEdit ? (
-        <div className="comBtn_box">
-          <button
-            onClick={() => {
-              del_comment();
-            }}
-          >
-            삭제
-          </button>
-          <button
-            onClick={() => {
-              setIsEdit(!isEdit);
-            }}
-          >
-            수정
-          </button>
-        </div>
-      ) : (
-        <div className="comBtn_box">
-          <button
-            onClick={() => {
-              setIsEdit(!isEdit);
-            }}
-          >
-            수정취소
-          </button>
-          <button
-            onClick={() => {
-              edit_endCommit();
-            }}
-          >
-            수정완료
-          </button>
-        </div>
-      )}
-    </ComListBox>
+    <>
+      <ComListBox>
+        <li>
+          <p>{comment.content}</p>
+          <p>{comment.username}</p>
+        </li>
+        ;
+      </ComListBox>
+    </>
   );
 };
 
-const ComListBox = styled.div`
+const ComListBox = styled.ul`
   textarea {
     width: 100%;
     height: 60px;

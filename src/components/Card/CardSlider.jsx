@@ -12,10 +12,12 @@ function CardSlider(props) {
   const navigate = useNavigate();
   const { posts, isLoading, error } = useSelector((state) => state.post);
 
+
   const cookie = getCookie("is_login");
 
   useEffect(() => {
     dispatch(__getPosts(selectedCategory));
+
   }, [selectedCategory, dispatch, cookie]);
   // dispatch가 되면 멈춰라, dispatch가 될때까지만 렌더링 되어라
   console.log(selectedCategory);

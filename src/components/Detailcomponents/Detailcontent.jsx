@@ -1,50 +1,46 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { __deletePost } from "../../redux/modules/postSlice";
 
-const DetailContent = (props) => {
-  const state = props.state;
+const DetailContent = ({ state, posts }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  console.log("아이디값", state.postId);
-
-  useEffect(() => {
-    // console.log(state);
-  }, [state]);
-
   const deleteHandler = () => {
     if (!window.confirm("해당글을 삭제하시겠습니까?")) return;
-    dispatch(__deletePost(state));
-    window.location.href = "/";
+
+    dispatch(__deletePost(posts.postId));
+    // window.location.href = "/";
+
   };
 
   const updateHandler = () => {
     if (!window.confirm("해당글을 수정하시겠습니까?")) return;
     const newContent = {
-      postId: state.postId,
-      title: state.title,
-      category: state.category,
-      price: state.price,
-      content: state.content,
-      imageBefore: state.imageBefore,
-      imageAfter: state.imageAfter,
-      hospitalAdress: state.hospitalAdress,
-      doctor: state.doctor,
+      postId: posts.postId,
+      title: posts.title,
+      category: posts.category,
+      price: posts.price,
+      content: posts.content,
+      imageBefore: posts.imageBefore,
+      imageAfter: posts.imageAfter,
+      hospitalAddress: posts.hospitalAddress,
+      doctor: posts.doctor,
     };
+
     navigate(`/postingEdit`, { state: newContent });
   };
   return (
     <DetailSection>
       <div className="title">
         <h3>글제목: </h3>
-        <p>{state.title}</p>
+        <p>{posts.title}</p>
         <h3>
           <span>글번호:</span>
         </h3>
-        <p>{state.postId}</p>
+        <p>{posts.postId}</p>
         <button onClick={deleteHandler} className="titlebtn1">
           게시글 삭제
         </button>
@@ -55,22 +51,22 @@ const DetailContent = (props) => {
         <div className="imgBox">
           <div className="img">
             <h2 className="imgAlt">성형 전</h2>
-            <img src={state.imageBefore} alt="이미지 전"></img>
+            <img src={posts.imageBefore} alt="이미지 전"></img>
           </div>
           <div className="img">
             <h2 className="imgAlt">성형 후</h2>
-            <img src={state.imageAfter} alt="이미지 후"></img>
+            <img src={posts.imageAfter} alt="이미지 후"></img>
           </div>
         </div>
         <h2>시술 정보</h2>
         <div className="contentText">
           <p className="price">
             <span>가격:</span>
-            {state.price}
+            {posts.price}
           </p>
           <p className="price">
             <span>내용:</span>
-            {state.content}
+            {posts.content}
           </p>
         </div>
       </article>
@@ -78,13 +74,13 @@ const DetailContent = (props) => {
       <div className="info">
         <p>
           <span>병원 주소:</span>
-          {state.hospitalAdress}
+          {posts.hospitalAddress}
         </p>
         <p>
-          <span>원 장:</span> {state.doctor}
+          <span>원 장:</span> {posts.doctor}
         </p>
         <p>
-          <span>카테고리:</span> {state.category}
+          <span>카테고리:</span> {posts.category}
         </p>
       </div>
     </DetailSection>

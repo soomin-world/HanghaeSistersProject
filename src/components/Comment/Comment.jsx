@@ -3,17 +3,19 @@ import { useDispatch, useSelector } from "react-redux";
 import CommentLists from "./CommentLists";
 import styled from "styled-components";
 import { __addComment } from "../../redux/modules/commentSlice";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { __getPosts } from "../../redux/modules/postSlice";
 
-const Comment = (props) => {
-  const { state } = props.state;
+const Comment = ({ posts }) => {
+  console.log("댓글확인중입니다.", posts.commentList);
   //메인페이지에서 get으로 받은 정보를 디테일페이지에서 state라는 이름으로 props로 받음.
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const commentList = useSelector((state) => state.comment.comment);
-  // id로 넘어오는 값을 받는다 치고 1로 고정시켜서 데이터 출력함함
-  console.log(commentList);
+  const { id } = useParams();
 
+  // const content = useSelector((state) => state.props);
+  // id로 넘어오는 값을 받는다 치고 1로 고정시켜서 데이터 출력함함
+  // console.log("어떤값이 오나?", content);
   //댓글창stae, 수정여부state
   const [isComment, setIsComment] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
@@ -22,10 +24,10 @@ const Comment = (props) => {
 
   const add_comment = () => {
     if (commentText.trim() === "") return alert("댓글 칸을 채워주세요!");
-    dispatch(__addComment(commentText));
+    const payload = { postId: id, content: commentText };
+    dispatch(__addComment(payload));
     setCommentText("");
     // console.log("comments", __postComments);
-    navigate(`/detail/:${state.id}`);
   };
 
   return (
@@ -51,14 +53,17 @@ const Comment = (props) => {
                   // console.log(e.target.value)
                 }}
               />
-              <button onClick={add_comment()}>등록</button>
+              <button onClick={add_comment}>등록</button>
             </div>
             {/* <div>글자수:____</div> */}
           </>
         )}
       </ComWriteBox>
       <ComListBox>
-        <CommentLists />
+        {posts.commentList.map((comment) => (
+          <CommentLists key={comment.commentId} comment={comment} />
+        ))}
+        {/* 디테일 페이지에서 넘겨받은 (posts)로 컴포넌트 리스트 컴포넌트로 props 해줌  */}
       </ComListBox>
     </>
   );

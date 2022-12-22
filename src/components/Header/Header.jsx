@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 function Header() {
   const navigate = useNavigate();
   const cookie = getCookie("is_login");
+
   const deleteCookiehandler = () => {
     deleteCookie("is_login");
     navigate("/");

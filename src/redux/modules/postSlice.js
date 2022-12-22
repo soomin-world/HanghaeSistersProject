@@ -6,7 +6,6 @@ import { instance } from "../../core/api/axios";
 
 const initialState = {
   posts: [],
-  post: {},
   isLoading: true,
   error: null,
 };
@@ -38,7 +37,11 @@ export const __upDatePost = createAsyncThunk(
     try {
       console.log(payload);
 
-      const data = await instance.put(`/api/post/${payload.postId}`, payload);
+      const data = await instance.put(
+        `/api/post/${payload[0]}`,
+        payload[1],
+        config
+      );
       return thunkAPI.fulfillWithValue(data.data);
     } catch (error) {
       alert("서버요청중 오류발생!");
@@ -50,13 +53,11 @@ export const __upDatePost = createAsyncThunk(
 export const __deletePost = createAsyncThunk(
   "__deletePost",
   async (payload, thunkAPI) => {
-    console.log("페이로드 아이디", payload.postId);
-
     try {
-      const data = await instance.delete(`/api/post/${payload.postId}`);
+      const data = await instance.delete(`/api/post/${payload.postId}`, config);
       return thunkAPI.fulfillWithValue(data.data);
     } catch (error) {
-      console.log("에러가 발생했습니다.", error);
+      // console.log("에러가 발생했습니다.", error);
       return thunkAPI.rejectWithValue(error);
     }
   }
